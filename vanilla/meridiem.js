@@ -207,13 +207,13 @@
   }
   function niceMax(v) { if (v <= 0) return 4; var p = Math.pow(10, Math.floor(Math.log10(v))), n = v / p; return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10) * p; }
 
-  // Aire à plusieurs séries : MUI.area(el, { labels, series: [{ name, values, color }], height, format })
+  // Aire à plusieurs séries : MUI.area(el, { labels, series: [{ name, values, color }], height, format, axisFormat, padLeft })
   function area(el, o) {
-    var H = o.height || 240, W = Math.max(280, el.clientWidth || 600), padL = 30, padR = 10, padT = 12, padB = 26;
+    var H = o.height || 240, W = Math.max(280, el.clientWidth || 600), padL = o.padLeft || 30, padR = 10, padT = 12, padB = 26;
     var n = o.labels.length, max = niceMax(Math.max.apply(null, o.series.map(function (s) { return Math.max.apply(null, s.values); })) || 1);
     var X = function (i) { return padL + (W - padL - padR) * (n === 1 ? 0.5 : i / (n - 1)); }, Y = function (v) { return padT + (H - padT - padB) * (1 - v / max); };
-    var fmt = o.format || nf, g = "", defs = "";
-    for (var t = 0; t <= 4; t++) { var v = max * t / 4, y = Y(v); g += '<line x1="' + padL + '" x2="' + (W - padR) + '" y1="' + y + '" y2="' + y + '" class="m-grid"/><text x="' + (padL - 6) + '" y="' + (y + 3) + '" class="m-axis" text-anchor="end">' + Math.round(v) + "</text>"; }
+    var fmt = o.format || nf, axisFmt = o.axisFormat || Math.round, g = "", defs = "";
+    for (var t = 0; t <= 4; t++) { var v = max * t / 4, y = Y(v); g += '<line x1="' + padL + '" x2="' + (W - padR) + '" y1="' + y + '" y2="' + y + '" class="m-grid"/><text x="' + (padL - 6) + '" y="' + (y + 3) + '" class="m-axis" text-anchor="end">' + esc(axisFmt(v)) + "</text>"; }
     var every = Math.max(Math.ceil(n / 7), Math.ceil(n / Math.max(2, Math.floor((W - padL - padR) / 58))));   // au plus une date tous les 58 px (téléphone)
     o.labels.forEach(function (l, i) { if ((n - 1 - i) % every === 0) g += '<text x="' + X(i) + '" y="' + (H - 6) + '" class="m-axis" text-anchor="middle">' + esc(l) + "</text>"; });
     var paths = "";

@@ -62,7 +62,7 @@ Les blocs du design system existent aussi sans framework (`vanilla/meridiem.js`,
 |---|---|
 | Carte indicateur animée | `MUI.kpi({ label, value, note, kind: "bars" })` puis `MUI.bind(racine)` |
 | Rangée de cartes rafraîchie en place (page qui se met à jour seule) | `MUI.kpis(el, [{ label, value, note, kind }])` |
-| Graphiques | `MUI.area(el, …)`, `MUI.columns(el, …)`, `MUI.donut(el, …)`, `MUI.radial(el, …)` |
+| Graphiques | `MUI.area(el, …)`, `MUI.columns(el, …)`, `MUI.donut(el, …)`, `MUI.radial(el, …)` ; `area` accepte `format` (infobulle), `axisFormat` (graduations Y) et `padLeft` (place des unités) |
 | Bandeau ville en points, bloc à points animés | `MUI.banner({ … })`, `MUI.ctaBand({ … })` |
 | Menu du compte, pastille de navigation | `MUI.menu(bouton, panneau, { side: "top" })`, `MUI.navPill(nav)` |
 | Palette de commandes ⌘K, recherche dans le contenu | `MUI.palette({ items, sources, hotkey: true })` (détail ci-dessous) |
