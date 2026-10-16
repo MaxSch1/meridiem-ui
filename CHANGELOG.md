@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-10-16 · Icône carrée et favicons
+- Retour de Maxime : l'icône Meridiem posée en favicon ou dans une case carrée sortait écrasée. Ajout de `meridiem-icone-hd.png` (440 × 246, extraite du logotype officiel), `meridiem-icone-carre.png` et sa version blanche, et du jeu `public/assets/favicon/` (ico 16/32/48, png 16/32/48, apple-touch-icon et 512 sur fond ivoire), tous à ratio conservé. `assets.markSquare`, `assets.markSquareLight`. Favicons câblés dans le kit et la démo sans framework. Règle dans `DESIGN.md` § Marque.
+
 ## Non publié · 2026-10-06
 - **Logotypes officiels** (Maxime, 06/10) : `meridiem-logo-noir.png` remplacé, `meridiem-logo-blanc.png` ajouté pour les fonds sombres (`assets.logoLight`).
 - **Plus de Waremme en avant** : pied du gabarit `landing` signé « meridiem.be · Your AI partner » (adresse retirée), clients fictifs des démos déplacés à Ciney ; règle ajoutée dans `DESIGN.md` (§ Marque).

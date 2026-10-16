@@ -5,7 +5,9 @@ const BASE = "https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/pub
 export const assets = {
   logo: BASE + "meridiem-logo-noir.png",       // logotype officiel, fond clair
   logoLight: BASE + "meridiem-logo-blanc.png", // logotype officiel, fond sombre
-  mark: BASE + "meridiem-icone.png",
+  mark: BASE + "meridiem-icone.png",            // icône seule, ratio 1,79 : jamais dans un carré à taille imposée
+  markSquare: BASE + "meridiem-icone-carre.png", // icône déjà carrée (favicon, avatar, tuile)
+  markSquareLight: BASE + "meridiem-icone-carre-blanc.png",
   city: BASE + "ville-europe.jpg",
 }
 

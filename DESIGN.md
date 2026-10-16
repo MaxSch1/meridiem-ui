@@ -36,6 +36,18 @@ Calme, lisible, sérieux, avec une touche classique : ivoire et encre, titres en
 - Signature en pied de page : « meridiem.be · Your AI partner ». Ne jamais mettre l'adresse ni la ville
   (Waremme) en avant dans une interface (demande de Maxime du 06/10/2026). Seul un document commercial ou
   légal (devis, facture, CGV) porte l'adresse du siège.
+- Icône seule (sans le mot) : son ratio est 1,79 (plus large que haute). Ne jamais la mettre dans une boîte
+  carrée avec une largeur ET une hauteur imposées : elle s'écrase (retour de Maxime du 16/10/2026, favicons
+  et icônes d'interfaces écrasés). Dans une page : `height: auto` ou `object-fit: contain`. Pour tout usage
+  carré, les fichiers déjà carrés de `public/assets/` : `meridiem-icone-carre.png` (fond clair),
+  `meridiem-icone-carre-blanc.png` (fond sombre), et le jeu de favicons `favicon/` à copier tel quel :
+  ```html
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  ```
+  Next.js : copier `favicon.ico` dans `src/app/` et `apple-touch-icon.png` sous le nom `src/app/apple-icon.png`.
+  Version haute définition de l'icône (440 × 246) : `meridiem-icone-hd.png`.
 
 ## Couleurs
 - Fond de page `background`, surfaces `card`, menu de gauche `sidebar`, filets `border`.
