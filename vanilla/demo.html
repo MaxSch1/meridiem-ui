@@ -13,6 +13,7 @@
   .main { padding: 24px; display: flex; flex-direction: column; gap: 18px; min-width: 0; }
   .row2 { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 16px; }
   .row2b { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+  .theme-bar { display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin-bottom: -6px; }
   .foot { margin-top: auto; display: flex; flex-direction: column; gap: 4px; }
   @media (max-width: 900px) { .shell { grid-template-columns: 1fr; } .m-sidebar { display: none; } .row2, .row2b { grid-template-columns: 1fr; } }
 </style>
@@ -20,7 +21,7 @@
 <body class="m-body">
 <div class="shell">
   <aside class="m-sidebar">
-    <div class="m-sb-ws"><span class="m-sb-mark"><img src="../public/assets/meridiem-icone.png" alt=""></span><div><b>Command Center</b><small>Meridiem</small></div></div>
+    <div class="m-sb-ws"><span class="m-sb-mark"><img class="m-mark-ink" src="../public/assets/meridiem-icone.png" alt=""></span><div><b>Command Center</b><small>Meridiem</small></div></div>
     <div class="m-sb-search" onclick="pal.open()"><i data-icon="Search01"></i>Rechercher<span class="m-kbd">⌘K</span></div>
     <nav class="nav" id="nav">
       <div class="m-nav-label">Pilotage</div>
@@ -57,6 +58,7 @@
   MUI.citySrc = "../public/assets/ville-europe.jpg";
   var main = document.getElementById("main");
   main.innerHTML =
+    '<div class="theme-bar"><span class="m-eyebrow">Thème</span><div class="m-tabs" role="tablist" aria-label="Thème" id="theme"><button type="button" data-t="light">Jour</button><button type="button" data-t="dark">Nuit</button><button type="button" data-t="auto">Système</button></div></div>' +
     MUI.banner({ eyebrow: "Bonjour Maxime", title: "Votre journée", sub: "lundi 5 octobre · 12 choses à valider · 2 agents actifs", actions: '<button class="m-btn m-btn-primary m-btn-sm" onclick="MUI.toast(\'Ouverture des tâches\', { tone: \'ok\' })">Traiter les demandes</button><button class="m-btn m-btn-ghost m-btn-sm">Voir le CRM</button>' }) +
     '<div class="m-kpis">' +
       MUI.kpi({ label: "Besoin de toi", value: "12", note: "8 tâches · 4 retards", kind: "bars" }) +
@@ -75,7 +77,7 @@
     MUI.ctaBand({ title: "Tout tourne.", text: "12 contrôles au vert, contrôlé à 09:30.", action: '<button class="m-btn m-btn-primary m-btn-sm">Voir la santé</button>' });
   var labels = [], cr = [], cl = [];
   for (var i = 13; i >= 0; i--) { var d = new Date(Date.now() - i * 864e5); labels.push(d.toLocaleDateString("fr-BE", { day: "numeric", month: "short" })); cr.push(Math.round(8 + 8 * Math.abs(Math.sin(i / 2)))); cl.push(Math.round(6 + 7 * Math.abs(Math.sin(i / 2 + 0.6)))); }
-  MUI.area(document.getElementById("area"), { labels: labels, series: [{ name: "Créées", values: cr, color: "#3F6FB0" }, { name: "Clôturées", values: cl, color: "#AA4F13" }] });
+  MUI.area(document.getElementById("area"), { labels: labels, series: [{ name: "Créées", values: cr, color: MUI.CHART[1] }, { name: "Clôturées", values: cl, color: MUI.CHART[0] }] });
   MUI.radial(document.getElementById("radial"), { value: 67, sub: "objectif : 70 %" });
   MUI.columns(document.getElementById("cols"), { name: "Tâches", data: [{ label: "À faire", value: 12 }, { label: "En cours", value: 4 }, { label: "Besoin de moi", value: 15 }, { label: "Terminées", value: 41 }] });
   MUI.donut(document.getElementById("donut"), { total: "184 k€", sub: "pipeline actif", format: function (v) { return Math.round(v / 1000) + " k€"; }, segments: [{ label: "Découverte", value: 52000 }, { label: "Offre et négociation", value: 88000 }, { label: "Gagné", value: 44000 }] });
@@ -91,6 +93,16 @@
     emptyItems: function () { return [{ group: "Suggestion", label: "Nouvelle tâche", icon: "Add01" }]; } });
   var dlg = MUI.dialog({ title: "Réglages", content: '<div class="m-section"><p class="m-section-t">Confidentialité</p><label class="m-setting"><span><span class="m-setting-t">Masquer les montants</span><span class="m-setting-d">Floute les montants à l\'écran.</span></span><input type="checkbox" class="m-switch"></label></div>' });
   MUI.menu(document.getElementById("userbtn"), document.getElementById("usermenu"), { side: "top" });
+  // Jour, nuit ou réglage du système : choix gardé dans ce navigateur (démo)
+  var themeBtns = document.querySelectorAll("#theme button");
+  function markTheme() { var t = document.documentElement.getAttribute("data-theme") || "light"; themeBtns.forEach(function (b) { b.setAttribute("aria-selected", b.getAttribute("data-t") === t ? "true" : "false"); }); }
+  try { var saved = localStorage.getItem("olympe-theme"); if (saved) MUI.setTheme(saved); } catch (e) { /* stockage indisponible */ }
+  markTheme();
+  themeBtns.forEach(function (b) { b.addEventListener("click", function () {
+    var t = b.getAttribute("data-t"); MUI.setTheme(t); markTheme();
+    try { localStorage.setItem("olympe-theme", t); } catch (e) { /* stockage indisponible */ }
+    MUI.toast(t === "dark" ? "Mode nuit" : t === "auto" ? "Thème du système" : "Mode jour", { description: "Thème actif : " + (MUI.theme() === "dark" ? "nuit" : "jour") });
+  }); });
   document.querySelectorAll("#nav .m-nav-item").forEach(function (a) { a.addEventListener("click", function () { document.querySelectorAll("#nav .m-nav-item").forEach(function (x) { x.classList.toggle("is-active", x === a); }); main.classList.remove("m-view-in"); void main.offsetWidth; main.classList.add("m-view-in"); }); });
 </script>
 </body>

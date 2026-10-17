@@ -47,6 +47,25 @@
   --m-font-heading: "EB Garamond", Georgia, serif;
   --m-font-sans: "Geist", system-ui, -apple-system, sans-serif;
   --m-font-mono: "Geist Mono", ui-monospace, Menlo, monospace;
+  /* Rôles ajoutés pour le mode nuit (valeurs de jour = rendu d'avant) */
+  --m-sidebar-fg: #3D3A36;
+  --m-destructive-fg: #FFFFFF;
+  --m-badge-fill: 8%;
+  --m-badge-line: 22%;
+  --m-avatar-bg: color-mix(in srgb, var(--m-sand) 55%, transparent);
+  --m-backdrop: rgb(28 27 26 / .34);
+  --m-cta-bg: var(--m-ink);
+  --m-cta-fg: var(--m-ivory);
+  --m-cta-ring: none;
+  /* Visuels sur canvas et colonnes tramées (lus par meridiem.js et art.js) */
+  --m-bar-top: #C4672A;
+  --m-bar-bottom: #8A3F0F;
+  --m-city-1: #6E4226;
+  --m-city-2: #B98259;
+  --m-city-3: #E8D6C0;
+  --m-dots: #AA4F13;
+  --m-dots-accent: #E3CDB3;
+  --m-dotchart-dim: #C9BFB0;
 }
 
 .m-body { margin: 0; background: var(--m-bg); color: var(--m-fg); font: 14px/1.5 var(--m-font-sans); -webkit-font-smoothing: antialiased; }
@@ -67,12 +86,12 @@
 .m-btn-primary:hover { background: var(--m-primary-hover); border-color: var(--m-primary-hover); }
 .m-btn-ghost { background: transparent; border-color: transparent; color: var(--m-muted-fg); }
 .m-btn-ghost:hover { background: var(--m-accent); color: var(--m-fg); }
-.m-btn-destructive { background: var(--m-destructive); border-color: var(--m-destructive); color: #fff; }
+.m-btn-destructive { background: var(--m-destructive); border-color: var(--m-destructive); color: var(--m-destructive-fg); }
 .m-btn-sm { height: 28px; padding: 0 10px; font-size: 12.5px; }
 .m-btn-icon { width: 32px; padding: 0; }
 
 /* Badges de statut : pastille + mot */
-.m-badge { display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 8px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--st, var(--m-muted-fg)) 22%, transparent); background: color-mix(in srgb, var(--st, var(--m-muted-fg)) 8%, transparent); color: var(--st, var(--m-muted-fg)); font: 500 12px/1 var(--m-font-sans); white-space: nowrap; }
+.m-badge { display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 8px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--st, var(--m-muted-fg)) var(--m-badge-line), transparent); background: color-mix(in srgb, var(--st, var(--m-muted-fg)) var(--m-badge-fill), transparent); color: var(--st, var(--m-muted-fg)); font: 500 12px/1 var(--m-font-sans); white-space: nowrap; }
 .m-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 .m-badge.is-ok { --st: var(--m-ok); } .m-badge.is-warn { --st: var(--m-warn); } .m-badge.is-wait { --st: var(--m-wait); } .m-badge.is-crit { --st: var(--m-crit); } .m-badge.is-info { --st: var(--m-info); }
 .m-count { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: var(--m-muted); color: var(--m-muted-fg); font: 500 11px/1 var(--m-font-mono); }
@@ -111,7 +130,7 @@
 /* Menu latéral */
 .m-sidebar { background: var(--m-sidebar); border-right: 1px solid var(--m-border); padding: 12px 8px; display: flex; flex-direction: column; gap: 2px; }
 .m-nav-label { padding: 12px 8px 4px; font: 500 11px/1 var(--m-font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--m-muted-fg); }
-.m-nav-item { display: flex; align-items: center; gap: 10px; height: 32px; padding: 0 8px; border-radius: 8px; color: #3D3A36; text-decoration: none; font-size: 14px; cursor: pointer; transition: background .15s, color .15s; }
+.m-nav-item { display: flex; align-items: center; gap: 10px; height: 32px; padding: 0 8px; border-radius: 8px; color: var(--m-sidebar-fg); text-decoration: none; font-size: 14px; cursor: pointer; transition: background .15s, color .15s; }
 .m-nav-item:hover { background: var(--m-sidebar-accent); color: var(--m-fg); }
 .m-nav-item[aria-current="page"], .m-nav-item.is-active { background: var(--m-sidebar-accent); color: var(--m-fg); font-weight: 500; }
 .m-nav-item svg { width: 16px; height: 16px; flex: none; }
@@ -137,7 +156,7 @@
 .m-iso-svg .ma { fill: var(--m-primary); stroke: var(--m-primary); }
 .m-iso-svg .mfa { fill: var(--m-primary); }
 .m-iso-svg .ml { stroke: currentColor; }
-.m-iso-svg .mlw { stroke: #fff; }
+.m-iso-svg .mlw { stroke: var(--m-primary-fg); }
 .m-iso-svg .mla { stroke: var(--m-primary); }
 .m-iso-svg .mdot { fill: var(--m-primary); }
 .m-iso-svg .mlink { stroke: var(--m-fg); }
@@ -169,7 +188,7 @@
 @media (max-width: 800px) { .m-banner { grid-template-columns: 1fr; } .m-banner-art { position: absolute; inset: 0; opacity: .22; } }
 
 /* Bloc sombre à points animés */
-.m-cta { position: relative; overflow: hidden; border-radius: 18px; background: var(--m-ink); color: var(--m-ivory); padding: 40px 28px; text-align: center; }
+.m-cta { position: relative; overflow: hidden; border-radius: 18px; background: var(--m-cta-bg); color: var(--m-cta-fg); box-shadow: var(--m-cta-ring); padding: 40px 28px; text-align: center; }
 .m-cta canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 .m-cta-inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .m-cta p { margin: 0; opacity: .75; max-width: 52ch; }
@@ -264,13 +283,13 @@
 .m-sb-user { position: relative; }
 .m-sb-userbtn { display: flex; align-items: center; gap: 10px; width: 100%; padding: 8px; border: 0; border-radius: 10px; background: transparent; cursor: pointer; text-align: left; font: inherit; color: inherit; }
 .m-sb-userbtn:hover, .m-sb-userbtn[aria-expanded="true"] { background: var(--m-sidebar-accent); }
-.m-avatar { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 9px; background: color-mix(in srgb, var(--m-sand) 55%, transparent); font: 600 11px/1 var(--m-font-sans); color: var(--m-fg); flex: none; }
+.m-avatar { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 9px; background: var(--m-avatar-bg); font: 600 11px/1 var(--m-font-sans); color: var(--m-fg); flex: none; }
 .m-sb-userbtn b { display: block; font-size: 13px; font-weight: 500; line-height: 1.2; }
 .m-sb-userbtn small { display: block; font-size: 11.5px; color: var(--m-muted-fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .m-sb-system { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px 8px 8px; }
 
 /* Palette de commandes (⌘K) */
-.m-pal-back { position: fixed; inset: 0; z-index: 90; display: none; align-items: flex-start; justify-content: center; padding: 14vh 16px 16px; background: rgb(28 27 26 / .34); }
+.m-pal-back { position: fixed; inset: 0; z-index: 90; display: none; align-items: flex-start; justify-content: center; padding: 14vh 16px 16px; background: var(--m-backdrop); }
 .m-pal-back.is-open { display: flex; }
 .m-pal { width: 100%; max-width: 600px; overflow: hidden; border: 1px solid var(--m-border); border-radius: var(--m-radius-lg); background: var(--m-card); box-shadow: var(--m-shadow-lift); animation: m-pal-in .18s cubic-bezier(.2, .8, .2, 1); font-family: var(--m-font-sans); color: var(--m-fg); }
 .m-pal-in { display: flex; align-items: center; gap: 10px; height: 48px; padding: 0 14px; border-bottom: 1px solid var(--m-border); color: var(--m-muted-fg); }
@@ -299,7 +318,7 @@
 @media (max-width: 600px) { .m-pal-back { padding-top: 10vh; } .m-pal-foot { display: none; } }
 
 /* Fenêtre centrée (MUI.dialog) */
-.m-dialog-back { position: fixed; inset: 0; z-index: 80; display: none; align-items: center; justify-content: center; padding: 16px; background: rgb(28 27 26 / .34); }
+.m-dialog-back { position: fixed; inset: 0; z-index: 80; display: none; align-items: center; justify-content: center; padding: 16px; background: var(--m-backdrop); }
 .m-dialog-back.is-open { display: flex; animation: m-fade-in .16s ease; }
 .m-dialog { position: relative; width: 100%; max-width: 520px; max-height: calc(100vh - 32px); display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--m-border); border-radius: var(--m-radius-lg); background: var(--m-card); box-shadow: var(--m-shadow-lift); color: var(--m-fg); font: 14px/1.5 var(--m-font-sans); outline: none; }
 .m-dialog.is-lg { max-width: 680px; } .m-dialog.is-sm { max-width: 400px; }
@@ -369,9 +388,126 @@ html.m-dialog-lock { overflow: hidden; }
 .m-btn.is-busy { position: relative; color: transparent !important; pointer-events: none; }
 .m-btn.is-busy > * { visibility: hidden; }
 .m-btn.is-busy::after { content: ""; position: absolute; inset: 0; margin: auto; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--m-border); border-top-color: var(--m-fg); animation: m-spin .7s linear infinite; }
-.m-btn-primary.is-busy::after { border-color: rgb(255 255 255 / .4); border-top-color: #fff; }
+.m-btn-primary.is-busy::after { border-color: color-mix(in srgb, var(--m-primary-fg) 40%, transparent); border-top-color: var(--m-primary-fg); }
 
 /* Changement de vue */
 @keyframes m-view-in { from { opacity: 0; transform: translateY(10px); filter: blur(3px); } to { opacity: 1; transform: none; filter: none; } }
 .m-view-in { animation: m-view-in .28s cubic-bezier(.2, .8, .2, 1); }
 @media (prefers-reduced-motion: reduce) { .m-grow, .m-draw, .m-radial-arc, .m-toast, .m-view-in, .m-pill, .m-pal, .m-dialog, .m-dialog-back, .m-switch, .m-switch::after, .m-spin { animation: none !important; transition: none !important; } .m-radial-arc { stroke-dashoffset: var(--to); } }
+
+/* ===================== Mode nuit =====================
+   Activation : <html data-theme="dark"> (nuit), data-theme="auto" (suit le réglage du système),
+   rien ou data-theme="light" (jour, rendu inchangé). MUI.setTheme("dark" | "light" | "auto") le fait.
+   Fond encre chaude, surfaces un cran plus claires, texte ivoire, terracotta éclairci pour l'action.
+   Les deux blocs ci-dessous portent les mêmes valeurs : les modifier ensemble. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  /* Rôles */
+  --m-bg: #181513;
+  --m-sidebar: #12100E;
+  --m-card: #211D19;
+  --m-fg: #EEE7DB;
+  --m-muted: #2B2621;
+  --m-muted-fg: #A9A095;
+  --m-accent: #2E2823;
+  --m-sidebar-accent: #26211C;
+  --m-sidebar-fg: #D6CEC2;
+  --m-border: #36302A;
+  --m-input: #453D35;
+  --m-ring: #C98A5E;
+  --m-primary: #D9773F;
+  --m-primary-hover: #E58B57;
+  --m-primary-fg: #1A1410;
+  --m-destructive: #EE7D70;
+  --m-destructive-fg: #1A1410;
+  /* Statuts éclaircis (≥ 4,5:1 sur leur fond de badge), toujours avec leur mot */
+  --m-ok: #6CC08A;
+  --m-warn: #E3A55A;
+  --m-wait: #AFA2EE;
+  --m-crit: #F2867A;
+  --m-info: #80B2E8;
+  --m-badge-fill: 14%;
+  --m-badge-line: 32%;
+  /* Graphiques nuit, même ordre (validés au script dataviz sur #211D19) */
+  --m-chart-1: #D9773F;
+  --m-chart-2: #7489E2;
+  --m-chart-3: #C3841A;
+  --m-chart-4: #2AA88C;
+  --m-chart-5: #BE72CC;
+  /* Ombres : du noir, plus dense, sinon elles disparaissent */
+  --m-shadow: 0 1px 2px rgb(0 0 0 / .35), 0 4px 16px rgb(0 0 0 / .25);
+  --m-shadow-lift: 0 2px 6px rgb(0 0 0 / .4), 0 16px 40px rgb(0 0 0 / .5);
+  --m-avatar-bg: color-mix(in srgb, var(--m-sand) 16%, transparent);
+  --m-backdrop: rgb(0 0 0 / .6);
+  /* Bloc à points : encore plus profond que la page, cerné d'un filet */
+  --m-cta-bg: #0E0C0A;
+  --m-cta-fg: var(--m-ivory);
+  --m-cta-ring: inset 0 0 0 1px var(--m-border);
+  /* Visuels : sable et terracotta sur encre */
+  --m-bar-top: #E58B57;
+  --m-bar-bottom: #A8521F;
+  --m-city-1: #4A3424;
+  --m-city-2: #9C6440;
+  --m-city-3: #C9AD8A;
+  --m-dots: #B85A22;
+  --m-dots-accent: #E3CDB3;
+  --m-dotchart-dim: #5A5249;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="auto"] {
+    color-scheme: dark;
+    /* Rôles */
+    --m-bg: #181513;
+    --m-sidebar: #12100E;
+    --m-card: #211D19;
+    --m-fg: #EEE7DB;
+    --m-muted: #2B2621;
+    --m-muted-fg: #A9A095;
+    --m-accent: #2E2823;
+    --m-sidebar-accent: #26211C;
+    --m-sidebar-fg: #D6CEC2;
+    --m-border: #36302A;
+    --m-input: #453D35;
+    --m-ring: #C98A5E;
+    --m-primary: #D9773F;
+    --m-primary-hover: #E58B57;
+    --m-primary-fg: #1A1410;
+    --m-destructive: #EE7D70;
+    --m-destructive-fg: #1A1410;
+    /* Statuts éclaircis (≥ 4,5:1 sur leur fond de badge), toujours avec leur mot */
+    --m-ok: #6CC08A;
+    --m-warn: #E3A55A;
+    --m-wait: #AFA2EE;
+    --m-crit: #F2867A;
+    --m-info: #80B2E8;
+    --m-badge-fill: 14%;
+    --m-badge-line: 32%;
+    /* Graphiques nuit, même ordre (validés au script dataviz sur #211D19) */
+    --m-chart-1: #D9773F;
+    --m-chart-2: #7489E2;
+    --m-chart-3: #C3841A;
+    --m-chart-4: #2AA88C;
+    --m-chart-5: #BE72CC;
+    /* Ombres : du noir, plus dense, sinon elles disparaissent */
+    --m-shadow: 0 1px 2px rgb(0 0 0 / .35), 0 4px 16px rgb(0 0 0 / .25);
+    --m-shadow-lift: 0 2px 6px rgb(0 0 0 / .4), 0 16px 40px rgb(0 0 0 / .5);
+    --m-avatar-bg: color-mix(in srgb, var(--m-sand) 16%, transparent);
+    --m-backdrop: rgb(0 0 0 / .6);
+    /* Bloc à points : encore plus profond que la page, cerné d'un filet */
+    --m-cta-bg: #0E0C0A;
+    --m-cta-fg: var(--m-ivory);
+    --m-cta-ring: inset 0 0 0 1px var(--m-border);
+    /* Visuels : sable et terracotta sur encre */
+    --m-bar-top: #E58B57;
+    --m-bar-bottom: #A8521F;
+    --m-city-1: #4A3424;
+    --m-city-2: #9C6440;
+    --m-city-3: #C9AD8A;
+    --m-dots: #B85A22;
+    --m-dots-accent: #E3CDB3;
+    --m-dotchart-dim: #5A5249;
+  }
+}
+/* Icône officielle noire (meridiem-icone.png) : passe en blanc la nuit, sans autre fichier */
+:root[data-theme="dark"] .m-mark-ink { filter: invert(1); }
+@media (prefers-color-scheme: dark) { :root[data-theme="auto"] .m-mark-ink { filter: invert(1); } }

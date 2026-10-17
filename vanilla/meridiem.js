@@ -2,7 +2,10 @@
    (Command Center, outils internes). Même rendu que la librairie React.
    Dépend de olympe.css, et pour les visuels de marque de art.js (window.MeridiemArt) et icons.js.
    API : window.MUI = { kpi, kpis, iso, bind, area, columns, donut, radial, banner, ctaBand, empty, badge,
-                        toast, menu, navPill, palette, dialog, actionBar, busy, dotChart, dotField, city } */
+                        toast, menu, navPill, palette, dialog, actionBar, busy, dotChart, dotField, city,
+                        setTheme, theme, retheme, CHART, CHART_HEX }
+   Mode nuit : les couleurs sont des variables CSS (olympe.css) ; les visuels sur canvas sont redessinés
+   tout seuls quand data-theme change sur <html> ou quand le système passe en sombre (data-theme="auto"). */
 (function () {
   "use strict";
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -168,11 +171,39 @@
     if (!window.MeridiemArt) return;
     var src = o.src || MUI.citySrc || CITY_SRC;
     if (!cityImg || cityImg._src !== src) { cityImg = new Image(); cityImg.crossOrigin = "anonymous"; cityImg._src = src; cityImg.src = src; }
-    var go = function () { window.MeridiemArt.ditherImage(cv, cityImg, { mode: o.mode || "dither", cell: o.cell || 2, focusY: o.focusY == null ? 0.5 : o.focusY, lift: o.lift == null ? 0.12 : o.lift, contrast: o.contrast || 1.15, reveal: o.reveal == null ? 1.4 : o.reveal, palette: (o.palette || ["#6e4226", "#b98259", "#e8d6c0"]).concat([o.paper || "#FFFFFF"]) }); };
+    cv._muiArt = { kind: "city", o: o };
+    var go = function () { window.MeridiemArt.ditherImage(cv, cityImg, { mode: o.mode || "dither", cell: o.cell || 2, focusY: o.focusY == null ? 0.5 : o.focusY, lift: o.lift == null ? 0.12 : o.lift, contrast: o.contrast || 1.15, reveal: o.reveal == null ? 1.4 : o.reveal, palette: (o.palette || ["var(--m-city-1, #6E4226)", "var(--m-city-2, #B98259)", "var(--m-city-3, #E8D6C0)"]).concat([o.paper || "var(--m-card, #FFFFFF)"]) }); };
     if (cityImg.complete && cityImg.naturalWidth) go(); else cityImg.addEventListener("load", go, { once: true });
   }
-  function dotField(cv, o) { if (window.MeridiemArt) window.MeridiemArt.dots(cv, Object.assign({ color: "#AA4F13", accent: "#E3CDB3", gap: 11, alpha: 0.55, focus: { x: 0.82, y: 0.45 } }, o || {})); }
-  function dotChart(cv, o) { if (window.MeridiemArt) window.MeridiemArt.dotChart(cv, Object.assign({ color: "#1C1B1A", accent: "#AA4F13", dim: "#C9BFB0", gap: 5 }, o || {})); }
+  function dotField(cv, o) { cv._muiArt = { kind: "dots", o: o }; if (window.MeridiemArt) window.MeridiemArt.dots(cv, Object.assign({ color: "var(--m-dots, #AA4F13)", accent: "var(--m-dots-accent, #E3CDB3)", gap: 11, alpha: 0.55, focus: { x: 0.82, y: 0.45 } }, o || {})); }
+  function dotChart(cv, o) { cv._muiArt = { kind: "dotchart", o: o }; if (window.MeridiemArt) window.MeridiemArt.dotChart(cv, Object.assign({ color: "var(--m-fg, #1C1B1A)", accent: "var(--m-primary, #AA4F13)", dim: "var(--m-dotchart-dim, #C9BFB0)", gap: 5 }, o || {})); }
+
+  /* ======================= Thème (jour, nuit, système) ======================= */
+  // MUI.setTheme("dark" | "light" | "auto") pose data-theme sur <html> ; MUI.theme() rend "dark" ou "light" (effectif).
+  var darkMq = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+  function setTheme(t) { document.documentElement.setAttribute("data-theme", t === "dark" || t === "auto" ? t : "light"); }
+  function theme() {
+    var t = document.documentElement.getAttribute("data-theme");
+    return t === "dark" || (t === "auto" && darkMq && darkMq.matches) ? "dark" : "light";
+  }
+  // Redessine les visuels sur canvas (ville, points, graphique en points) avec les couleurs du thème courant.
+  // La ville ne rejoue pas son apparition.
+  function retheme() {
+    document.querySelectorAll("canvas").forEach(function (cv) {
+      var a = cv._muiArt; if (!a) return;
+      if (a.kind === "city") city(cv, Object.assign({}, a.o, { reveal: 0 }));
+      else if (a.kind === "dots") dotField(cv, a.o);
+      else if (a.kind === "dotchart") dotChart(cv, a.o);
+    });
+  }
+  var lastTheme = null, themeRaf = 0;
+  function onThemeChange() {
+    if (themeRaf) return;
+    themeRaf = requestAnimationFrame(function () { themeRaf = 0; var t = theme(); if (t !== lastTheme) { lastTheme = t; retheme(); } });
+  }
+  lastTheme = theme();
+  new MutationObserver(onThemeChange).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
+  if (darkMq) { if (darkMq.addEventListener) darkMq.addEventListener("change", onThemeChange); else if (darkMq.addListener) darkMq.addListener(onThemeChange); }
 
   // Bandeau d'accueil : texte à gauche, ville en points à droite (fondue dans la carte)
   function banner(o) {
@@ -195,7 +226,9 @@
   function badge(status, text) { return '<span class="m-badge is-' + status + '">' + esc(text) + "</span>"; }
 
   /* ======================= Graphiques ======================= */
-  var CHART = ["#AA4F13", "#3F6FB0", "#C2861A", "#0E8C7C", "#8E4F8A"];
+  // Couleurs des séries : variables CSS (suivent le mode nuit), valeurs de jour en repli. CHART_HEX : les valeurs de jour en hexadécimal.
+  var CHART_HEX = ["#AA4F13", "#3F6FB0", "#C2861A", "#0E8C7C", "#8E4F8A"];
+  var CHART = CHART_HEX.map(function (h, i) { return "var(--m-chart-" + (i + 1) + ", " + h + ")"; });
   function tipEl(host) {
     var t = host.querySelector(".m-tip");
     if (!t) { t = document.createElement("div"); t.className = "m-tip"; host.appendChild(t); }
@@ -255,12 +288,12 @@
         '<rect x="' + slot * i + '" y="0" width="' + slot + '" height="' + H + '" fill="transparent" class="m-hit"/></g>';
     });
     el.classList.add("m-chart");
-    el.innerHTML = '<svg width="100%" height="' + H + '" viewBox="0 0 ' + W + " " + H + '"><defs><linearGradient id="' + gid + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#C4672A"/><stop offset="100%" stop-color="#8A3F0F"/></linearGradient>' +
+    el.innerHTML = '<svg width="100%" height="' + H + '" viewBox="0 0 ' + W + " " + H + '"><defs><linearGradient id="' + gid + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--m-bar-top, #C4672A)"/><stop offset="100%" stop-color="var(--m-bar-bottom, #8A3F0F)"/></linearGradient>' +
       '<pattern id="' + pid + '" width="5" height="5" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r=".8" fill="#fff" fill-opacity=".22"/></pattern></defs>' + body + "</svg>";
     var cols = el.querySelectorAll(".m-col"), tip = tipEl(el);
     cols.forEach(function (g) {
       var i = +g.getAttribute("data-i"), d = o.data[i];
-      g.addEventListener("mouseenter", function () { el.classList.add("is-hover"); g.classList.add("is-on"); tip.innerHTML = '<div class="m-tip-h">' + esc(d.label) + '</div><div class="m-tip-r"><i style="background:#AA4F13"></i>' + esc(o.name || "Valeur") + "<b>" + fmt(d.value) + "</b></div>"; tip.style.opacity = 1; var r = el.getBoundingClientRect(), gr = g.getBoundingClientRect(); placeTip(el, tip, gr.left - r.left + gr.width / 2, 34); });
+      g.addEventListener("mouseenter", function () { el.classList.add("is-hover"); g.classList.add("is-on"); tip.innerHTML = '<div class="m-tip-h">' + esc(d.label) + '</div><div class="m-tip-r"><i style="background:' + CHART[0] + '"></i>' + esc(o.name || "Valeur") + "<b>" + fmt(d.value) + "</b></div>"; tip.style.opacity = 1; var r = el.getBoundingClientRect(), gr = g.getBoundingClientRect(); placeTip(el, tip, gr.left - r.left + gr.width / 2, 34); });
       g.addEventListener("mouseleave", function () { el.classList.remove("is-hover"); g.classList.remove("is-on"); tip.style.opacity = 0; });
       if (o.onClick) { g.style.cursor = "pointer"; g.addEventListener("click", function () { o.onClick(d, i); }); }
     });
@@ -571,5 +604,6 @@
   }
 
   window.MUI = { kpi: kpi, kpis: kpis, iso: iso, bind: bind, area: area, columns: columns, donut: donut, radial: radial, banner: banner, ctaBand: ctaBand, empty: empty, badge: badge,
-    toast: toast, menu: menu, navPill: navPill, palette: palette, dialog: dialog, actionBar: actionBar, busy: busy, dotChart: dotChart, dotField: dotField, city: city, CHART: CHART, citySrc: null };
+    toast: toast, menu: menu, navPill: navPill, palette: palette, dialog: dialog, actionBar: actionBar, busy: busy, dotChart: dotChart, dotField: dotField, city: city, CHART: CHART, CHART_HEX: CHART_HEX, citySrc: null,
+    setTheme: setTheme, theme: theme, retheme: retheme };
 })();

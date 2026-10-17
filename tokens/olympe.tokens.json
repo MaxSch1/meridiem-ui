@@ -108,6 +108,145 @@
     "chart-5": {
       "$type": "color",
       "$value": "#8E4F8A"
+    },
+    "primary-foreground": {
+      "$type": "color",
+      "$value": "#FFFFFF"
+    },
+    "sidebar-foreground": {
+      "$type": "color",
+      "$value": "#3D3A36"
+    },
+    "destructive-foreground": {
+      "$type": "color",
+      "$value": "#FFFFFF"
+    }
+  },
+  "color-dark": {
+    "$description": "Mode nuit : mêmes noms que color, à appliquer sous data-theme=\"dark\" ou .dark",
+    "ivory": {
+      "$type": "color",
+      "$value": "#F6F3ED"
+    },
+    "ink": {
+      "$type": "color",
+      "$value": "#1C1B1A"
+    },
+    "sand": {
+      "$type": "color",
+      "$value": "#E3CDB3"
+    },
+    "sepia": {
+      "$type": "color",
+      "$value": "#4A2C18"
+    },
+    "background": {
+      "$type": "color",
+      "$value": "#181513"
+    },
+    "sidebar": {
+      "$type": "color",
+      "$value": "#12100E"
+    },
+    "card": {
+      "$type": "color",
+      "$value": "#211D19"
+    },
+    "popover": {
+      "$type": "color",
+      "$value": "#262119"
+    },
+    "foreground": {
+      "$type": "color",
+      "$value": "#EEE7DB"
+    },
+    "muted": {
+      "$type": "color",
+      "$value": "#2B2621"
+    },
+    "muted-foreground": {
+      "$type": "color",
+      "$value": "#A9A095"
+    },
+    "accent": {
+      "$type": "color",
+      "$value": "#2E2823"
+    },
+    "border": {
+      "$type": "color",
+      "$value": "#36302A"
+    },
+    "input": {
+      "$type": "color",
+      "$value": "#453D35"
+    },
+    "ring": {
+      "$type": "color",
+      "$value": "#C98A5E"
+    },
+    "primary": {
+      "$type": "color",
+      "$value": "#D9773F"
+    },
+    "primary-hover": {
+      "$type": "color",
+      "$value": "#E58B57"
+    },
+    "destructive": {
+      "$type": "color",
+      "$value": "#EE7D70"
+    },
+    "status-ok": {
+      "$type": "color",
+      "$value": "#6CC08A"
+    },
+    "status-warn": {
+      "$type": "color",
+      "$value": "#E3A55A"
+    },
+    "status-wait": {
+      "$type": "color",
+      "$value": "#AFA2EE"
+    },
+    "status-crit": {
+      "$type": "color",
+      "$value": "#F2867A"
+    },
+    "status-info": {
+      "$type": "color",
+      "$value": "#80B2E8"
+    },
+    "chart-1": {
+      "$type": "color",
+      "$value": "#D9773F"
+    },
+    "chart-2": {
+      "$type": "color",
+      "$value": "#7489E2"
+    },
+    "chart-3": {
+      "$type": "color",
+      "$value": "#C3841A"
+    },
+    "chart-4": {
+      "$type": "color",
+      "$value": "#2AA88C"
+    },
+    "chart-5": {
+      "$type": "color",
+      "$value": "#BE72CC"
+    },
+    "primary-foreground": {
+      "$type": "color",
+      "$value": "#1A1410"
+    },
+    "sidebar-foreground": {
+      "$type": "color",
+      "$value": "#D6CEC2"
+    },
+    "destructive-foreground": {
+      "$type": "color",
+      "$value": "#1A1410"
     }
   },
   "font": {
@@ -158,6 +297,16 @@
     "lift": {
       "$type": "shadow",
       "$value": "0 2px 6px rgb(60 40 20 / 0.06), 0 16px 40px rgb(60 40 20 / 0.09)"
+    }
+  },
+  "shadow-dark": {
+    "soft": {
+      "$type": "shadow",
+      "$value": "0 1px 2px rgb(0 0 0 / 0.35), 0 4px 16px rgb(0 0 0 / 0.25)"
+    },
+    "lift": {
+      "$type": "shadow",
+      "$value": "0 2px 6px rgb(0 0 0 / 0.4), 0 16px 40px rgb(0 0 0 / 0.5)"
     }
   }
 }

@@ -16,6 +16,19 @@ colors:
   sepia: "#4A2C18"
   status: { ok: "#2F7A4A", warn: "#9A5D0C", wait: "#55499F", crit: "#B3261E", info: "#2B6099" }
   chart: ["#AA4F13", "#3F6FB0", "#C2861A", "#0E8C7C", "#8E4F8A"]
+colors-dark:
+  background: "#181513"
+  sidebar: "#12100E"
+  card: "#211D19"
+  foreground: "#EEE7DB"
+  muted: "#2B2621"
+  muted-foreground: "#A9A095"
+  border: "#36302A"
+  ring: "#C98A5E"
+  primary: "#D9773F"
+  primary-foreground: "#1A1410"
+  status: { ok: "#6CC08A", warn: "#E3A55A", wait: "#AFA2EE", crit: "#F2867A", info: "#80B2E8" }
+  chart: ["#D9773F", "#7489E2", "#C3841A", "#2AA88C", "#BE72CC"]
 typography:
   heading: "EB Garamond"
   sans: "Geist"
@@ -54,6 +67,73 @@ Calme, lisible, sérieux, avec une touche classique : ivoire et encre, titres en
 - `primary` (terracotta) : l'action principale de la zone, et elle seule. Les autres actions : contour (`outline`) ou fantôme (`ghost`).
 - Statuts : `ok` traitée, `wait` à valider, `warn` bloquée, `crit` urgent, `info` en cours. Toujours une pastille ET un mot (`StatusBadge` ou `.m-badge`), jamais la couleur seule.
 - Graphiques : `chart` dans cet ordre fixe, jamais réordonné ; palette vérifiée pour le daltonisme. La couleur suit la série, pas son rang.
+
+## Mode nuit
+Olympe de nuit, pas un thème sombre générique : la même page, éclairée à la bougie.
+
+**Principes**
+- Fond encre chaude (`#181513`), jamais de noir pur ni de bleu nuit. Les surfaces montent d'un cran
+  vers le clair (carte `#211D19`, fenêtre `#262119`) ; le menu de gauche descend d'un cran (`#12100E`),
+  comme de jour où il est plus foncé que la page.
+- Texte ivoire (`#EEE7DB`), secondaire pierre claire (`#A9A095`), filets discrets (`#36302A`).
+- Terracotta éclairci (`#D9773F`) pour l'action principale, avec un texte encre (`#1A1410`) : du blanc
+  sur un terracotta assez clair pour se détacher du fond tomberait sous 4,5:1. Toujours un seul par zone.
+- Titres EB Garamond inchangés (taille, graisse) ; seule leur couleur suit `foreground`.
+- Statuts éclaircis, pastille ET mot comme de jour. Graphiques : même ordre, couleurs éclaircies.
+- Visuels de marque : ville en points en sable et terracotta sur encre (ombres brun profond, halo sable
+  à l'horizon) ; bloc à points plus profond que la page (`#0E0C0A`), cerné d'un filet ; cartes
+  animées en traits clairs, leur touche terracotta suit `primary`.
+- Ombres en noir et plus denses (sans quoi elles disparaissent) ; voile des fenêtres plus opaque.
+
+**Activer**
+| Valeur | Effet |
+|---|---|
+| rien, ou `<html data-theme="light">` | jour : rendu identique à avant le mode nuit, même si le système est en sombre |
+| `<html data-theme="dark">` | nuit |
+| `<html data-theme="auto">` | suit le réglage du système (`prefers-color-scheme`) |
+| classe `.dark` (React, `next-themes` en `attribute="class"`) | nuit |
+
+- Sans framework : `MUI.setTheme("dark" | "light" | "auto")`, `MUI.theme()` rend le thème effectif.
+  Graphiques SVG et illustrations lisent les variables : rien à refaire. Les visuels sur canvas (ville,
+  champ de points, graphique en points) sont redessinés seuls quand `data-theme` change ou que le
+  système bascule ; `MUI.retheme()` le force. `MUI.CHART` contient des `var(--m-chart-N, #jour)`
+  (utilisables en SVG et en CSS) ; `MUI.CHART_HEX` garde les hexadécimaux de jour.
+- Icône officielle noire dans une page qui passe la nuit : classe `m-mark-ink` (elle devient blanche,
+  sans autre fichier). Logo complet : `meridiem-logo-blanc.png` sur fond sombre.
+- React : le thème du registre porte un jeu `dark` (posé par la CLI shadcn sous `.dark`), et
+  `styles/olympe.css` porte les mêmes valeurs sous `data-theme`. Pour que les utilitaires `dark:` de
+  shadcn suivent aussi `data-theme`, remplacer `@custom-variant dark (&:is(.dark *));` par :
+  ```css
+  @custom-variant dark {
+    &:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *) { @slot; }
+    @media (prefers-color-scheme: dark) { &:where([data-theme="auto"], [data-theme="auto"] *) { @slot; } }
+  }
+  ```
+- `art.js` accepte une couleur `var(--x)` ou `var(--x, repli)` : elle est lue sur le canvas au rendu.
+
+**Jetons nuit** (sans framework `--m-*`, React sans préfixe ; jetons DTCG : groupe `color-dark`)
+| Rôle | Jour | Nuit |
+|---|---|---|
+| Page `bg` / `background` | `#FBF9F5` | `#181513` |
+| Menu de gauche `sidebar` | `#F3EFE8` | `#12100E` |
+| Carte `card` | `#FFFFFF` | `#211D19` |
+| Texte `fg` / `foreground` | `#1C1B1A` | `#EEE7DB` |
+| Texte secondaire `muted-fg` | `#6B6764` | `#A9A095` |
+| Fond discret `muted` | `#F2EDE5` | `#2B2621` |
+| Survol `accent` | `#EFE9DF` | `#2E2823` |
+| Filet `border` / champ `input` | `#E8E2D8` / `#E0D9CD` | `#36302A` / `#453D35` |
+| Action `primary` / son texte | `#AA4F13` / `#FFFFFF` | `#D9773F` / `#1A1410` |
+| Danger `destructive` / son texte | `#B3261E` / `#FFFFFF` | `#EE7D70` / `#1A1410` |
+| Statuts ok, warn, wait, crit, info | `#2F7A4A` `#9A5D0C` `#55499F` `#B3261E` `#2B6099` | `#6CC08A` `#E3A55A` `#AFA2EE` `#F2867A` `#80B2E8` |
+| Graphiques chart-1 à chart-5 | `#AA4F13` `#3F6FB0` `#C2861A` `#0E8C7C` `#8E4F8A` | `#D9773F` `#7489E2` `#C3841A` `#2AA88C` `#BE72CC` |
+
+**Règles**
+- Toute couleur passe par une variable : une couleur écrite en dur dans un composant ne suit pas la nuit.
+- Contraste mesuré : texte et texte secondaire ≥ 4,5:1 sur page, carte et fond discret ; chaque badge
+  de statut ≥ 4,5:1 sur son propre fond (14 % de sa couleur sur la carte, 8 % en React) ; bouton
+  principal ≥ 4,5:1. Palette des graphiques validée au script dataviz sur la carte nuit (bande de
+  luminosité, chroma, daltonisme ΔE 9,2, vision normale, contraste ≥ 5:1).
+- Le jour ne bouge pas : une évolution du mode nuit se vérifie par une capture de jour identique.
 
 ## Typographie
 - EB Garamond : titres d'écran (32 px), de section (24 à 30 px), de carte (18 px), chiffres clés (32 px).

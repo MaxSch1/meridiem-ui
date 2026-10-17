@@ -31,6 +31,6 @@ const icons = `/* Icônes Hugeicons (gratuites, style stroke rounded) en SVG, po
 writeFileSync("vanilla/icons.js", icons)
 
 let art = readFileSync("src/lib/meridiem/art.js", "utf8").replace("// @ts-nocheck\n", "")
-art = art.replace("  export { render, dots, dotChart, ditherImage, reduced };", "  window.MeridiemArt = { render, dots, dotChart, ditherImage, reduced };")
+art = art.replace("  export { render, dots, dotChart, ditherImage, reduced, color };", "  window.MeridiemArt = { render, dots, dotChart, ditherImage, reduced, color };")
 writeFileSync("vanilla/art.js", "/* Moteur de visuels Meridiem sans module (window.MeridiemArt). Généré par scripts/build-vanilla.mjs depuis src/lib/meridiem/art.js. */\n(function () {\n" + art + "\n})();\n")
 console.log("icônes :", Object.keys(map).length)

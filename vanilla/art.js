@@ -5,7 +5,9 @@
        opts : palette (sombre -> clair), seed, sun {x,y,r}, sunColor, cell, gamma, contrast, colors {...}, temple {x,y,w,h}
    - MeridiemArt.dots(canvas, opts)     champ de points animé (variante de marque, chargements)
    - MeridiemArt.dotChart(canvas, opts) graphique en points (barres faites de points), animé à l'apparition
-   Respecte prefers-reduced-motion : une seule image fixe dans ce cas. */
+   Respecte prefers-reduced-motion : une seule image fixe dans ce cas.
+   Couleurs : hexadécimal, ou variable CSS « var(--m-primary) » lue sur le canvas au moment du rendu
+   (le mode nuit change ces variables ; relancer le rendu après un changement de thème). */
   // Garde SSR : ce module est aussi évalué côté serveur dans une app Next (composants client pré-rendus).
   const reduced = typeof window !== 'undefined' && !!window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function rng(seed) {
@@ -93,6 +95,19 @@
     };
   }
 
+  /* Couleur lue sur le canvas : « var(--x) » ou « var(--x, repli) » devient la valeur calculée de la
+     variable, normalisée en #rrggbb par un contexte 2D (accepte aussi rgb() et les noms CSS). */
+  let probe = null;
+  function color(canvas, c) {
+    if (typeof c !== 'string' || c.indexOf('var(') !== 0 || typeof getComputedStyle === 'undefined') return c;
+    const m = /^var\(\s*(--[\w-]+)\s*(?:,\s*(.+?))?\s*\)$/.exec(c);
+    if (!m) return c;
+    const v = getComputedStyle(canvas).getPropertyValue(m[1]).trim() || (m[2] || '').trim();
+    if (!v) return c;
+    if (!probe) probe = document.createElement('canvas').getContext('2d');
+    probe.fillStyle = '#000'; probe.fillStyle = v;
+    return probe.fillStyle;
+  }
   function size(canvas) {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const W = canvas.clientWidth || canvas.width, H = canvas.clientHeight || canvas.height;
@@ -109,8 +124,8 @@
     const off = document.createElement('canvas'); off.width = w; off.height = h;
     const octx = off.getContext('2d'), img = octx.createImageData(w, h);
     const f = scene(o), aspect = w / h;
-    const pal = (o.palette || ['#1d2a6b', '#5b74c9', '#f3efe6']).map(hex);
-    const levels = pal.length - 1, gamma = o.gamma || 1, contrast = o.contrast || 1, sunC = o.sunColor ? hex(o.sunColor) : null;
+    const pal = (o.palette || ['#1d2a6b', '#5b74c9', '#f3efe6']).map(c => hex(color(canvas, c)));
+    const levels = pal.length - 1, gamma = o.gamma || 1, contrast = o.contrast || 1, sunC = o.sunColor ? hex(color(canvas, o.sunColor)) : null;
     for (let j = 0; j < h; j++) {
       for (let i = 0; i < w; i++) {
         const r = f(i / w, j / h, aspect), k = (j * w + i) * 4; let rgb;
@@ -144,7 +159,7 @@
     o = o || {};
     const dpr = size(canvas), ctx = canvas.getContext('2d'), N = makeNoise(o.seed || 3);
     const gap = (o.gap || 9) * dpr, rmax = gap * (o.fill || 0.42);
-    const ink = o.color || '#1b2a8a', acc = o.accent || null, bg = o.background || null;
+    const ink = color(canvas, o.color || '#1b2a8a'), acc = o.accent ? color(canvas, o.accent) : null, bg = o.background ? color(canvas, o.background) : null;
     const fx = o.focus ? o.focus.x : 0.7, fy = o.focus ? o.focus.y : 0.35, speed = o.speed || 0.12;
     loop(canvas, t => {
       const W = canvas.width, H = canvas.height;
@@ -169,7 +184,7 @@
   function dotChart(canvas, o) {
     const dpr = size(canvas), ctx = canvas.getContext('2d');
     const vals = o.values || [], max = Math.max.apply(null, vals) || 1;
-    const gap = (o.gap || 6) * dpr, r = gap * 0.34, ink = o.color || '#111', acc = o.accent || ink, dim = o.dim || ink;
+    const gap = (o.gap || 6) * dpr, r = gap * 0.34, ink = color(canvas, o.color || '#111'), acc = o.accent ? color(canvas, o.accent) : ink, dim = o.dim ? color(canvas, o.dim) : ink;
     const hi = o.highlight == null ? vals.length - 1 : o.highlight;
     loop(canvas, t => {
       const W = canvas.width, H = canvas.height; ctx.clearRect(0, 0, W, H);
@@ -210,7 +225,7 @@
       const L = (0.2126 * src[i * 4] + 0.7152 * src[i * 4 + 1] + 0.0722 * src[i * 4 + 2]) / 255;
       lum[i] = Math.pow(clamp((L - 0.5) * contrast + 0.5 + lift), gamma);
     }
-    const pal = (o.palette || ['#4a2c18', '#a8693f', '#e3cdb3', '#fbf9f5']).map(hex), levels = pal.length - 1;
+    const pal = (o.palette || ['#4a2c18', '#a8693f', '#e3cdb3', '#fbf9f5']).map(c => hex(color(canvas, c))), levels = pal.length - 1;
     const paper = pal[levels], ink = pal[0];
     const out = ctx.createImageData(w, h);
     const draw = t => {
@@ -246,6 +261,6 @@
     void ink;
   }
 
-  window.MeridiemArt = { render, dots, dotChart, ditherImage, reduced };
+  window.MeridiemArt = { render, dots, dotChart, ditherImage, reduced, color };
 
 })();

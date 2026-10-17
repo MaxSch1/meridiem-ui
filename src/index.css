@@ -10,7 +10,17 @@
 /* Streamdown (réponses de l'agent en markdown) */
 @source "../node_modules/streamdown/dist/*.js";
 
-@custom-variant dark (&:is(.dark *));
+/* Utilitaires dark: actifs avec .dark, data-theme="dark", ou data-theme="auto" quand le système est en sombre */
+@custom-variant dark {
+  &:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where([data-theme="auto"], [data-theme="auto"] *) {
+      @slot;
+    }
+  }
+}
 
 /* ============================================================
    Meridiem · Olympe
@@ -127,6 +137,110 @@
   --wait: #55499F;
   --crit: #B3261E;
   --info: #2B6099;
+}
+
+/* ============================================================
+   Mode nuit Olympe : encre chaude, surfaces un cran plus claires,
+   texte ivoire, terracotta éclairci pour l'action principale.
+   Actif avec la classe .dark de shadcn (next-themes) ou avec
+   <html data-theme="dark"> ; data-theme="auto" suit le système.
+   Les deux blocs portent les mêmes valeurs : les modifier ensemble.
+   ============================================================ */
+.dark,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Rôles shadcn */
+  --background: #181513;
+  --foreground: #EEE7DB;
+  --card: #211D19;
+  --card-foreground: #EEE7DB;
+  --popover: #262119;
+  --popover-foreground: #EEE7DB;
+  --primary: #D9773F;
+  --primary-foreground: #1A1410;
+  --secondary: #2B2621;
+  --secondary-foreground: #EEE7DB;
+  --muted: #2B2621;
+  --muted-foreground: #A9A095;
+  --accent: #2E2823;
+  --accent-foreground: #EEE7DB;
+  --destructive: #EE7D70;
+  --border: #36302A;
+  --input: #453D35;
+  --ring: #C98A5E;
+
+  /* Graphiques : même ordre, éclaircis (validés au script dataviz sur la carte) */
+  --chart-1: #D9773F;
+  --chart-2: #7489E2;
+  --chart-3: #C3841A;
+  --chart-4: #2AA88C;
+  --chart-5: #BE72CC;
+
+  --sidebar: #12100E;
+  --sidebar-foreground: #D6CEC2;
+  --sidebar-primary: #EEE7DB;
+  --sidebar-primary-foreground: #1A1410;
+  --sidebar-accent: #26211C;
+  --sidebar-accent-foreground: #EEE7DB;
+  --sidebar-border: #2A2520;
+  --sidebar-ring: #C98A5E;
+
+  /* Statuts éclaircis (≥ 4,5:1 sur leur fond de badge), toujours doublés d'un mot */
+  --ok: #6CC08A;
+  --warn: #E3A55A;
+  --wait: #AFA2EE;
+  --crit: #F2867A;
+  --info: #80B2E8;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="auto"] {
+    color-scheme: dark;
+
+    /* Rôles shadcn */
+    --background: #181513;
+    --foreground: #EEE7DB;
+    --card: #211D19;
+    --card-foreground: #EEE7DB;
+    --popover: #262119;
+    --popover-foreground: #EEE7DB;
+    --primary: #D9773F;
+    --primary-foreground: #1A1410;
+    --secondary: #2B2621;
+    --secondary-foreground: #EEE7DB;
+    --muted: #2B2621;
+    --muted-foreground: #A9A095;
+    --accent: #2E2823;
+    --accent-foreground: #EEE7DB;
+    --destructive: #EE7D70;
+    --border: #36302A;
+    --input: #453D35;
+    --ring: #C98A5E;
+
+    /* Graphiques : même ordre, éclaircis (validés au script dataviz sur la carte) */
+    --chart-1: #D9773F;
+    --chart-2: #7489E2;
+    --chart-3: #C3841A;
+    --chart-4: #2AA88C;
+    --chart-5: #BE72CC;
+
+    --sidebar: #12100E;
+    --sidebar-foreground: #D6CEC2;
+    --sidebar-primary: #EEE7DB;
+    --sidebar-primary-foreground: #1A1410;
+    --sidebar-accent: #26211C;
+    --sidebar-accent-foreground: #EEE7DB;
+    --sidebar-border: #2A2520;
+    --sidebar-ring: #C98A5E;
+
+    /* Statuts éclaircis (≥ 4,5:1 sur leur fond de badge), toujours doublés d'un mot */
+    --ok: #6CC08A;
+    --warn: #E3A55A;
+    --wait: #AFA2EE;
+    --crit: #F2867A;
+    --info: #80B2E8;
+  }
 }
 
 @layer base {

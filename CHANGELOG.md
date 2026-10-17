@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-18 · Mode nuit
+- Mode nuit complet, rendu de jour inchangé (0 style calculé et 0 pixel différent sur la démo sans framework et la plateforme React, preuves dans `docs/qa/mode-nuit/`). Activation : `<html data-theme="dark">`, `data-theme="auto"` (suit le système) ou la classe `.dark` de shadcn ; sans attribut, la page reste de jour même si le système est en sombre.
+- Sans framework : jeu `--m-*` nuit dans `olympe.css` (encre chaude `#181513`, cartes `#211D19`, texte ivoire, terracotta `#D9773F` avec texte encre, statuts et graphiques éclaircis). Couleurs en dur remplacées par des variables aux valeurs de jour identiques (texte du menu, texte du bouton danger, fonds des badges, trait blanc des illustrations, bloc à points, avatar, voiles, bouton occupé). Classe `m-mark-ink` pour l'icône noire officielle. `MUI.setTheme`, `MUI.theme`, `MUI.retheme` ; les canvas (ville, points, graphique en points) se redessinent seuls au changement de thème ; `MUI.CHART` contient désormais des `var(--m-chart-N, #jour)` (`MUI.CHART_HEX` pour les hexadécimaux). Démo : sélecteur Jour, Nuit, Système en tête de page.
+- `art.js` (source `src/lib/meridiem/art.js`) : accepte des couleurs `var(--x)` lues sur le canvas au rendu (nouvelle fonction exportée `color`) ; `scripts/build-vanilla.mjs` exporte `color`.
+- React : jeu nuit dans `src/index.css` et `registry/olympe.css` (installé en `src/styles/olympe.css`) sous `.dark` et `data-theme`, variante `dark:` étendue à `data-theme` dans la démo, jeu `dark` du thème du registre (`registry.json`, `public/r/`). Jetons DTCG : groupes `color-dark` et `shadow-dark`, plus `primary-foreground`, `sidebar-foreground`, `destructive-foreground` au jeu de jour. `DESIGN.md` : section « Mode nuit ».
+- Palette nuit des graphiques choisie au script dataviz (tous les contrôles PASS sur la carte nuit, daltonisme ΔE 9,2) ; premiers essais refusés par le script (trop clairs pour la bande, bleu trop gris, prune et sarcelle confondus en deutan ΔE 3,8).
+- Reste à faire (hors lot) : couleurs en dur des briques React (`brand.tsx`, `charts.tsx`, `Dashboard.tsx`, `landing.tsx`, kit) ; de nuit, la ville du tableau de bord React garde un ciel blanc.
+
 ## 2026-10-16 · Icône carrée et favicons
 - Retour de Maxime : l'icône Meridiem posée en favicon ou dans une case carrée sortait écrasée. Ajout de `meridiem-icone-hd.png` (440 × 246, extraite du logotype officiel), `meridiem-icone-carre.png` et sa version blanche, et du jeu `public/assets/favicon/` (ico 16/32/48, png 16/32/48, apple-touch-icon et 512 sur fond ivoire), tous à ratio conservé. `assets.markSquare`, `assets.markSquareLight`. Favicons câblés dans le kit et la démo sans framework. Règle dans `DESIGN.md` § Marque.
 
