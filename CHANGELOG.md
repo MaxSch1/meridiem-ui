@@ -40,14 +40,14 @@ Relevés sur la démo de nuit et confirmés sur le Command Center de nuit (premi
 ## 2026-10-18 · Icônes épingle, favori retiré et suivi retiré
 - Quatre icônes Hugeicons ajoutées au kit et à `vanilla/icons.js` (121 icônes) : `Pin` (épingler), `PinOff` (détacher), `StarOff` (retirer des favoris), `FlagOff` (retirer du suivi). Besoin : épingles et favoris des conversations dans Meridiem AI Center (`DEV/meridiem-vigie`).
 
-## 2026-10-18 · Retours d'une app Next.js 16 (Assiette)
-Quatre défauts du registre trouvés en montant `DEV/meridiem-assiette` (Next.js 16.4) et corrigés là-bas sur place la nuit du 18/10 ; reportés à la source pour que les projets suivants n'aient pas à les refaire.
+## 2026-10-18 · Retours d'une app Next.js 16 interne
+Quatre défauts du registre trouvés en montant une app interne (Next.js 16.4) et corrigés là-bas sur place la nuit du 18/10 ; reportés à la source pour que les projets suivants n'aient pas à les refaire.
 - **`brand`** : erreur d'hydratation React des cartes animées (`KpiCard`). Le dernier chiffre de cos et sin différait entre le rendu serveur et le navigateur, donc les attributs SVG aussi. Coordonnées isométriques et polaires arrondies à 0,01 (`r2` dans `P` et `polar`), rendu identique à l'œil.
 - **`use-mobile`** : le hook de la sidebar shadcn faisait échouer `npm run lint` de Next 16 (règle `react-hooks/set-state-in-effect` d'eslint-config-next 16). Réécrit avec `useSyncExternalStore`, même résultat (faux au rendu serveur, puis la vraie largeur). Livré par l'élément `platform`, qui remplace à l'installation celui de la sidebar : la CLI installe les dépendances d'abord et garde le dernier fichier écrit à un même chemin.
 - **`spinner`** (nouvel élément du registre) : le spinner shadcn, converti à Hugeicons par la CLI, étalait les props SVG sur `HugeiconsIcon` et ne compilait pas. Version adaptée (celle de l'espace clients) : aucune prop étalée, `aria-hidden` car il accompagne toujours un libellé qui change (« Envoi… »). `platform` en dépend à la place du spinner shadcn. Le kit utilise le même fichier ; il n'annonce plus « Chargement » en plus du libellé.
 - **`clients-table`, `data-table`** : `@tanstack/react-table@^8.21.3` épinglé. Sans version, la CLI installait la dernière, v9 (9.3.1 au 18/10), dont l'API est incompatible.
 - Preuve : projet Next 16.4 neuf (`shadcn@4.22.0 init -t next -b radix -p nova`, icônes Hugeicons), puis `add` de `olympe-theme`, `olympe-styles`, `platform`, `data-table` et `landing` depuis le registre régénéré : spinner et `use-mobile` corrigés posés, TanStack 8.21.3 installé, `tsc --noEmit` sans erreur, plus aucune erreur de lint sur `use-mobile`, `spinner`, `brand`, `charts`, `kpi-card`, `data-table`, `clients-table`.
-- Reste ouvert : le lint de Next 16 refuse encore les apostrophes droites du texte JSX des gabarits `platform` (14) et `landing` (5) (`react/no-unescaped-entities`). Assiette exclut le code copié du registre de son lint en attendant.
+- Reste ouvert : le lint de Next 16 refuse encore les apostrophes droites du texte JSX des gabarits `platform` (14) et `landing` (5) (`react/no-unescaped-entities`). L'app exclut le code copié du registre de son lint en attendant.
 
 ## 2026-10-18 · Mode nuit
 - Mode nuit complet, rendu de jour inchangé (0 style calculé et 0 pixel différent sur la démo sans framework et la plateforme React, preuves dans `docs/qa/mode-nuit/`). Activation : `<html data-theme="dark">`, `data-theme="auto"` (suit le système) ou la classe `.dark` de shadcn ; sans attribut, la page reste de jour même si le système est en sombre.
