@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-10-18 · Sous-menu rogné par un conteneur en `overflow: hidden`
+- `DESIGN.md` § Mise en page : le sous-menu sans framework est posé en absolu à côté de son panneau ; un menu de gauche en `overflow: hidden` (étroit ou replié) le coupe. Parade documentée : `.m-sidebar:has(.m-menu.is-open) { overflow: visible; }`. Relevé en passant l'AI Center au sous-menu « Apparence ».
+
 ## 2026-10-18 · `ThemeSubmenu` traduisible
 - `labels` (Jour, Nuit, Système) à côté de `label` : le sous-menu d'apparence suit la langue d'une interface bilingue. Repris de la première application Next.js passée au mode nuit, qui l'a ajouté pour son anglais.
 - `DESIGN.md` : le piège de la clé du cookie importée d'un module client dans un layout serveur (le cookie n'est alors jamais lu).

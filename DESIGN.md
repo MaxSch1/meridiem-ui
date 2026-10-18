@@ -203,7 +203,11 @@ Olympe de nuit, pas un thème sombre générique : la même page, éclairée à 
   `.m-submenu`, options `role="menuitemradio"` avec `data-value` et `.m-menu-check`, note `.m-menu-note`)
   dans un panneau de `MUI.menu` ; `MUI.menuValue(bloc, valeur)` coche et recopie la valeur. Il s'ouvre au
   survol et au clic, à droite de l'entrée, à gauche si la place manque, en place sous l'entrée sur
-  téléphone ; flèche droite ouvre, flèche gauche referme, Échap et clic dehors ferment tout. Fermé, il
+  téléphone ; flèche droite ouvre, flèche gauche referme, Échap et clic dehors ferment tout. Piège : le
+  sous-menu est posé en absolu à côté de son panneau, donc un ancêtre en `overflow: hidden` ou `auto` (menu de
+  gauche étroit, menu replié) le rogne ; laisser déborder pendant l'ouverture, par exemple
+  `.m-sidebar:has(.m-menu.is-open) { overflow: visible; }` (relevé sur l'AI Center le 18/10 ; React n'est pas
+  concerné, le menu de Radix passe par un portail). Fermé, il
   est en `display: none` (aucun calque de plus, le jour reste identique au pixel). React : `ThemeSubmenu` (élément
   `theme`) pour l'apparence ; pour une autre préférence (langue), le même assemblage : `DropdownMenuSub`,
   `DropdownMenuSubTrigger` (icône, libellé en `flex-1`, valeur en `text-muted-foreground`, le chevron est déjà posé),
