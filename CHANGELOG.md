@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-18 · Mot des pastilles de statut lisible de jour
+Relevé en passant l'AI Center au mode nuit : de jour, le mot des pastilles descendait à 3,48:1 (« Terminé » sur une carte teintée et sélectionnée), 4,14:1 sur le menu de gauche (sans framework). Le mot prenait la couleur pure du statut, pensée pour le point.
+- Sans framework : `.m-badge` écrit son mot en `color-mix(statut --m-badge-ink, --m-fg)`, `--m-badge-ink: 72%` le jour et `100%` la nuit ; le point (`::before`) garde `var(--st)`.
+- React : `--badge-ink` et les couleurs `ok-ink`, `warn-ink`, `wait-ink`, `crit-ink`, `info-ink` (thème du registre et `src/index.css`) ; `StatusBadge` écrit le mot en `text-*-ink` et pose le point en `bg-*`. Jetons DTCG : `status-*-text`.
+- Contraste de jour du mot, pire cas (statut 8 % sur une carte teintée de 7 % de son statut, menu sélectionné) : 3,48:1 avant, 4,95:1 après ; sur la démo 4,14 devient 5,89 ; sur le kit 5,25 devient 7,46 (ok), 5,32 devient 7,55 (warn).
+- Preuve (`docs/qa/pastilles-jour/`) : démo, plateforme, landing et kit à 1440 et 390 px, toiles masquées et animations figées : nuit identique au pixel partout, jour différent seulement à l'intérieur des pastilles ; console sans erreur.
+
 ## 2026-10-18 · Sous-menu rogné par un conteneur en `overflow: hidden`
 - `DESIGN.md` § Mise en page : le sous-menu sans framework est posé en absolu à côté de son panneau ; un menu de gauche en `overflow: hidden` (étroit ou replié) le coupe. Parade documentée : `.m-sidebar:has(.m-menu.is-open) { overflow: visible; }`. Relevé en passant l'AI Center au sous-menu « Apparence ».
 

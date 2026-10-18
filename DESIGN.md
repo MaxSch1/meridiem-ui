@@ -71,6 +71,9 @@ Calme, lisible, sérieux, avec une touche classique : ivoire et encre, titres en
 - Fond de page `background`, surfaces `card`, menu de gauche `sidebar`, filets `border`.
 - `primary` (terracotta) : l'action principale de la zone, et elle seule. Les autres actions : contour (`outline`) ou fantôme (`ghost`).
 - Statuts : `ok` traitée, `wait` à valider, `warn` bloquée, `crit` urgent, `info` en cours. Toujours une pastille ET un mot (`StatusBadge` ou `.m-badge`), jamais la couleur seule.
+  Le point garde la couleur pure du statut ; le mot est le statut mêlé d'encre le jour (`--m-badge-ink` /
+  `--badge-ink` = 72 %, classes React `text-ok-ink`…, jetons `status-*-text`), au moins 4,5:1 sur carte, page,
+  menu de gauche et même sur une carte teintée de son statut ; la nuit, le mot est le statut pur (100 %).
 - Graphiques : `chart` dans cet ordre fixe, jamais réordonné ; palette vérifiée pour le daltonisme. La couleur suit la série, pas son rang.
 
 ## Mode nuit

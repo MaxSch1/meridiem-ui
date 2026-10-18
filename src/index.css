@@ -40,6 +40,12 @@
   --color-wait: var(--wait);
   --color-crit: var(--crit);
   --color-info: var(--info);
+  /* Texte des pastilles de statut : statut mêlé d'encre le jour (--badge-ink 72 %, ≥ 4,5:1 même sur une carte teintée), pur la nuit (100 %) */
+  --color-ok-ink: color-mix(in srgb, var(--ok) var(--badge-ink, 100%), var(--foreground));
+  --color-warn-ink: color-mix(in srgb, var(--warn) var(--badge-ink, 100%), var(--foreground));
+  --color-wait-ink: color-mix(in srgb, var(--wait) var(--badge-ink, 100%), var(--foreground));
+  --color-crit-ink: color-mix(in srgb, var(--crit) var(--badge-ink, 100%), var(--foreground));
+  --color-info-ink: color-mix(in srgb, var(--info) var(--badge-ink, 100%), var(--foreground));
   --color-ivory: var(--ivory);
   --color-sand: var(--sand);
   --color-sepia: var(--sepia);
@@ -137,6 +143,7 @@
   --wait: #55499F;
   --crit: #B3261E;
   --info: #2B6099;
+  --badge-ink: 72%;
 
   /* Visuels de marque et colonnes tramées : valeurs de jour (la nuit les remplace) */
   --chart-area-fill: 1;
@@ -211,6 +218,7 @@
   --wait: #AFA2EE;
   --crit: #F2867A;
   --info: #80B2E8;
+  --badge-ink: 100%;
 
   /* Visuels de marque (CityDots, DotField, DotChart) : la ville de nuit éclairée (masse sourde,
      lumières chaudes, ciel vide) et des points pierre et ambre (retours de Maxime du 18/10/2026) */
@@ -282,6 +290,7 @@
     --wait: #AFA2EE;
     --crit: #F2867A;
     --info: #80B2E8;
+    --badge-ink: 100%;
 
     /* Visuels de marque (CityDots, DotField, DotChart) : la ville de nuit éclairée (masse sourde,
        lumières chaudes, ciel vide) et des points pierre et ambre (retours de Maxime du 18/10/2026) */

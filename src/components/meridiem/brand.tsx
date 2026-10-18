@@ -296,19 +296,21 @@ export function IsoArt({ kind, active, className }: { kind: IsoKind; active: boo
 
 /* ---------- Statut : une pastille ET un mot, jamais la couleur seule ---------- */
 export type Status = "ok" | "warn" | "wait" | "crit" | "info" | "neutral"
+/* Le mot en `*-ink` (statut mêlé d'encre le jour, ≥ 4,5:1) ; le point garde la couleur pure du statut. */
 const STATUS_CLASS: Record<Status, string> = {
-  ok: "text-ok bg-ok/8 border-ok/20",
-  warn: "text-warn bg-warn/8 border-warn/20",
-  wait: "text-wait bg-wait/8 border-wait/20",
-  crit: "text-crit bg-crit/8 border-crit/20",
-  info: "text-info bg-info/8 border-info/20",
+  ok: "text-ok-ink bg-ok/8 border-ok/20",
+  warn: "text-warn-ink bg-warn/8 border-warn/20",
+  wait: "text-wait-ink bg-wait/8 border-wait/20",
+  crit: "text-crit-ink bg-crit/8 border-crit/20",
+  info: "text-info-ink bg-info/8 border-info/20",
   /* Neutre : clos, retiré, sans suite (refusé, annulé, terminé). Le mot porte l'information. */
   neutral: "text-muted-foreground bg-muted border-border",
 }
+const STATUS_DOT: Record<Status, string> = { ok: "bg-ok", warn: "bg-warn", wait: "bg-wait", crit: "bg-crit", info: "bg-info", neutral: "bg-muted-foreground" }
 export function StatusBadge({ status, children, className }: { status: Status; children: React.ReactNode; className?: string }) {
   return (
     <Badge variant="outline" className={cn("gap-1.5 font-medium", STATUS_CLASS[status], className)}>
-      <span className="size-1.5 rounded-full bg-current" aria-hidden />
+      <span className={cn("size-1.5 rounded-full", STATUS_DOT[status])} aria-hidden />
       {children}
     </Badge>
   )

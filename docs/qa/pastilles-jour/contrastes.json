@@ -1,0 +1,83 @@
+{
+ "demo-jour-avant-1440": {
+  "pastilles": 2,
+  "min": 4.14,
+  "sous_4_5": 2
+ },
+ "demo-jour-apres-1440": {
+  "pastilles": 2,
+  "min": 5.89,
+  "sous_4_5": 0
+ },
+ "demo-nuit-avant-1440": {
+  "pastilles": 2,
+  "min": 6.87,
+  "sous_4_5": 0
+ },
+ "demo-nuit-apres-1440": {
+  "pastilles": 2,
+  "min": 6.87,
+  "sous_4_5": 0
+ },
+ "platform-jour-avant-1440": {
+  "pastilles": 0,
+  "min": null,
+  "sous_4_5": 0
+ },
+ "platform-jour-apres-1440": {
+  "pastilles": 0,
+  "min": null,
+  "sous_4_5": 0
+ },
+ "platform-nuit-avant-1440": {
+  "pastilles": 0,
+  "min": null,
+  "sous_4_5": 0
+ },
+ "platform-nuit-apres-1440": {
+  "pastilles": 0,
+  "min": null,
+  "sous_4_5": 0
+ },
+ "landing-jour-avant-1440": {
+  "pastilles": 1,
+  "min": 5.32,
+  "sous_4_5": 0
+ },
+ "landing-jour-apres-1440": {
+  "pastilles": 1,
+  "min": 7.55,
+  "sous_4_5": 0
+ },
+ "landing-nuit-avant-1440": {
+  "pastilles": 1,
+  "min": 7.81,
+  "sous_4_5": 0
+ },
+ "landing-nuit-apres-1440": {
+  "pastilles": 1,
+  "min": 7.81,
+  "sous_4_5": 0
+ },
+ "kit-jour-avant-1440": {
+  "pastilles": 27,
+  "min": 4.81,
+  "sous_4_5": 0
+ },
+ "kit-jour-apres-1440": {
+  "pastilles": 27,
+  "min": 4.81,
+  "sous_4_5": 0
+ },
+ "kit-nuit-avant-1440": {
+  "pastilles": 27,
+  "min": 5.78,
+  "sous_4_5": 0
+ },
+ "kit-nuit-apres-1440": {
+  "pastilles": 27,
+  "min": 5.78,
+  "sous_4_5": 0
+ },
+ "erreurs_console": 0
+}

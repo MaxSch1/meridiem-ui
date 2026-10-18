@@ -89,6 +89,31 @@
       "$type": "color",
       "$value": "#2B6099"
     },
+    "status-ok-text": {
+      "$type": "color",
+      "$value": "#2A5F3D",
+      "$description": "Texte d'une pastille ok : 72 % du statut, 28 % de foreground (≥ 4,5:1) ; le point garde status-ok."
+    },
+    "status-warn-text": {
+      "$type": "color",
+      "$value": "#774B10",
+      "$description": "Texte d'une pastille warn : 72 % du statut, 28 % de foreground (≥ 4,5:1) ; le point garde status-warn."
+    },
+    "status-wait-text": {
+      "$type": "color",
+      "$value": "#453C7A",
+      "$description": "Texte d'une pastille wait : 72 % du statut, 28 % de foreground (≥ 4,5:1) ; le point garde status-wait."
+    },
+    "status-crit-text": {
+      "$type": "color",
+      "$value": "#89231D",
+      "$description": "Texte d'une pastille crit : 72 % du statut, 28 % de foreground (≥ 4,5:1) ; le point garde status-crit."
+    },
+    "status-info-text": {
+      "$type": "color",
+      "$value": "#274D75",
+      "$description": "Texte d'une pastille info : 72 % du statut, 28 % de foreground (≥ 4,5:1) ; le point garde status-info."
+    },
     "chart-1": {
       "$type": "color",
       "$value": "#AA4F13"
@@ -264,6 +289,31 @@
     "status-info": {
       "$type": "color",
       "$value": "#80B2E8"
+    },
+    "status-ok-text": {
+      "$type": "color",
+      "$value": "#6CC08A",
+      "$description": "La nuit, le texte de la pastille est le statut lui-même."
+    },
+    "status-warn-text": {
+      "$type": "color",
+      "$value": "#E3A55A",
+      "$description": "La nuit, le texte de la pastille est le statut lui-même."
+    },
+    "status-wait-text": {
+      "$type": "color",
+      "$value": "#AFA2EE",
+      "$description": "La nuit, le texte de la pastille est le statut lui-même."
+    },
+    "status-crit-text": {
+      "$type": "color",
+      "$value": "#F2867A",
+      "$description": "La nuit, le texte de la pastille est le statut lui-même."
+    },
+    "status-info-text": {
+      "$type": "color",
+      "$value": "#80B2E8",
+      "$description": "La nuit, le texte de la pastille est le statut lui-même."
     },
     "chart-1": {
       "$type": "color",

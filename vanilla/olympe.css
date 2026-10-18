@@ -52,6 +52,7 @@
   --m-destructive-fg: #FFFFFF;
   --m-badge-fill: 8%;
   --m-badge-line: 22%;
+  --m-badge-ink: 72%;   /* texte des pastilles : 72 % du statut, le reste en encre (≥ 4,5:1 même sur carte teintée) ; le point garde le statut pur */
   --m-avatar-bg: color-mix(in srgb, var(--m-sand) 55%, transparent);
   --m-backdrop: rgb(28 27 26 / .34);
   --m-cta-bg: var(--m-ink);
@@ -93,8 +94,8 @@
 .m-btn-icon { width: 32px; padding: 0; }
 
 /* Badges de statut : pastille + mot */
-.m-badge { display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 8px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--st, var(--m-muted-fg)) var(--m-badge-line), transparent); background: color-mix(in srgb, var(--st, var(--m-muted-fg)) var(--m-badge-fill), transparent); color: var(--st, var(--m-muted-fg)); font: 500 12px/1 var(--m-font-sans); white-space: nowrap; }
-.m-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.m-badge { display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 8px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--st, var(--m-muted-fg)) var(--m-badge-line), transparent); background: color-mix(in srgb, var(--st, var(--m-muted-fg)) var(--m-badge-fill), transparent); color: color-mix(in srgb, var(--st, var(--m-muted-fg)) var(--m-badge-ink, 100%), var(--m-fg)); font: 500 12px/1 var(--m-font-sans); white-space: nowrap; }
+.m-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--st, var(--m-muted-fg)); }
 .m-badge.is-ok { --st: var(--m-ok); } .m-badge.is-warn { --st: var(--m-warn); } .m-badge.is-wait { --st: var(--m-wait); } .m-badge.is-crit { --st: var(--m-crit); } .m-badge.is-info { --st: var(--m-info); }
 .m-count { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: var(--m-muted); color: var(--m-muted-fg); font: 500 11px/1 var(--m-font-mono); }
 
@@ -447,6 +448,7 @@ html.m-dialog-lock { overflow: hidden; }
   --m-info: #80B2E8;
   --m-badge-fill: 14%;
   --m-badge-line: 32%;
+  --m-badge-ink: 100%;
   /* Graphiques nuit, même ordre (validés au script dataviz sur #211D19) */
   --m-chart-1: #D9773F;
   --m-chart-2: #7489E2;
@@ -506,6 +508,7 @@ html.m-dialog-lock { overflow: hidden; }
     --m-info: #80B2E8;
     --m-badge-fill: 14%;
     --m-badge-line: 32%;
+    --m-badge-ink: 100%;
     /* Graphiques nuit, même ordre (validés au script dataviz sur #211D19) */
     --m-chart-1: #D9773F;
     --m-chart-2: #7489E2;
