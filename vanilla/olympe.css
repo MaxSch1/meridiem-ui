@@ -97,6 +97,12 @@
 .m-badge { display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 8px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--st, var(--m-muted-fg)) var(--m-badge-line), transparent); background: color-mix(in srgb, var(--st, var(--m-muted-fg)) var(--m-badge-fill), transparent); color: color-mix(in srgb, var(--st, var(--m-muted-fg)) var(--m-badge-ink, 100%), var(--m-fg)); font: 500 12px/1 var(--m-font-sans); white-space: nowrap; }
 .m-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--st, var(--m-muted-fg)); }
 .m-badge.is-ok { --st: var(--m-ok); } .m-badge.is-warn { --st: var(--m-warn); } .m-badge.is-wait { --st: var(--m-wait); } .m-badge.is-crit { --st: var(--m-crit); } .m-badge.is-info { --st: var(--m-info); }
+/* Barre de niveau (MUI.meter) : piste, remplissage à la couleur du ton, repère de seuil */
+.m-meter { position: relative; height: 8px; border-radius: 999px; background: var(--m-muted); }
+.m-meter > i { position: absolute; top: 0; bottom: 0; left: 0; border-radius: inherit; background: var(--st, var(--m-info)); transition: width .5s cubic-bezier(.2, .8, .2, 1); }
+.m-meter.is-ok { --st: var(--m-ok); } .m-meter.is-warn { --st: var(--m-warn); } .m-meter.is-wait { --st: var(--m-wait); } .m-meter.is-crit { --st: var(--m-crit); } .m-meter.is-info { --st: var(--m-info); }
+.m-meter-mark { position: absolute; top: -4px; bottom: -4px; width: 2px; margin-left: -1px; border-radius: 1px; background: var(--m-fg); }
+@media (prefers-reduced-motion: reduce) { .m-meter > i { transition: none; } }
 .m-count { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: var(--m-muted); color: var(--m-muted-fg); font: 500 11px/1 var(--m-font-mono); }
 
 /* Cartes */

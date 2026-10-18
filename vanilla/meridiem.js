@@ -1,7 +1,7 @@
 /* Meridiem UI sans framework : les blocs du design system Olympe pour les pages HTML/JS simples
    (Command Center, outils internes). Même rendu que la librairie React.
    Dépend de olympe.css, et pour les visuels de marque de art.js (window.MeridiemArt) et icons.js.
-   API : window.MUI = { kpi, kpis, iso, bind, area, columns, donut, radial, banner, ctaBand, empty, badge,
+   API : window.MUI = { kpi, kpis, iso, bind, area, columns, donut, radial, banner, ctaBand, empty, badge, meter,
                         toast, menu, menuValue, navPill, palette, dialog, actionBar, busy, dotChart, dotField, city,
                         setTheme, theme, retheme, CHART, CHART_HEX }
    Mode nuit : les couleurs sont des variables CSS (olympe.css) ; les visuels sur canvas sont redessinés
@@ -229,6 +229,15 @@
       '<div class="m-empty-title">' + (o.title || "") + "</div>" + (o.text ? '<div class="m-empty-text">' + o.text + "</div>" : "") + (o.action || "") + "</div>";
   }
   function badge(status, text) { return '<span class="m-badge is-' + status + '">' + esc(text) + "</span>"; }
+  /* Barre de niveau (quota, solde, part consommée) : MUI.meter({ value, max, tone, mark, markLabel, label })
+     tone : ok | warn | wait | crit | info (défaut info) ; mark : un repère sur la même échelle que value (seuil, plafond),
+     markLabel son infobulle. Une barre ne dit jamais un statut seule : le chiffre et le mot s'écrivent à côté. */
+  function meter(o) {
+    o = o || {};
+    var max = o.max > 0 ? o.max : 100, pc = function (v) { return Math.max(0, Math.min(100, v / max * 100)).toFixed(1); };
+    return '<div class="m-meter' + (o.tone ? " is-" + o.tone : "") + '" role="meter" aria-valuemin="0" aria-valuemax="' + max + '" aria-valuenow="' + (o.value || 0) + '"' + (o.label ? ' aria-label="' + esc(o.label) + '"' : "") + ">" +
+      '<i style="width:' + pc(o.value || 0) + '%"></i>' + (o.mark != null ? '<b class="m-meter-mark" style="left:' + pc(o.mark) + '%"' + (o.markLabel ? ' title="' + esc(o.markLabel) + '"' : "") + "></b>" : "") + "</div>";
+  }
 
   /* ======================= Graphiques ======================= */
   // Couleurs des séries : variables CSS (suivent le mode nuit), valeurs de jour en repli. CHART_HEX : les valeurs de jour en hexadécimal.
@@ -657,7 +666,7 @@
     return Promise.resolve().then(fn).finally(function () { el.classList.remove("is-busy"); el.style.minWidth = ""; el.removeAttribute("aria-busy"); });
   }
 
-  window.MUI = { kpi: kpi, kpis: kpis, iso: iso, bind: bind, area: area, columns: columns, donut: donut, radial: radial, banner: banner, ctaBand: ctaBand, empty: empty, badge: badge,
+  window.MUI = { kpi: kpi, kpis: kpis, iso: iso, bind: bind, area: area, columns: columns, donut: donut, radial: radial, banner: banner, ctaBand: ctaBand, empty: empty, badge: badge, meter: meter,
     toast: toast, menu: menu, menuValue: menuValue, navPill: navPill, palette: palette, dialog: dialog, actionBar: actionBar, busy: busy, dotChart: dotChart, dotField: dotField, city: city, CHART: CHART, CHART_HEX: CHART_HEX, citySrc: null,
     setTheme: setTheme, theme: theme, retheme: retheme };
 })();

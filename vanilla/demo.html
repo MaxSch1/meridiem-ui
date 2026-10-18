@@ -81,6 +81,8 @@
     '<div class="m-card" style="padding:18px 20px"><h3 class="m-card-title">Relances devis de septembre</h3><p class="m-card-desc">4 brouillons prêts, rien ne part sans toi.</p>' +
       MUI.actionBar({ prompt: "L'agent attend ta décision", decision: [{ label: "Confirmer", icon: "Tick02", kind: "primary", onclick: "MUI.toast('Confirmé, l\\'agent reprend', { tone: 'ok' })" }, { label: "Donner un retour", icon: "PencilEdit02" }],
         follow: [{ label: "Marquer lu", icon: "MailOpen01" }], more: [{ label: "Discuter avec l'agent", icon: "Message01" }, { label: "C'est réglé", icon: "CheckmarkCircle02" }] }) + "</div>" +
+    '<div class="m-card" style="padding:18px 20px"><h3 class="m-card-title">Crédits de voix</h3><p class="m-card-desc">74 % restants, arrêt automatique sous le repère.</p><div style="margin-top:14px">' +
+      MUI.meter({ value: 74, max: 100, tone: "ok", mark: 22, markLabel: "Seuil d'arrêt", label: "Crédits restants" }) + "</div></div>" +
     '<div class="m-card">' + MUI.empty({ icon: "CheckList", title: "Rien d'autre en attente", text: "Les tâches terminées apparaissent ici.", action: '<button class="m-btn m-btn-sm">Voir l\'historique</button>' }) + "</div>" +
     MUI.ctaBand({ title: "Tout tourne.", text: "12 contrôles au vert, contrôlé à 09:30.", action: '<button class="m-btn m-btn-primary m-btn-sm">Voir la santé</button>' });
   var labels = [], cr = [], cl = [];

@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-10-19 · Barre de niveau `MUI.meter`, icônes Vidéo et Pause
+Demandé par la vue Content Factory du Command Center (solde de crédits de voix avec son seuil d'arrêt) ; le
+Command Center en portait déjà une version locale (limites des licences).
+- Sans framework : `MUI.meter({ value, max, tone, mark, markLabel, label })` et `.m-meter` (piste `--m-muted`,
+  remplissage au ton ok, warn, wait, crit ou info, repère `.m-meter-mark` en encre), `role="meter"` ; démo dans
+  `vanilla/demo.html`. Jetons seulement : suit la nuit.
+- Icônes : `Video01` et `Pause` ajoutées au kit (`src/kit/foundations.tsx`), donc à `vanilla/icons.js` (123 icônes).
+- Pas encore d'équivalent React : à ajouter au registre le jour où une application React en a besoin.
+
 ## 2026-10-18 · Mot des pastilles de statut lisible de jour
 Relevé en passant l'AI Center au mode nuit : de jour, le mot des pastilles descendait à 3,48:1 (« Terminé » sur une carte teintée et sélectionnée), 4,14:1 sur le menu de gauche (sans framework). Le mot prenait la couleur pure du statut, pensée pour le point.
 - Sans framework : `.m-badge` écrit son mot en `color-mix(statut --m-badge-ink, --m-fg)`, `--m-badge-ink: 72%` le jour et `100%` la nuit ; le point (`::before`) garde `var(--st)`.
