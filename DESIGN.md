@@ -80,11 +80,19 @@ Olympe de nuit, pas un thème sombre générique : la même page, éclairée à 
   sur un terracotta assez clair pour se détacher du fond tomberait sous 4,5:1. Toujours un seul par zone.
 - Titres EB Garamond inchangés (taille, graisse) ; seule leur couleur suit `foreground`.
 - Statuts éclaircis, pastille ET mot comme de jour. Graphiques : même ordre, couleurs éclaircies.
-- Visuels de marque : ville en points en sable et terracotta sur encre (ombres brun profond, halo sable
-  à l'horizon) ; bloc à points plus profond que la page (`#0E0C0A`), cerné d'un filet ; cartes
+- Visuels de marque : la ville devient une **ville de nuit éclairée** (retours de Maxime du 18/10/2026,
+  « les petits points très laids » de la première version) : le ciel, la brume et l'eau restent la carte,
+  la ville est une masse de points sourds (`--m-city-1`, `--m-city-2`) piquée de lumières chaudes là où
+  la photo est plus claire que son voisinage (`--m-city-light-1` à `-3`, de l'ambre sourd au doré).
+  À l'apparition, la masse monte comme de jour puis les lumières s'allument une à une. Le jeton
+  `--m-city-mode: nocturne` choisit ce rendu (`ditherImage` mode `nocturne`), le jour ne le pose pas.
+  Trois partis essayés dans le vrai bandeau (gravure claire, ville éclairée, riso deux encres) :
+  `docs/qa/mode-nuit/ville-nuit-essais.png`. Champ de points (`MUI.dotField`, bloc final, carte
+  sombre) en pierre et ambre (`--m-dots` `#5C5045`, `--m-dots-accent` `#D9934A`), jamais de terracotta
+  saturé sur l'encre. Bloc à points plus profond que la page (`#0E0C0A`), cerné d'un filet ; cartes
   animées en traits clairs, leur touche terracotta suit `primary`.
 - Ombres en noir et plus denses (sans quoi elles disparaissent) ; voile des fenêtres plus opaque.
-- Aires de graphique allégées : le dégradé garde 30 % de son opacité de jour (`--m-area-fill`, `--chart-area-fill`) ; la ville reste sourde (sable `#A08A70` au plus clair), jamais la zone la plus lumineuse de la page.
+- Aires de graphique allégées : le dégradé garde 30 % de son opacité de jour (`--m-area-fill`, `--chart-area-fill`) ; la ville reste sourde : seules quelques lumières sont vives, jamais une zone entière lumineuse.
 
 **Activer**
 | Valeur | Effet |
@@ -128,6 +136,8 @@ Olympe de nuit, pas un thème sombre générique : la même page, éclairée à 
 | Danger `destructive` / son texte | `#B3261E` / `#FFFFFF` | `#EE7D70` / `#1A1410` |
 | Statuts ok, warn, wait, crit, info | `#2F7A4A` `#9A5D0C` `#55499F` `#B3261E` `#2B6099` | `#6CC08A` `#E3A55A` `#AFA2EE` `#F2867A` `#80B2E8` |
 | Graphiques chart-1 à chart-5 | `#AA4F13` `#3F6FB0` `#C2861A` `#0E8C7C` `#8E4F8A` | `#D9773F` `#7489E2` `#C3841A` `#2AA88C` `#BE72CC` |
+| Ville `city-mode`, masse `city-1` / `city-2`, lumières `city-light-1..3` | (non posé : trame de jour) `#6E4226` `#B98259` | `nocturne` `#433A31` `#5C4F42`, `#A8693A` `#DE9A4E` `#F2D49C` |
+| Champ de points `dots` / `dots-accent` | `#AA4F13` / `#E3CDB3` | `#5C5045` / `#D9934A` |
 
 **Règles**
 - Toute couleur passe par une variable : une couleur écrite en dur dans un composant ne suit pas la nuit.
@@ -145,6 +155,17 @@ Olympe de nuit, pas un thème sombre générique : la même page, éclairée à 
 
 ## Mise en page
 - Plateforme : sidebar shadcn en variante `inset` (espace de travail, recherche ⌘K, navigation avec compteurs, liste « à valider », menu du compte en bas qui contient profil, réglages, aide, raccourcis, déconnexion).
+- **Choix d'une préférence dans le menu du compte (apparence, langue ; règle de Maxime du 18/10/2026)** :
+  UNE entrée du menu (icône, libellé, valeur courante à droite, chevron) qui ouvre un sous-menu avec les
+  options cochables, plus une note courte si besoin. Jamais une liste dépliée au milieu du menu, jamais
+  un bouton isolé à côté du nom. Le même choix peut vivre aussi dans Réglages et ⌘K.
+  Sans framework : bloc `.m-menu-sub` (`.m-menu-subtrigger`, `.m-menu-value`, `.m-menu-chev`,
+  `.m-submenu`, options `role="menuitemradio"` avec `data-value` et `.m-menu-check`, note `.m-menu-note`)
+  dans un panneau de `MUI.menu` ; `MUI.menuValue(bloc, valeur)` coche et recopie la valeur. Il s'ouvre au
+  survol et au clic, à droite de l'entrée, à gauche si la place manque, en place sous l'entrée sur
+  téléphone ; flèche droite ouvre, flèche gauche referme, Échap et clic dehors ferment tout. Fermé, il
+  est en `display: none` (aucun calque de plus, le jour reste identique au pixel). React : `DropdownMenuSub`,
+  `DropdownMenuSubTrigger`, `DropdownMenuSubContent` et `DropdownMenuRadioGroup` de shadcn.
 - En-tête de page : titre serif, une phrase, actions à droite. L'information essentielle tient au premier écran ; les bandeaux restent compacts.
 - Liste et détail côte à côte ; le détail porte l'action principale et rappelle que rien ne part sans validation.
 - Landing : héros sur la ville en points, grille de filets à repères en croix, bloc final sombre avec champ de points.

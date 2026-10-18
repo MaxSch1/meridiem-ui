@@ -83,3 +83,14 @@ maintenant qu'`art.js` lit les variables : passer `paper="var(--card)"` et une p
 | Aires de nuit en bloc brun | facteur `--m-area-fill` / `--chart-area-fill` : 1 le jour, 0,3 la nuit | `demo-aire-nuit-avant.png`, `demo-aire-nuit-apres.png` |
 | Ville de nuit trop lumineuse à droite | `--m-city-1/2/3` : `#3F2D1E`, `#7E5537`, `#A08A70` | `demo-ville-nuit-avant.png`, `demo-ville-nuit-apres.png` |
 | Jour | démo 1440 et 390 px : 0 pixel différent | `demo-jour-avant-18-10-1440.png`, `demo-jour-apres-18-10-1440.png` |
+
+## Retours de Maxime du 18/10 (soir) : ville de nuit éclairée, points, sous-menu
+| Sujet | Preuve |
+|---|---|
+| Trois partis de ville essayés dans le bandeau réel du Command Center, retenu : ville éclairée | `ville-nuit-essais.png` (captures détaillées dans `meridiem-operateur/docs/qa/mode-nuit/retours-1/`) |
+| Démo de nuit | `demo-nuit-retours-1440.png`, `demo-nuit-retours-390.png` |
+| Jour inchangé : démo 1440 et 390 px, 0 pixel différent (polices chargées, curseur masqué) | `demo-jour-avant-retours-1440.png` / `demo-jour-apres-retours-1440.png`, idem `-390` |
+| Sous-menu Apparence : menu, survol (jour), choix Nuit et toast, survol (nuit) | `sous-menu-1-menu-jour.png` à `sous-menu-4-survol-nuit.png` |
+
+Parcours (`qa-retours-1.js`) : survol ouvre ; clic sur « Nuit » pose `data-theme="dark"`, ferme le menu, toast ; la valeur affichée passe à « Nuit », coche sur Nuit ; clic dehors ferme tout ; flèche droite ouvre et met le focus sur l'option cochée, flèche bas passe à la suivante, flèche gauche referme et rend le focus à l'entrée ; Échap ferme tout ; Entrée ouvre puis choisit. Console : aucune erreur ni avertissement.
+Piège mesuré : un sous-menu fermé en `opacity: 0` (calque composité) décalait de ±1 l'anticrénelage de 20 pixels du menu de gauche ; en `display: none`, 0 pixel.

@@ -206,7 +206,37 @@
   }
 
 
-  /* Image tramée (la ville du site) : 'dither' = trame de Bayer en pixels, 'halftone' = points dont la taille suit l'ombre.
+  /* Ville de nuit : la photo est lue en luminance (src, RGBA w×h). Les zones lisses (ciel, brume, eau) n'ont pas de
+     texture locale et restent le papier ; la ville, texturée, devient une masse de points sourds qui suit la photo en
+     positif (palette 0 et 1) ; un point nettement plus clair que son voisinage (façade éclairée, pont, rue) devient une
+     lumière chaude (palette 2 à 4, de la plus sourde à la plus vive). Rend l'index de palette de chaque cellule (papier =
+     dernier index) et, pour les lumières, l'instant (0 à 1) où elles s'allument pendant l'apparition. */
+  function nocturne(src, w, h, paperIdx, o) {
+    const n = w * h, L = new Float32Array(n), L2 = new Float32Array(n);
+    for (let i = 0; i < n; i++) { L[i] = (0.2126 * src[i * 4] + 0.7152 * src[i * 4 + 1] + 0.0722 * src[i * 4 + 2]) / 255; L2[i] = L[i] * L[i]; }
+    const blur = (a, r) => {
+      const t = new Float32Array(n), b = new Float32Array(n);
+      for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) { let s = 0, c = 0; for (let x = Math.max(0, i - r); x <= Math.min(w - 1, i + r); x++) { s += a[j * w + x]; c++; } t[j * w + i] = s / c; }
+      for (let i = 0; i < w; i++) for (let j = 0; j < h; j++) { let s = 0, c = 0; for (let y = Math.max(0, j - r); y <= Math.min(h - 1, j + r); y++) { s += t[y * w + i]; c++; } b[j * w + i] = s / c; }
+      return b;
+    };
+    const m = blur(L, 1), m2 = blur(L2, 1), mean = blur(L, 2), dev = new Float32Array(n);
+    for (let i = 0; i < n; i++) dev[i] = Math.sqrt(Math.max(0, m2[i] - m[i] * m[i]));
+    const tex = blur(dev, 3), idx = new Uint8Array(n), on = new Float32Array(n);
+    const hash = (i, j) => { let x = Math.imul(i, 374761393) + Math.imul(j, 668265263) >>> 0; x = Math.imul(x ^ (x >>> 13), 1274126177) >>> 0; return ((x ^ (x >>> 16)) >>> 0) / 4294967296; };
+    const lights = o.lights == null ? 0.85 : o.lights, mass = o.mass == null ? 0.5 : o.mass;
+    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) {
+      const c = j * w + i, t = smooth(0.018, 0.06, tex[c]), th = (BAYER[(j & 7) * 8 + (i & 7)] + 0.5) / 64;
+      const lit = smooth(0.03, 0.12, L[c] - mean[c]) * smooth(0.42, 0.68, L[c]) * t;
+      if (lit > 0.05 && hash(i, j) < lit * lights) { idx[c] = lit > 0.7 ? 4 : lit > 0.4 ? 3 : 2; on[c] = 0.45 + 0.55 * hash(j, i); continue; }
+      const v = (0.1 + mass * clamp((L[c] - 0.2) * 1.4)) * t;
+      idx[c] = v > th ? (v > 0.42 ? 1 : 0) : paperIdx;
+    }
+    return { idx, on };
+  }
+
+  /* Image tramée (la ville du site) : 'dither' = trame de Bayer en pixels, 'halftone' = points dont la taille suit l'ombre,
+     'nocturne' = la ville de nuit (ciel, brume et eau restent le papier ; la ville en points sourds piquée de lumières chaudes).
      L'image « se développe » à l'apparition : le seuil de trame monte de 0 à 1 (reveal, en secondes). */
   function ditherImage(canvas, img, o) {
     o = o || {};
@@ -227,8 +257,21 @@
     const pal = (o.palette || ['#4a2c18', '#a8693f', '#e3cdb3', '#fbf9f5']).map(c => hex(color(canvas, c))), levels = pal.length - 1;
     const paper = pal[levels], ink = pal[0];
     const out = ctx.createImageData(w, h);
+    const night = o.mode === 'nocturne' ? nocturne(src, w, h, pal.length - 1, o) : null;
     const draw = t => {
       const k = reduced || !o.reveal ? 1 : clamp(t / o.reveal), ease = 1 - Math.pow(1 - k, 3);
+      if (night) {
+        // apparition : la masse monte de bas en haut comme de jour, puis les lumières s'allument une à une
+        for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) {
+          const n = j * w + i, th = (BAYER[(j & 7) * 8 + (i & 7)] + 0.5) / 64, gate = ease * 1.25 - (1 - j / h) * 0.25;
+          let rgb = pal[night.idx[n]];
+          if (night.idx[n] >= 2 ? night.on[n] > k : th > gate) rgb = paper;
+          const q = n * 4; out.data[q] = rgb[0]; out.data[q + 1] = rgb[1]; out.data[q + 2] = rgb[2]; out.data[q + 3] = 255;
+        }
+        const tmp = document.createElement('canvas'); tmp.width = w; tmp.height = h; tmp.getContext('2d').putImageData(out, 0, 0);
+        ctx.imageSmoothingEnabled = false; ctx.drawImage(tmp, 0, 0, W, H);
+        return;
+      }
       if (o.mode === 'halftone') {
         ctx.fillStyle = 'rgb(' + paper.join(',') + ')'; ctx.fillRect(0, 0, W, H);
         for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) {

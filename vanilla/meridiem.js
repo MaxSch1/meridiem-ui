@@ -2,7 +2,7 @@
    (Command Center, outils internes). Même rendu que la librairie React.
    Dépend de olympe.css, et pour les visuels de marque de art.js (window.MeridiemArt) et icons.js.
    API : window.MUI = { kpi, kpis, iso, bind, area, columns, donut, radial, banner, ctaBand, empty, badge,
-                        toast, menu, navPill, palette, dialog, actionBar, busy, dotChart, dotField, city,
+                        toast, menu, menuValue, navPill, palette, dialog, actionBar, busy, dotChart, dotField, city,
                         setTheme, theme, retheme, CHART, CHART_HEX }
    Mode nuit : les couleurs sont des variables CSS (olympe.css) ; les visuels sur canvas sont redessinés
    tout seuls quand data-theme change sur <html> ou quand le système passe en sombre (data-theme="auto"). */
@@ -172,7 +172,12 @@
     var src = o.src || MUI.citySrc || CITY_SRC;
     if (!cityImg || cityImg._src !== src) { cityImg = new Image(); cityImg.crossOrigin = "anonymous"; cityImg._src = src; cityImg.src = src; }
     cv._muiArt = { kind: "city", o: o };
-    var go = function () { window.MeridiemArt.ditherImage(cv, cityImg, { mode: o.mode || "dither", cell: o.cell || 2, focusY: o.focusY == null ? 0.5 : o.focusY, lift: o.lift == null ? 0.12 : o.lift, contrast: o.contrast || 1.15, reveal: o.reveal == null ? 1.4 : o.reveal, palette: (o.palette || ["var(--m-city-1, #6E4226)", "var(--m-city-2, #B98259)", "var(--m-city-3, #E8D6C0)"]).concat([o.paper || "var(--m-card, #FFFFFF)"]) }); };
+    var go = function () {
+      // De nuit, le jeton --m-city-mode vaut « nocturne » : la ville éclairée (masse sourde, lumières chaudes). Le jour ne le pose pas.
+      var mode = o.mode || (getComputedStyle(cv).getPropertyValue("--m-city-mode").trim() || "dither");
+      var pal = o.palette || (mode === "nocturne" ? ["var(--m-city-1)", "var(--m-city-2)", "var(--m-city-light-1)", "var(--m-city-light-2)", "var(--m-city-light-3)"] : ["var(--m-city-1, #6E4226)", "var(--m-city-2, #B98259)", "var(--m-city-3, #E8D6C0)"]);
+      window.MeridiemArt.ditherImage(cv, cityImg, { mode: mode, cell: o.cell || 2, focusY: o.focusY == null ? 0.5 : o.focusY, lift: o.lift == null ? 0.12 : o.lift, contrast: o.contrast || 1.15, reveal: o.reveal == null ? 1.4 : o.reveal, palette: pal.concat([o.paper || "var(--m-card, #FFFFFF)"]) });
+    };
     if (cityImg.complete && cityImg.naturalWidth) go(); else cityImg.addEventListener("load", go, { once: true });
   }
   function dotField(cv, o) { cv._muiArt = { kind: "dots", o: o }; if (window.MeridiemArt) window.MeridiemArt.dots(cv, Object.assign({ color: "var(--m-dots, #AA4F13)", accent: "var(--m-dots-accent, #E3CDB3)", gap: 11, alpha: 0.55, focus: { x: 0.82, y: 0.45 } }, o || {})); }
@@ -338,20 +343,69 @@
   }
 
   // Menu déroulant attaché à un bouton : MUI.menu(bouton, panneau, { side: "top" | "bottom" })
+  // Sous-menu (choix d'une préférence : apparence, langue) : dans le panneau, un bloc
+  //   <div class="m-menu-sub"><button class="m-menu-item m-menu-subtrigger">icône, libellé, <span class="m-menu-value">valeur</span></button>
+  //   <div class="m-submenu" role="menu"> options role="menuitemradio" data-value, <span class="m-menu-check"></span> </div></div>
+  // Il s'ouvre au survol et au clic, à droite de l'entrée (à gauche, ou en place sous elle, si la place manque) ;
+  // flèche droite l'ouvre, flèche gauche le referme, Échap et clic dehors ferment tout. MUI.menuValue(bloc, valeur) coche.
   function menu(trigger, panel, o) {
     o = o || {};
     panel.classList.add("m-menu"); panel.setAttribute("data-side", o.side || "bottom");
-    function close() { panel.classList.remove("is-open"); trigger.setAttribute("aria-expanded", "false"); document.removeEventListener("click", outside, true); document.removeEventListener("keydown", key); }
+    var subs = [];
+    function close() { subs.forEach(function (x) { x.hide(); }); panel.classList.remove("is-open"); trigger.setAttribute("aria-expanded", "false"); document.removeEventListener("click", outside, true); document.removeEventListener("keydown", key); }
     function outside(e) { if (!panel.contains(e.target) && !trigger.contains(e.target)) close(); }
-    function key(e) { if (e.key === "Escape") close(); }
+    function key(e) { if (e.key === "Escape") { close(); trigger.focus(); } }
     trigger.addEventListener("click", function (e) {
       e.stopPropagation();
       if (panel.classList.contains("is-open")) return close();
       panel.classList.add("is-open"); trigger.setAttribute("aria-expanded", "true");
       setTimeout(function () { document.addEventListener("click", outside, true); document.addEventListener("keydown", key); }, 0);
     });
-    panel.addEventListener("click", function (e) { if (e.target.closest(".m-menu-item")) close(); });
+    panel.addEventListener("click", function (e) { var it = e.target.closest(".m-menu-item"); if (it && !it.classList.contains("m-menu-subtrigger")) close(); });
+    panel.querySelectorAll(".m-menu-sub").forEach(function (box) { subs.push(subMenu(box, function () { subs.forEach(function (x) { if (x.box !== box) x.hide(); }); })); });
     return { close: close };
+  }
+  var canHover = window.matchMedia ? window.matchMedia("(hover: hover) and (pointer: fine)") : null;
+  function subMenu(box, others) {
+    var btn = box.querySelector(".m-menu-subtrigger"), sub = box.querySelector(".m-submenu"), timer = 0;
+    btn.setAttribute("aria-haspopup", "menu"); btn.setAttribute("aria-expanded", "false");
+    sub.classList.add("m-menu"); sub.setAttribute("role", "menu");
+    var items = function () { return Array.prototype.slice.call(sub.querySelectorAll(".m-menu-item")); };
+    function place() {
+      sub.removeAttribute("data-place"); sub.style.top = "";
+      var r = btn.getBoundingClientRect(), w = sub.offsetWidth, vw = document.documentElement.clientWidth;
+      if (r.right + 6 + w > vw - 8) sub.setAttribute("data-place", r.left - 6 - w >= 8 ? "left" : "inline");
+      if (sub.getAttribute("data-place") === "inline") return;
+      var sr = sub.getBoundingClientRect(), over = sr.bottom - (window.innerHeight - 8);
+      if (over > 0) sub.style.top = Math.round(-5 - Math.min(over, sr.top - 8)) + "px";
+    }
+    function show(focus) {
+      clearTimeout(timer); if (box.classList.contains("is-open")) { if (focus) items()[0].focus(); return; }
+      others(); box.classList.add("is-open"); sub.classList.add("is-open"); btn.setAttribute("aria-expanded", "true"); place();
+      if (focus) { var on = sub.querySelector('[aria-checked="true"]') || items()[0]; if (on) on.focus(); }
+    }
+    function hide() { clearTimeout(timer); box.classList.remove("is-open"); sub.classList.remove("is-open"); btn.setAttribute("aria-expanded", "false"); }
+    btn.addEventListener("click", function (e) { e.stopPropagation(); if (box.classList.contains("is-open") && !(canHover && canHover.matches)) hide(); else show(e.detail === 0); });
+    box.addEventListener("mouseenter", function () { if (canHover && canHover.matches) { clearTimeout(timer); timer = setTimeout(function () { show(false); }, 60); } });
+    box.addEventListener("mouseleave", function () { if (canHover && canHover.matches) { clearTimeout(timer); timer = setTimeout(hide, 220); } });
+    btn.addEventListener("keydown", function (e) { if (e.key === "ArrowRight" || ((e.key === "Enter" || e.key === " ") && !box.classList.contains("is-open"))) { e.preventDefault(); show(true); } else if (e.key === "ArrowLeft") { e.preventDefault(); hide(); } });
+    sub.addEventListener("keydown", function (e) {
+      var list = items(), i = list.indexOf(document.activeElement);
+      if (e.key === "ArrowLeft") { e.preventDefault(); e.stopPropagation(); hide(); btn.focus(); }
+      else if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); list[(i + (e.key === "ArrowDown" ? 1 : list.length - 1)) % list.length].focus(); }
+    });
+    return { box: box, hide: hide };
+  }
+  // Coche l'option data-value=valeur d'un sous-menu et recopie son libellé dans l'entrée (valeur courante à droite)
+  function menuValue(box, value) {
+    var label = "";
+    box.querySelectorAll(".m-submenu [data-value]").forEach(function (it) {
+      var on = it.getAttribute("data-value") === String(value), c = it.querySelector(".m-menu-check");
+      it.setAttribute("aria-checked", on ? "true" : "false");
+      if (c) c.innerHTML = on && window.meridiemIcon ? window.meridiemIcon("Tick02", 16) : "";
+      if (on) { var t = it.querySelector(".m-menu-label"); label = (t || it).textContent.trim(); }
+    });
+    var v = box.querySelector(".m-menu-subtrigger .m-menu-value"); if (v && label) v.textContent = label;
   }
 
   // Pastille active qui glisse d'un lien à l'autre : MUI.navPill(nav, ".m-nav-item", "is-active")
@@ -604,6 +658,6 @@
   }
 
   window.MUI = { kpi: kpi, kpis: kpis, iso: iso, bind: bind, area: area, columns: columns, donut: donut, radial: radial, banner: banner, ctaBand: ctaBand, empty: empty, badge: badge,
-    toast: toast, menu: menu, navPill: navPill, palette: palette, dialog: dialog, actionBar: actionBar, busy: busy, dotChart: dotChart, dotField: dotField, city: city, CHART: CHART, CHART_HEX: CHART_HEX, citySrc: null,
+    toast: toast, menu: menu, menuValue: menuValue, navPill: navPill, palette: palette, dialog: dialog, actionBar: actionBar, busy: busy, dotChart: dotChart, dotField: dotField, city: city, CHART: CHART, CHART_HEX: CHART_HEX, citySrc: null,
     setTheme: setTheme, theme: theme, retheme: retheme };
 })();

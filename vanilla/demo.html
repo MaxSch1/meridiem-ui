@@ -43,6 +43,14 @@
           <div class="m-menu-head"><span class="m-avatar">MS</span><div><b style="font-weight:500">Maxime Schifflers</b><div class="m-muted" style="font-size:12px">Meridiem</div></div></div>
           <button class="m-menu-item" onclick="dlg.open()"><i data-icon="Settings02"></i>Réglages</button>
           <button class="m-menu-item" onclick="MUI.toast('Aide')"><i data-icon="HelpCircle"></i>Aide</button>
+          <div class="m-menu-sub" id="um-theme">
+            <button type="button" class="m-menu-item m-menu-subtrigger"><i data-icon="Moon02"></i>Apparence<span class="m-menu-value">Jour</span><i class="m-menu-chev" data-icon="ArrowRight01"></i></button>
+            <div class="m-submenu">
+              <button type="button" class="m-menu-item" role="menuitemradio" data-value="light"><i data-icon="Sun03"></i><span class="m-menu-label">Jour</span><span class="m-menu-check"></span></button>
+              <button type="button" class="m-menu-item" role="menuitemradio" data-value="dark"><i data-icon="Moon02"></i><span class="m-menu-label">Nuit</span><span class="m-menu-check"></span></button>
+              <button type="button" class="m-menu-item" role="menuitemradio" data-value="auto"><i data-icon="Layers01"></i><span class="m-menu-label">Système</span><span class="m-menu-check"></span></button>
+            </div>
+          </div>
           <div class="m-menu-sep"></div>
           <button class="m-menu-item is-danger" onclick="MUI.toast('Déconnexion', { description: 'Désactivée dans la démo' })"><i data-icon="Logout01"></i>Se déconnecter</button>
         </div>
@@ -95,14 +103,17 @@
   MUI.menu(document.getElementById("userbtn"), document.getElementById("usermenu"), { side: "top" });
   // Jour, nuit ou réglage du système : choix gardé dans ce navigateur (démo)
   var themeBtns = document.querySelectorAll("#theme button");
-  function markTheme() { var t = document.documentElement.getAttribute("data-theme") || "light"; themeBtns.forEach(function (b) { b.setAttribute("aria-selected", b.getAttribute("data-t") === t ? "true" : "false"); }); }
+  function markTheme() { var t = document.documentElement.getAttribute("data-theme") || "light"; themeBtns.forEach(function (b) { b.setAttribute("aria-selected", b.getAttribute("data-t") === t ? "true" : "false"); }); MUI.menuValue(document.getElementById("um-theme"), t); }
   try { var saved = localStorage.getItem("olympe-theme"); if (saved) MUI.setTheme(saved); } catch (e) { /* stockage indisponible */ }
   markTheme();
-  themeBtns.forEach(function (b) { b.addEventListener("click", function () {
-    var t = b.getAttribute("data-t"); MUI.setTheme(t); markTheme();
+  // Le même choix depuis le menu du compte : une entrée « Apparence » qui ouvre un sous-menu (règle de DESIGN.md)
+  document.querySelectorAll("#um-theme [data-value]").forEach(function (b) { b.addEventListener("click", function () { chooseTheme(b.getAttribute("data-value")); }); });
+  themeBtns.forEach(function (b) { b.addEventListener("click", function () { chooseTheme(b.getAttribute("data-t")); }); });
+  function chooseTheme(t) {
+    MUI.setTheme(t); markTheme();
     try { localStorage.setItem("olympe-theme", t); } catch (e) { /* stockage indisponible */ }
     MUI.toast(t === "dark" ? "Mode nuit" : t === "auto" ? "Thème du système" : "Mode jour", { description: "Thème actif : " + (MUI.theme() === "dark" ? "nuit" : "jour") });
-  }); });
+  }
   document.querySelectorAll("#nav .m-nav-item").forEach(function (a) { a.addEventListener("click", function () { document.querySelectorAll("#nav .m-nav-item").forEach(function (x) { x.classList.toggle("is-active", x === a); }); main.classList.remove("m-view-in"); void main.offsetWidth; main.classList.add("m-view-in"); }); });
 </script>
 </body>

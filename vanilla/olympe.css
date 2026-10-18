@@ -264,6 +264,23 @@
 .m-menu-sep { height: 1px; background: var(--m-border); margin: 4px 0; }
 .m-menu-item.is-danger { color: var(--m-destructive); }
 .m-menu-item.is-danger svg { color: var(--m-destructive); }
+/* Sous-menu d'une préférence (apparence, langue) : une entrée avec la valeur courante et un chevron, les options à côté */
+.m-menu-sub { position: relative; }
+.m-menu-subtrigger .m-menu-value { margin-left: auto; color: var(--m-muted-fg); font-size: 12.5px; }
+.m-menu-subtrigger .m-menu-chev { display: inline-flex; margin-left: 2px; }
+.m-menu-subtrigger .m-menu-chev svg { width: 14px; height: 14px; }
+.m-menu-sub.is-open > .m-menu-subtrigger { background: var(--m-accent); }
+/* Fermé, le sous-menu n'existe pas à l'écran (display: none, aucun calque de plus) ; il apparaît par une courte animation. */
+.m-menu.m-submenu { display: none; top: -5px; left: calc(100% + 6px); min-width: 180px; transform: none; transform-origin: top left; }
+.m-menu.m-submenu.is-open { display: block; animation: m-sub-in .14s ease-out; }
+.m-menu.m-submenu[data-place="left"] { left: auto; right: calc(100% + 6px); transform-origin: top right; }
+.m-menu.m-submenu[data-place="inline"] { position: static; min-width: 0; margin: 2px 0 2px 18px; padding: 0 0 0 8px; border: 0; border-left: 1px solid var(--m-border); border-radius: 0; box-shadow: none; animation: none; }
+@keyframes m-sub-in { from { opacity: 0; transform: translateX(-4px) scale(.98); } }
+@media (prefers-reduced-motion: reduce) { .m-menu.m-submenu.is-open { animation: none; } }
+.m-menu-item .m-menu-check { display: inline-flex; width: 16px; height: 16px; margin-left: auto; }
+.m-menu-item .m-menu-check svg { color: var(--m-fg); }
+.m-menu-item:focus-visible { outline: none; background: var(--m-accent); }
+.m-menu-note { margin: 0; padding: 4px 8px 6px; font-size: 11.5px; line-height: 1.35; color: var(--m-muted-fg); }
 
 /* Menu latéral complet */
 .m-pill { position: absolute; top: 0; left: 0; z-index: 0; border-radius: 8px; background: var(--m-sidebar-accent); pointer-events: none; transition: transform .32s cubic-bezier(.3, .9, .3, 1.15), height .32s, opacity .2s; }
@@ -446,14 +463,18 @@ html.m-dialog-lock { overflow: hidden; }
   --m-cta-bg: #0E0C0A;
   --m-cta-fg: var(--m-ivory);
   --m-cta-ring: inset 0 0 0 1px var(--m-border);
-  /* Visuels : sable et terracotta sur encre ; la ville reste sourde (18/10 : plus claire, elle volait la page) */
+  /* Visuels : la ville de nuit éclairée (masse sourde, lumières chaudes, ciel vide) et des points pierre et ambre (18/10, retours de Maxime) */
   --m-bar-top: #E58B57;
   --m-bar-bottom: #A8521F;
-  --m-city-1: #3F2D1E;
-  --m-city-2: #7E5537;
+  --m-city-mode: nocturne;
+  --m-city-1: #433A31;
+  --m-city-2: #5C4F42;
   --m-city-3: #A08A70;
-  --m-dots: #B85A22;
-  --m-dots-accent: #E3CDB3;
+  --m-city-light-1: #A8693A;
+  --m-city-light-2: #DE9A4E;
+  --m-city-light-3: #F2D49C;
+  --m-dots: #5C5045;
+  --m-dots-accent: #D9934A;
   --m-dotchart-dim: #5A5249;
 }
 @media (prefers-color-scheme: dark) {
@@ -501,14 +522,18 @@ html.m-dialog-lock { overflow: hidden; }
     --m-cta-bg: #0E0C0A;
     --m-cta-fg: var(--m-ivory);
     --m-cta-ring: inset 0 0 0 1px var(--m-border);
-    /* Visuels : sable et terracotta sur encre ; la ville reste sourde (18/10 : plus claire, elle volait la page) */
+    /* Visuels : la ville de nuit éclairée (masse sourde, lumières chaudes, ciel vide) et des points pierre et ambre (18/10, retours de Maxime) */
     --m-bar-top: #E58B57;
     --m-bar-bottom: #A8521F;
-    --m-city-1: #3F2D1E;
-    --m-city-2: #7E5537;
+    --m-city-mode: nocturne;
+    --m-city-1: #433A31;
+    --m-city-2: #5C4F42;
     --m-city-3: #A08A70;
-    --m-dots: #B85A22;
-    --m-dots-accent: #E3CDB3;
+    --m-city-light-1: #A8693A;
+    --m-city-light-2: #DE9A4E;
+    --m-city-light-3: #F2D49C;
+    --m-dots: #5C5045;
+    --m-dots-accent: #D9934A;
     --m-dotchart-dim: #5A5249;
   }
 }
