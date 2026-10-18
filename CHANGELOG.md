@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-10-18 · Icônes épingle et favori retiré
+- Trois icônes Hugeicons ajoutées au kit et à `vanilla/icons.js` (120 icônes) : `Pin` (épingler), `PinOff` (détacher), `StarOff` (retirer des favoris). Besoin : épingles et favoris des conversations dans Meridiem AI Center (`DEV/meridiem-vigie`).
+
 ## 2026-10-18 · Retours d'une app Next.js 16 (Assiette)
 Quatre défauts du registre trouvés en montant `DEV/meridiem-assiette` (Next.js 16.4) et corrigés là-bas sur place la nuit du 18/10 ; reportés à la source pour que les projets suivants n'aient pas à les refaire.
 - **`brand`** : erreur d'hydratation React des cartes animées (`KpiCard`). Le dernier chiffre de cos et sin différait entre le rendu serveur et le navigateur, donc les attributs SVG aussi. Coordonnées isométriques et polaires arrondies à 0,01 (`r2` dans `P` et `polar`), rendu identique à l'œil.
