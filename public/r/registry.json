@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "meridiem",
-  "homepage": "https://github.com/Meridiem-ai/meridiem-ui",
+  "homepage": "https://github.com/MaxSch1/meridiem-ui",
   "items": [
     {
       "name": "olympe-theme",
@@ -203,7 +203,7 @@
       "title": "Carte indicateur animée",
       "registryDependencies": [
         "card",
-        "https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/public/r/brand.json"
+        "https://raw.githubusercontent.com/MaxSch1/meridiem-ui/main/public/r/brand.json"
       ],
       "files": [
         {
@@ -236,7 +236,7 @@
       "description": "ThemeProvider (choix mémorisé, data-theme et .dark sur <html>), ThemeScript contre le flash au chargement, et ThemeSubmenu : l'entrée « Apparence » du menu du compte qui ouvre un sous-menu Jour, Nuit, Système.",
       "registryDependencies": [
         "dropdown-menu",
-        "https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/public/r/brand.json"
+        "https://raw.githubusercontent.com/MaxSch1/meridiem-ui/main/public/r/brand.json"
       ],
       "dependencies": [
         "@hugeicons/react",
@@ -281,7 +281,7 @@
         "input-group",
         "dropdown-menu",
         "card",
-        "https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/public/r/brand.json"
+        "https://raw.githubusercontent.com/MaxSch1/meridiem-ui/main/public/r/brand.json"
       ],
       "files": [
         {
@@ -307,7 +307,7 @@
         "button",
         "input-group",
         "card",
-        "https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/public/r/brand.json"
+        "https://raw.githubusercontent.com/MaxSch1/meridiem-ui/main/public/r/brand.json"
       ],
       "files": [
         {
@@ -347,15 +347,15 @@
         "table",
         "input-group",
         "alert-dialog",
-        "https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/public/r/spinner.json",
+        "https://raw.githubusercontent.com/MaxSch1/meridiem-ui/main/public/r/spinner.json",
         "switch",
         "item",
         "card",
         "sonner",
-        "https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/public/r/kpi-card.json",
-        "https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/public/r/charts.json",
-        "https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/public/r/clients-table.json",
-        "https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/public/r/theme.json"
+        "https://raw.githubusercontent.com/MaxSch1/meridiem-ui/main/public/r/kpi-card.json",
+        "https://raw.githubusercontent.com/MaxSch1/meridiem-ui/main/public/r/charts.json",
+        "https://raw.githubusercontent.com/MaxSch1/meridiem-ui/main/public/r/clients-table.json",
+        "https://raw.githubusercontent.com/MaxSch1/meridiem-ui/main/public/r/theme.json"
       ],
       "files": [
         {
@@ -397,7 +397,7 @@
         "button",
         "calendar",
         "dialog",
-        "https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/public/r/brand.json"
+        "https://raw.githubusercontent.com/MaxSch1/meridiem-ui/main/public/r/brand.json"
       ],
       "files": [
         {

@@ -21,7 +21,7 @@ cd mon-app && npm install && npm install tailwindcss @tailwindcss/vite
 # configurer Tailwind 4 et l'alias @/ (copier vite.config.ts et les "paths" des tsconfig de ce dépôt)
 npx shadcn@latest init -t vite -b radix -p nova
 # dans components.json : "iconLibrary": "hugeicons"
-R=https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/public/r
+R=https://raw.githubusercontent.com/MaxSch1/meridiem-ui/main/public/r
 npx shadcn@latest add $R/olympe-theme.json $R/olympe-styles.json
 npx shadcn@latest add $R/platform.json   # gabarit de plateforme complet, ou $R/landing.json
 ```

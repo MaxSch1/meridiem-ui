@@ -164,7 +164,7 @@
   }
 
   /* ======================= Visuels de marque ======================= */
-  var CITY_SRC = "https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/public/assets/ville-europe.jpg";
+  var CITY_SRC = "https://raw.githubusercontent.com/MaxSch1/meridiem-ui/main/public/assets/ville-europe.jpg";
   var cityImg = null;
   function city(cv, o) {
     o = o || {};

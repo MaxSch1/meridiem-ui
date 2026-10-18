@@ -29,15 +29,15 @@
     "table",
     "input-group",
     "alert-dialog",
-    "https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/public/r/spinner.json",
+    "https://raw.githubusercontent.com/MaxSch1/meridiem-ui/main/public/r/spinner.json",
     "switch",
     "item",
     "card",
     "sonner",
-    "https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/public/r/kpi-card.json",
-    "https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/public/r/charts.json",
-    "https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/public/r/clients-table.json",
-    "https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/public/r/theme.json"
+    "https://raw.githubusercontent.com/MaxSch1/meridiem-ui/main/public/r/kpi-card.json",
+    "https://raw.githubusercontent.com/MaxSch1/meridiem-ui/main/public/r/charts.json",
+    "https://raw.githubusercontent.com/MaxSch1/meridiem-ui/main/public/r/clients-table.json",
+    "https://raw.githubusercontent.com/MaxSch1/meridiem-ui/main/public/r/theme.json"
   ],
   "files": [
     {

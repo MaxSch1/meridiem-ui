@@ -1,6 +1,6 @@
 /* Fichiers de marque. Par défaut : les versions publiques du dépôt (CORS ouvert, utilisables dans un canvas).
    Une app peut les remplacer par ses fichiers locaux au démarrage avec setMeridiemAssets(). */
-const BASE = "https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/public/assets/"
+const BASE = "https://raw.githubusercontent.com/MaxSch1/meridiem-ui/main/public/assets/"
 
 export const assets = {
   logo: BASE + "meridiem-logo-noir.png",       // logotype officiel, fond clair

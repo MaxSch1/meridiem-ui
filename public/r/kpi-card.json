@@ -4,7 +4,7 @@
   "title": "Carte indicateur animée",
   "registryDependencies": [
     "card",
-    "https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/public/r/brand.json"
+    "https://raw.githubusercontent.com/MaxSch1/meridiem-ui/main/public/r/brand.json"
   ],
   "files": [
     {
