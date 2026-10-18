@@ -5,7 +5,7 @@ import { motion } from "motion/react"
 import { Colors, Typography, Icons } from "@/kit/foundations"
 import { Actions, Forms, Statuses, Navigation, Feedback } from "@/kit/components"
 import { Sidebars, Cards, AnimatedCards, Tables, Charts, PageSections, BrandVisuals } from "@/kit/layouts"
-import logo from "@/assets/meridiem-logo-noir.png"
+import { Logo } from "@/components/meridiem/brand"
 
 const TOC = [
   { g: "Fondations", items: [["couleurs", "Couleurs"], ["typo", "Typographie"], ["icones", "Icônes"]] },
@@ -30,7 +30,7 @@ export default function Kit() {
     <div className="mx-auto flex max-w-7xl gap-10 px-4 md:px-6">
       <aside className="sticky top-0 hidden h-svh w-56 shrink-0 flex-col gap-6 overflow-y-auto py-10 lg:flex">
         <div className="flex flex-col gap-1 px-2">
-          <img src={logo} alt="Meridiem" className="h-4 w-fit" />
+          <Logo className="h-4 w-fit" />
           <span className="font-heading text-2xl">Kit Olympe</span>
         </div>
         <nav className="flex flex-col gap-5">

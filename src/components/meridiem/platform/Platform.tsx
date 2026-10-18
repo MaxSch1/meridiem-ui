@@ -29,8 +29,8 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
-import { Icon } from "@/components/meridiem/brand"
-import { assets } from "@/components/meridiem/assets"
+import { Icon, Logo } from "@/components/meridiem/brand"
+import { ThemeSubmenu } from "@/components/meridiem/theme"
 import { REQUESTS, NOTIFICATIONS, CLIENTS, type Request } from "@/components/meridiem/demo-data"
 import Dashboard from "./Dashboard"
 import Requests from "./Requests"
@@ -144,7 +144,7 @@ export default function Platform() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <SidebarMenuButton size="lg" className="data-[state=open]:bg-sidebar-accent">
-                    <Avatar className="size-8 rounded-lg"><AvatarFallback className="rounded-lg bg-sand/50 text-xs">JR</AvatarFallback></Avatar>
+                    <Avatar className="size-8 rounded-lg"><AvatarFallback className="rounded-lg bg-sand/50 dark:bg-sand/16 text-xs">JR</AvatarFallback></Avatar>
                     <div className="grid flex-1 text-left leading-tight">
                       <span className="truncate text-sm font-medium">Julie Remacle</span>
                       <span className="truncate text-xs text-muted-foreground">julie@lambert-emballages.be</span>
@@ -154,7 +154,7 @@ export default function Platform() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-64" side="top" align="start" sideOffset={6}>
                   <DropdownMenuLabel className="flex items-center gap-2 font-normal">
-                    <Avatar className="size-8 rounded-lg"><AvatarFallback className="rounded-lg bg-sand/50 text-xs">JR</AvatarFallback></Avatar>
+                    <Avatar className="size-8 rounded-lg"><AvatarFallback className="rounded-lg bg-sand/50 dark:bg-sand/16 text-xs">JR</AvatarFallback></Avatar>
                     <div className="grid leading-tight"><span className="text-sm font-medium">Julie Remacle</span><span className="text-xs text-muted-foreground">Service commercial</span></div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
@@ -163,6 +163,7 @@ export default function Platform() {
                     <DropdownMenuItem onSelect={() => go("settings")}><Icon icon={Settings02Icon} />Réglages<DropdownMenuShortcut>⌘,</DropdownMenuShortcut></DropdownMenuItem>
                     <DropdownMenuItem onSelect={() => setHelpOpen(true)}><Icon icon={HelpCircleIcon} />Aide</DropdownMenuItem>
                     <DropdownMenuItem onSelect={() => setKeysOpen(true)}><Icon icon={KeyboardIcon} />Raccourcis clavier</DropdownMenuItem>
+                    <ThemeSubmenu onChange={(t, r) => toast(t === "dark" ? "Mode nuit" : t === "auto" ? "Thème du système" : "Mode jour", { description: "Thème actif : " + (r === "dark" ? "nuit" : "jour") })} />
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem variant="destructive" onSelect={() => toast("Déconnexion", { description: "Désactivée dans la maquette" })}><Icon icon={Logout01Icon} />Se déconnecter</DropdownMenuItem>
@@ -170,7 +171,7 @@ export default function Platform() {
               </DropdownMenu>
             </SidebarMenuItem>
           </SidebarMenu>
-          <div className="flex items-center gap-1.5 px-2 pb-1 text-[11px] text-muted-foreground">by <img src={assets.logo} alt="Meridiem" className="h-2.5 w-auto opacity-70" /></div>
+          <div className="flex items-center gap-1.5 px-2 pb-1 text-[11px] text-muted-foreground">by <Logo className="h-2.5 w-auto opacity-70" /></div>
         </SidebarFooter>
       </Sidebar>
 

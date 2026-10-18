@@ -31,8 +31,8 @@
           "color-sand": "var(--sand)",
           "color-sepia": "var(--sepia)",
           "color-ink": "var(--ink)",
-          "shadow-soft": "0 1px 2px rgb(60 40 20 / 0.04), 0 4px 16px rgb(60 40 20 / 0.05)",
-          "shadow-lift": "0 2px 6px rgb(60 40 20 / 0.06), 0 16px 40px rgb(60 40 20 / 0.09)"
+          "shadow-soft": "var(--elevation-soft)",
+          "shadow-lift": "var(--elevation-lift)"
         },
         "light": {
           "ivory": "#F6F3ED",
@@ -75,7 +75,19 @@
           "warn": "#9A5D0C",
           "wait": "#55499F",
           "crit": "#B3261E",
-          "info": "#2B6099"
+          "info": "#2B6099",
+          "chart-area-fill": "1",
+          "chart-bar-top": "#C4672A",
+          "chart-bar-bottom": "#8A3F0F",
+          "city-1": "#6E4226",
+          "city-2": "#B98259",
+          "city-3": "#E8D6C0",
+          "dots": "#AA4F13",
+          "dots-accent": "#E3CDB3",
+          "dotchart-dim": "#C9BFB0",
+          "cta": "#1C1B1A",
+          "elevation-soft": "0 1px 2px rgb(60 40 20 / 0.04), 0 4px 16px rgb(60 40 20 / 0.05)",
+          "elevation-lift": "0 2px 6px rgb(60 40 20 / 0.06), 0 16px 40px rgb(60 40 20 / 0.09)"
         },
         "dark": {
           "ivory": "#F6F3ED",
@@ -118,7 +130,22 @@
           "warn": "#E3A55A",
           "wait": "#AFA2EE",
           "crit": "#F2867A",
-          "info": "#80B2E8"
+          "info": "#80B2E8",
+          "chart-bar-top": "#E58B57",
+          "chart-bar-bottom": "#A8521F",
+          "city-mode": "nocturne",
+          "city-1": "#433A31",
+          "city-2": "#5C4F42",
+          "city-3": "#A08A70",
+          "city-light-1": "#A8693A",
+          "city-light-2": "#DE9A4E",
+          "city-light-3": "#F2D49C",
+          "dots": "#5C5045",
+          "dots-accent": "#D9934A",
+          "dotchart-dim": "#5A5249",
+          "cta": "#0E0C0A",
+          "elevation-soft": "0 1px 2px rgb(0 0 0 / 0.35), 0 4px 16px rgb(0 0 0 / 0.25)",
+          "elevation-lift": "0 2px 6px rgb(0 0 0 / 0.4), 0 16px 40px rgb(0 0 0 / 0.5)"
         }
       }
     },
@@ -139,7 +166,7 @@
       "name": "brand",
       "type": "registry:lib",
       "title": "Briques de marque",
-      "description": "Icône Hugeicons, ville en points, champ de points, graphique en points, 9 cartes animées, badge de statut, palette des graphiques.",
+      "description": "Icône Hugeicons, logotype et icône qui passent la nuit (Logo, Mark), ville en points (ville de nuit éclairée), champ de points, graphique en points, 9 cartes animées, badge de statut, palette des graphiques.",
       "registryDependencies": [
         "badge"
       ],
@@ -191,6 +218,26 @@
       "files": [
         {
           "path": "src/components/meridiem/charts.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "theme",
+      "type": "registry:component",
+      "title": "Apparence (Jour, Nuit, Système)",
+      "description": "ThemeProvider (choix mémorisé, data-theme et .dark sur <html>), ThemeScript contre le flash au chargement, et ThemeSubmenu : l'entrée « Apparence » du menu du compte qui ouvre un sous-menu Jour, Nuit, Système.",
+      "registryDependencies": [
+        "dropdown-menu",
+        "https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/public/r/brand.json"
+      ],
+      "dependencies": [
+        "@hugeicons/react",
+        "@hugeicons/core-free-icons"
+      ],
+      "files": [
+        {
+          "path": "src/components/meridiem/theme.tsx",
           "type": "registry:component"
         }
       ]
@@ -300,7 +347,8 @@
         "sonner",
         "https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/public/r/kpi-card.json",
         "https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/public/r/charts.json",
-        "https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/public/r/clients-table.json"
+        "https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/public/r/clients-table.json",
+        "https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/public/r/theme.json"
       ],
       "files": [
         {

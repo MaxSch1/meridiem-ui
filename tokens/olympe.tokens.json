@@ -120,6 +120,55 @@
     "destructive-foreground": {
       "$type": "color",
       "$value": "#FFFFFF"
+    },
+    "sidebar-accent": {
+      "$type": "color",
+      "$value": "#EAE4D9"
+    },
+    "sidebar-border": {
+      "$type": "color",
+      "$value": "#E6DFD3"
+    },
+    "cta": {
+      "$type": "color",
+      "$value": "#1C1B1A"
+    },
+    "chart-bar-top": {
+      "$type": "color",
+      "$value": "#C4672A"
+    },
+    "chart-bar-bottom": {
+      "$type": "color",
+      "$value": "#8A3F0F"
+    },
+    "city-1": {
+      "$type": "color",
+      "$value": "#6E4226"
+    },
+    "city-2": {
+      "$type": "color",
+      "$value": "#B98259"
+    },
+    "city-3": {
+      "$type": "color",
+      "$value": "#E8D6C0"
+    },
+    "dots": {
+      "$type": "color",
+      "$value": "#AA4F13"
+    },
+    "dots-accent": {
+      "$type": "color",
+      "$value": "#E3CDB3"
+    },
+    "dotchart-dim": {
+      "$type": "color",
+      "$value": "#C9BFB0"
+    },
+    "chart-area-fill": {
+      "$type": "number",
+      "$value": 1,
+      "$description": "facteur d'opacité du dégradé des aires"
     }
   },
   "color-dark": {
@@ -247,6 +296,73 @@
     "destructive-foreground": {
       "$type": "color",
       "$value": "#1A1410"
+    },
+    "sidebar-accent": {
+      "$type": "color",
+      "$value": "#26211C"
+    },
+    "sidebar-border": {
+      "$type": "color",
+      "$value": "#2A2520"
+    },
+    "cta": {
+      "$type": "color",
+      "$value": "#0E0C0A"
+    },
+    "chart-bar-top": {
+      "$type": "color",
+      "$value": "#E58B57"
+    },
+    "chart-bar-bottom": {
+      "$type": "color",
+      "$value": "#A8521F"
+    },
+    "city-1": {
+      "$type": "color",
+      "$value": "#433A31"
+    },
+    "city-2": {
+      "$type": "color",
+      "$value": "#5C4F42"
+    },
+    "city-3": {
+      "$type": "color",
+      "$value": "#A08A70"
+    },
+    "city-light-1": {
+      "$type": "color",
+      "$value": "#A8693A"
+    },
+    "city-light-2": {
+      "$type": "color",
+      "$value": "#DE9A4E"
+    },
+    "city-light-3": {
+      "$type": "color",
+      "$value": "#F2D49C"
+    },
+    "dots": {
+      "$type": "color",
+      "$value": "#5C5045"
+    },
+    "dots-accent": {
+      "$type": "color",
+      "$value": "#D9934A"
+    },
+    "dotchart-dim": {
+      "$type": "color",
+      "$value": "#5A5249"
+    },
+    "chart-area-fill": {
+      "$type": "number",
+      "$value": 0.3,
+      "$description": "aires allégées la nuit"
+    },
+    "$extensions": {
+      "be.meridiem.olympe": {
+        "city-mode": "nocturne",
+        "$description": "jeton --city-mode (React) / --m-city-mode (sans framework) : la ville de nuit éclairée ; jamais posé le jour"
+      }
     }
   },
   "font": {

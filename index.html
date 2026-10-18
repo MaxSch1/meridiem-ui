@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Meridiem Olympe</title>
+    <!-- Apparence choisie (Jour, Nuit, Système) posée avant le premier affichage : aucun flash. Même code que themeScript() de theme.tsx. -->
+    <script>(function(){try{var d=document.documentElement,t=localStorage.getItem("olympe-theme");if(t!=="light"&&t!=="dark"&&t!=="auto")t="light";d.setAttribute("data-theme",t);var n=t==="dark"||(t==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches);d.classList.toggle("dark",n);}catch(e){}})()</script>
     <link rel="icon" href="/assets/favicon/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32.png" />
     <link rel="apple-touch-icon" href="/assets/favicon/apple-touch-icon.png" />

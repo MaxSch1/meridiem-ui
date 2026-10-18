@@ -117,8 +117,8 @@ export function TypesBarChart({ className }: { className?: string }) {
           >
             <defs>
               <linearGradient id="colFill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#C4672A" />
-                <stop offset="100%" stopColor="#8A3F0F" />
+                <stop offset="0%" stopColor="var(--chart-bar-top, #C4672A)" />
+                <stop offset="100%" stopColor="var(--chart-bar-bottom, #8A3F0F)" />
               </linearGradient>
               <pattern id="colDots" width="5" height="5" patternUnits="userSpaceOnUse">
                 <circle cx="1.5" cy="1.5" r="0.8" fill="#FFFFFF" fillOpacity="0.22" />

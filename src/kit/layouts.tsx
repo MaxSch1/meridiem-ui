@@ -3,6 +3,7 @@ import { useState } from "react"
 import {
   DashboardSquare01Icon, InboxIcon, Invoice03Icon, UserGroupIcon, Folder01Icon, Search01Icon, Settings02Icon, UnfoldMoreIcon, Building03Icon,
   ArrowRight01Icon, Analytics01Icon, WorkflowSquare01Icon, Robot01Icon, Plug01Icon, Mail01Icon, Calendar03Icon, Tick02Icon, Add01Icon, CloudUploadIcon,
+  HelpCircleIcon, Logout01Icon,
 } from "@hugeicons/core-free-icons"
 import { toast } from "sonner"
 import {
@@ -19,7 +20,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty"
 import { Item, ItemActions, ItemContent, ItemDescription, ItemGroup, ItemMedia, ItemTitle } from "@/components/ui/item"
 import { Progress } from "@/components/ui/progress"
-import { CityDots, DotChart, DotField, Icon, StatusBadge, type IsoKind } from "@/components/meridiem/brand"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { ThemeSubmenu } from "@/components/meridiem/theme"
+import { CityDots, DotChart, DotField, Icon, OLYMPE_INK, StatusBadge, type IsoKind } from "@/components/meridiem/brand"
 import { KpiCard } from "@/components/meridiem/kpi-card"
 import { ClientsTable } from "@/components/meridiem/clients-table"
 import { DataTable, SortHeader } from "@/components/meridiem/data-table"
@@ -64,11 +67,20 @@ function NavClassic() {
           </SidebarMenu></SidebarGroupContent></SidebarGroup>
         </SidebarContent>
         <SidebarFooter>
-          <SidebarMenu><SidebarMenuItem><SidebarMenuButton size="lg">
-            <Avatar className="size-8 rounded-lg"><AvatarFallback className="rounded-lg bg-sand/50 text-xs">JR</AvatarFallback></Avatar>
+          {/* Menu du compte : réglages, aide, apparence (sous-menu Jour, Nuit, Système), déconnexion */}
+          <SidebarMenu><SidebarMenuItem><DropdownMenu><DropdownMenuTrigger asChild><SidebarMenuButton size="lg">
+            <Avatar className="size-8 rounded-lg"><AvatarFallback className="rounded-lg bg-sand/50 dark:bg-sand/16 text-xs">JR</AvatarFallback></Avatar>
             <div className="grid flex-1 text-left leading-tight"><span className="truncate text-sm font-medium">Julie Remacle</span><span className="truncate text-xs text-muted-foreground">julie@lambert…</span></div>
             <Icon icon={UnfoldMoreIcon} className="ml-auto text-muted-foreground" />
-          </SidebarMenuButton></SidebarMenuItem></SidebarMenu>
+          </SidebarMenuButton></DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" side="top" align="start" sideOffset={6}>
+              <DropdownMenuItem onSelect={() => toast("Réglages")}><Icon icon={Settings02Icon} />Réglages</DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => toast("Aide")}><Icon icon={HelpCircleIcon} />Aide</DropdownMenuItem>
+              <ThemeSubmenu />
+              <DropdownMenuSeparator />
+              <DropdownMenuItem variant="destructive" onSelect={() => toast("Déconnexion", { description: "Désactivée dans le kit" })}><Icon icon={Logout01Icon} />Se déconnecter</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu></SidebarMenuItem></SidebarMenu>
         </SidebarFooter>
       </Sidebar>
     </SidebarProvider>
@@ -94,7 +106,7 @@ function NavRail() {
         ))}
         <div className="mt-auto flex flex-col items-center gap-2">
           <button aria-label="Réglages" className="flex size-9 items-center justify-center rounded-lg text-muted-foreground hover:bg-sidebar-accent"><Icon icon={Settings02Icon} size={18} /></button>
-          <Avatar className="size-8 rounded-lg"><AvatarFallback className="rounded-lg bg-sand/50 text-[10px]">JR</AvatarFallback></Avatar>
+          <Avatar className="size-8 rounded-lg"><AvatarFallback className="rounded-lg bg-sand/50 dark:bg-sand/16 text-[10px]">JR</AvatarFallback></Avatar>
         </div>
       </div>
       <div className="flex flex-1 flex-col gap-2 bg-background p-4">
@@ -265,7 +277,7 @@ export function PageSections() {
     <KitSection id="sections" title="Sections de page" desc="Les blocs de la landing, réutilisables sur toute page vitrine : héros sur la ville en points, grille de filets, bloc final.">
       <Demo label="Héros ville en points" bare>
         <div className="relative isolate overflow-hidden rounded-xl border">
-          <div className="absolute inset-0 -z-10"><CityDots paper="#FBF9F5" focusY={0} cell={2.5} lift={0.16} palette={["#6e4226", "#b98259", "#e8d6c0"]} /><div className="absolute inset-x-0 top-0 h-[70%] bg-gradient-to-b from-background from-30% to-transparent" /></div>
+          <div className="absolute inset-0 -z-10"><CityDots focusY={0} cell={2.5} lift={0.16} /><div className="absolute inset-x-0 top-0 h-[70%] bg-gradient-to-b from-background from-30% to-transparent" /></div>
           <div className="flex min-h-[340px] flex-col items-center gap-3 px-6 pt-12 text-center">
             <span className="eyebrow text-primary">Titre de rubrique</span>
             <h3 className="max-w-[20ch] font-heading text-4xl leading-tight text-balance">Une promesse claire, en une phrase.</h3>
@@ -280,7 +292,7 @@ export function PageSections() {
           </div>
         </Demo>
         <Demo label="Bloc final" bare>
-          <div className="relative flex min-h-[226px] flex-col items-center justify-center gap-3 overflow-hidden rounded-xl bg-ink px-6 text-center text-ivory">
+          <div className="relative flex min-h-[226px] flex-col items-center justify-center gap-3 overflow-hidden rounded-xl bg-[var(--cta,var(--ink))] px-6 text-center text-ivory dark:ring-1 dark:ring-border dark:ring-inset">
             <DotField />
             <h3 className="relative z-10 max-w-[18ch] font-heading text-3xl leading-tight">30 minutes pour savoir ce que l'IA peut faire chez vous.</h3>
             <Button size="sm" className="relative z-10" onClick={() => toast.success("Ouverture de l'agenda")}><Icon icon={Add01Icon} />Réserver un audit</Button>
@@ -296,9 +308,9 @@ export function BrandVisuals() {
   return (
     <KitSection id="visuels" title="Visuels de marque" desc="Générés à partir de l'image de ville du site ou calculés : aucune image tierce. La ville se « développe » à l'apparition.">
       <div className="grid gap-4 md:grid-cols-3">
-        <Demo label="Ville, trame en pixels" bare><div className="relative aspect-[4/3] overflow-hidden rounded-xl border bg-card"><CityDots key={"d" + key} paper="#FFFFFF" focusY={0.45} cell={2} palette={["#6e4226", "#b98259", "#e8d6c0"]} /></div></Demo>
-        <Demo label="Ville, trame en points" bare><div className="relative aspect-[4/3] overflow-hidden rounded-xl border bg-card"><CityDots key={"h" + key} paper="#FFFFFF" mode="halftone" focusY={0.45} cell={4} palette={["#4a2c18", "#a8693f", "#e3cdb3"]} /></div></Demo>
-        <Demo label="Champ de points animé" bare><div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-ink"><DotField focus={{ x: 0.5, y: 0.5 }} /></div></Demo>
+        <Demo label="Ville, trame en pixels" bare><div className="relative aspect-[4/3] overflow-hidden rounded-xl border bg-card"><CityDots key={"d" + key} paper="var(--card, #FFFFFF)" focusY={0.45} cell={2} /></div></Demo>
+        <Demo label="Ville, trame en points" bare><div className="relative aspect-[4/3] overflow-hidden rounded-xl border bg-card"><CityDots key={"h" + key} paper="var(--card, #FFFFFF)" mode="halftone" focusY={0.45} cell={4} palette={OLYMPE_INK} /></div></Demo>
+        <Demo label="Champ de points animé" bare><div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-[var(--cta,var(--ink))] dark:ring-1 dark:ring-border dark:ring-inset"><DotField focus={{ x: 0.5, y: 0.5 }} /></div></Demo>
       </div>
       <Button variant="outline" size="sm" className="self-start" onClick={() => setKey((k) => k + 1)}>Rejouer l'apparition</Button>
     </KitSection>

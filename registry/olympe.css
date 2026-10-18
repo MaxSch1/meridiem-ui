@@ -47,6 +47,9 @@
   --chart-5: #BE72CC;
   /* Remplissage des aires : moins dense la nuit (la teinte pèse plus sur l'encre) */
   --chart-area-fill: .3;
+  /* Colonnes tramées : dégradé terracotta éclairci */
+  --chart-bar-top: #E58B57;
+  --chart-bar-bottom: #A8521F;
 
   --sidebar: #12100E;
   --sidebar-foreground: #D6CEC2;
@@ -63,6 +66,24 @@
   --wait: #AFA2EE;
   --crit: #F2867A;
   --info: #80B2E8;
+
+  /* Visuels de marque (CityDots, DotField, DotChart) : la ville de nuit éclairée (masse sourde,
+     lumières chaudes, ciel vide) et des points pierre et ambre (retours de Maxime du 18/10/2026) */
+  --city-mode: nocturne;
+  --city-1: #433A31;
+  --city-2: #5C4F42;
+  --city-3: #A08A70;
+  --city-light-1: #A8693A;
+  --city-light-2: #DE9A4E;
+  --city-light-3: #F2D49C;
+  --dots: #5C5045;
+  --dots-accent: #D9934A;
+  --dotchart-dim: #5A5249;
+  /* Bloc à points : plus profond que la page, cerné d'un filet */
+  --cta: #0E0C0A;
+  /* Ombres : du noir, plus dense, sinon elles disparaissent */
+  --elevation-soft: 0 1px 2px rgb(0 0 0 / 0.35), 0 4px 16px rgb(0 0 0 / 0.25);
+  --elevation-lift: 0 2px 6px rgb(0 0 0 / 0.4), 0 16px 40px rgb(0 0 0 / 0.5);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -97,6 +118,9 @@
     --chart-5: #BE72CC;
     /* Remplissage des aires : moins dense la nuit (la teinte pèse plus sur l'encre) */
     --chart-area-fill: .3;
+    /* Colonnes tramées : dégradé terracotta éclairci */
+    --chart-bar-top: #E58B57;
+    --chart-bar-bottom: #A8521F;
 
     --sidebar: #12100E;
     --sidebar-foreground: #D6CEC2;
@@ -113,6 +137,24 @@
     --wait: #AFA2EE;
     --crit: #F2867A;
     --info: #80B2E8;
+
+    /* Visuels de marque (CityDots, DotField, DotChart) : la ville de nuit éclairée (masse sourde,
+       lumières chaudes, ciel vide) et des points pierre et ambre (retours de Maxime du 18/10/2026) */
+    --city-mode: nocturne;
+    --city-1: #433A31;
+    --city-2: #5C4F42;
+    --city-3: #A08A70;
+    --city-light-1: #A8693A;
+    --city-light-2: #DE9A4E;
+    --city-light-3: #F2D49C;
+    --dots: #5C5045;
+    --dots-accent: #D9934A;
+    --dotchart-dim: #5A5249;
+    /* Bloc à points : plus profond que la page, cerné d'un filet */
+    --cta: #0E0C0A;
+    /* Ombres : du noir, plus dense, sinon elles disparaissent */
+    --elevation-soft: 0 1px 2px rgb(0 0 0 / 0.35), 0 4px 16px rgb(0 0 0 / 0.25);
+    --elevation-lift: 0 2px 6px rgb(0 0 0 / 0.4), 0 16px 40px rgb(0 0 0 / 0.5);
   }
 }
 

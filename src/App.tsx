@@ -6,6 +6,7 @@ import { AnimatePresence, MotionConfig, motion } from "motion/react"
 import Platform from "@/components/meridiem/platform/Platform"
 import Landing from "@/components/meridiem/landing"
 import Kit from "@/screens/Kit"
+import { ThemeProvider, useTheme } from "@/components/meridiem/theme"
 
 const SCREENS = { platform: "Plateforme", landing: "Landing", kit: "Kit" } as const
 type Screen = keyof typeof SCREENS
@@ -28,6 +29,7 @@ export default function App() {
     window.scrollTo(0, 0)
   }
   return (
+    <ThemeProvider>
     <MotionConfig reducedMotion="user">
     <TooltipProvider>
       {/* Changement d'écran : fondu seul (une translation casserait la sidebar en position fixe) */}
@@ -38,7 +40,7 @@ export default function App() {
           {screen === "kit" && <Kit />}
         </motion.div>
       </AnimatePresence>
-      <Toaster position="top-center" richColors={false} />
+      <ThemedToaster />
       {/* Sélecteur de maquette : hors design system */}
       <nav aria-label="Maquettes" className="fixed right-4 bottom-4 z-50 flex items-center gap-1 rounded-full border border-white/10 bg-[#1C1B1A]/90 p-1 text-[13px] text-[#F6F3ED] shadow-lift backdrop-blur" style={{ marginBottom: "env(safe-area-inset-bottom, 0px)" }}>
         <span className="hidden px-3 font-heading text-sm sm:inline">Olympe</span>
@@ -50,5 +52,12 @@ export default function App() {
       </nav>
     </TooltipProvider>
     </MotionConfig>
+    </ThemeProvider>
   )
+}
+
+/* Le Toaster de shadcn lit next-themes : sans son fournisseur, il suit le système et non le choix de la page. On lui passe le thème effectif. */
+function ThemedToaster() {
+  const { resolvedTheme } = useTheme()
+  return <Toaster position="top-center" richColors={false} theme={resolvedTheme} />
 }

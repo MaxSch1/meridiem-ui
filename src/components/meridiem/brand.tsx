@@ -1,7 +1,7 @@
 "use client"
 /* Briques de marque Meridiem · Olympe
    Ville en points (image du site tramée), champ de points, graphique en points, cartes animées, icônes, statuts. */
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useSyncExternalStore } from "react"
 import { animate, useReducedMotion } from "motion/react"
 import { HugeiconsIcon } from "@hugeicons/react"
 import type { IconSvgElement } from "@hugeicons/react"
@@ -16,6 +16,22 @@ export const OLYMPE_INK = ["#4a2c18", "#a8693f", "#e3cdb3"]
 /** Icône Hugeicons (style stroke rounded de Speyy), trait 1.5 par défaut. */
 export function Icon({ icon, size = 16, strokeWidth = 1.5, className }: { icon: IconSvgElement; size?: number; strokeWidth?: number; className?: string }) {
   return <HugeiconsIcon icon={icon} size={size} strokeWidth={strokeWidth} className={cn("shrink-0", className)} />
+}
+
+/* Thème effectif de la page (jour ou nuit). Change quand data-theme ou la classe .dark de <html> change, ou quand le
+   système bascule (data-theme="auto") : les visuels sur canvas lisent leurs couleurs dans les variables et se redessinent. */
+const darkQuery = () => (typeof window !== "undefined" && window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null)
+function subscribeTheme(cb: () => void) {
+  const mo = new MutationObserver(cb)
+  mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class", "style"] })
+  const mq = darkQuery()
+  mq?.addEventListener("change", cb)
+  return () => { mo.disconnect(); mq?.removeEventListener("change", cb) }
+}
+/* La signature est la couleur de page calculée : elle suit tous les sélecteurs du thème (.dark, data-theme, auto). */
+const themeSnapshot = () => getComputedStyle(document.documentElement).getPropertyValue("--background").trim() + "|" + getComputedStyle(document.documentElement).colorScheme
+export function useThemeSignature() {
+  return useSyncExternalStore(subscribeTheme, themeSnapshot, () => "")
 }
 
 function useCanvas(draw: (cv: HTMLCanvasElement) => void, deps: unknown[]) {
@@ -45,24 +61,57 @@ function loadVille(cb: (img: HTMLImageElement) => void) {
   villeImg.addEventListener("load", () => cb(villeImg!), { once: true })
 }
 
-/** La ville du site, tramée en points d'encre. `paper` = fond sur lequel elle se fond. Parent positionné requis. */
-export function CityDots({ paper = "#FBF9F5", mode = "dither", focusY = 0.5, cell = 3, reveal = 1.4, gamma = 1, contrast = 1.15, lift = 0, palette, className }: {
-  paper?: string; mode?: "dither" | "halftone"; focusY?: number; cell?: number; reveal?: number; gamma?: number; contrast?: number; lift?: number; palette?: string[]; className?: string
+/* Trame de jour de la ville et ville de nuit éclairée : variables du thème (repli = valeurs de jour) */
+const CITY_DAY = ["var(--city-1, #6E4226)", "var(--city-2, #B98259)", "var(--city-3, #E8D6C0)"]
+const CITY_NIGHT = ["var(--city-1)", "var(--city-2)", "var(--city-light-1)", "var(--city-light-2)", "var(--city-light-3)"]
+
+/** La ville du site, tramée en points d'encre. `paper` = fond sur lequel elle se fond. Parent positionné requis.
+    De nuit (jeton `--city-mode: nocturne` du thème), elle devient la ville de nuit éclairée, quel que soit `mode` ;
+    `palette` est la trame de jour (par défaut les jetons `--city-1..3`), `nightPalette` celle de nuit (`--city-1/2`, `--city-light-1..3`).
+    Se redessine seule au changement de thème, sans rejouer l'apparition. */
+export function CityDots({ paper = "var(--background, #FBF9F5)", mode = "dither", focusY = 0.5, cell = 3, reveal = 1.4, gamma = 1, contrast = 1.15, lift = 0, palette, nightPalette, className }: {
+  paper?: string; mode?: "dither" | "halftone" | "nocturne"; focusY?: number; cell?: number; reveal?: number; gamma?: number; contrast?: number; lift?: number; palette?: string[]; nightPalette?: string[]; className?: string
 }) {
-  const ref = useCanvas((cv) => loadVille((img) => Art.ditherImage(cv, img, { mode, focusY, cell, reveal, gamma, contrast, lift, palette: [...(palette || OLYMPE_INK), paper] })), [paper, mode, focusY, cell, gamma, contrast, lift])
+  const theme = useThemeSignature()
+  const shown = useRef(false)
+  const ref = useCanvas((cv) => loadVille((img) => {
+    const night = mode === "nocturne" || getComputedStyle(cv).getPropertyValue("--city-mode").trim() === "nocturne"
+    const pal = night ? (nightPalette || CITY_NIGHT) : (palette || CITY_DAY)
+    Art.ditherImage(cv, img, { mode: night ? "nocturne" : mode, focusY, cell, reveal: shown.current ? 0 : reveal, gamma, contrast, lift, palette: [...pal, paper] })
+    shown.current = true
+  }), [paper, mode, focusY, cell, gamma, contrast, lift, (palette || []).join(), (nightPalette || []).join(), theme])
   return <canvas ref={ref} className={cn("absolute inset-0 block size-full", className)} aria-hidden />
 }
 
-/** Champ de points animé (variante de marque, à utiliser avec parcimonie). */
-export function DotField({ color = "#AA4F13", accent = "#E3CDB3", gap = 11, alpha = 0.55, focus = { x: 0.82, y: 0.45 }, className }: { color?: string; accent?: string; gap?: number; alpha?: number; focus?: { x: number; y: number }; className?: string }) {
-  const ref = useCanvas((cv) => Art.dots(cv, { color, accent, gap, alpha, focus }), [color, accent, gap, alpha])
+/** Champ de points animé (variante de marque, à utiliser avec parcimonie). Couleurs : jetons `--dots`, `--dots-accent` (pierre et ambre de nuit). */
+export function DotField({ color = "var(--dots, #AA4F13)", accent = "var(--dots-accent, #E3CDB3)", gap = 11, alpha = 0.55, focus = { x: 0.82, y: 0.45 }, className }: { color?: string; accent?: string; gap?: number; alpha?: number; focus?: { x: number; y: number }; className?: string }) {
+  const theme = useThemeSignature()
+  const ref = useCanvas((cv) => Art.dots(cv, { color, accent, gap, alpha, focus }), [color, accent, gap, alpha, theme])
   return <canvas ref={ref} className={cn("absolute inset-0 block size-full", className)} aria-hidden />
 }
 
-/** Graphique en points : barres faites de points, montée à l'apparition. */
-export function DotChart({ values, color = "#1C1B1A", accent = "#AA4F13", dim = "#C9BFB0", gap = 5, className }: { values: number[]; color?: string; accent?: string; dim?: string; gap?: number; className?: string }) {
-  const ref = useCanvas((cv) => Art.dotChart(cv, { values, color, accent, dim, gap }), [values.join(","), color, accent])
+/** Graphique en points : barres faites de points, montée à l'apparition. Couleurs : texte, action principale, `--dotchart-dim`. */
+export function DotChart({ values, color = "var(--foreground, #1C1B1A)", accent = "var(--primary, #AA4F13)", dim = "var(--dotchart-dim, #C9BFB0)", gap = 5, className }: { values: number[]; color?: string; accent?: string; dim?: string; gap?: number; className?: string }) {
+  const theme = useThemeSignature()
+  const ref = useCanvas((cv) => Art.dotChart(cv, { values, color, accent, dim, gap }), [values.join(","), color, accent, dim, theme])
   return <canvas ref={ref} className={cn("absolute inset-0 block size-full", className)} aria-hidden />
+}
+
+/** Logotype officiel : noir de jour, blanc de nuit (`assets.logoLight`), sans script ni flash (CSS `dark:`).
+    Donner une hauteur (`h-5 w-auto`) : le fichier contient déjà le mot « Meridiem ». */
+export function Logo({ className, alt = "Meridiem" }: { className?: string; alt?: string }) {
+  return (
+    <>
+      <img src={assets.logo} alt={alt} className={cn(className, "dark:hidden")} />
+      <img src={assets.logoLight} alt={alt} className={cn(className, "hidden dark:inline-block")} />
+    </>
+  )
+}
+
+/** Icône seule (sans le mot), ratio 1,79 : jamais écrasée (`object-contain`, hauteur auto par défaut), blanche de nuit.
+    Donner une largeur (`w-10`) ; pour une case carrée, `assets.markSquare` / `assets.markSquareLight`. */
+export function Mark({ className, alt = "Meridiem" }: { className?: string; alt?: string }) {
+  return <img src={assets.mark} alt={alt} className={cn("h-auto object-contain dark:invert", className)} />
 }
 
 /* ======================= Cartes animées ======================= */

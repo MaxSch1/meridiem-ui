@@ -7,9 +7,8 @@ import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { CityDots, DotField, Icon, StatusBadge } from "@/components/meridiem/brand"
+import { CityDots, DotField, Icon, Logo, Mark, StatusBadge } from "@/components/meridiem/brand"
 import { cn } from "@/lib/utils"
-import { assets } from "@/components/meridiem/assets"
 
 const AGENTS = [
   { name: "Agent commercial", task: "Relances de devis", icon: Mail01Icon, running: true },
@@ -73,12 +72,12 @@ export default function Landing() {
       {/* Héros : la ville du site, tramée en points */}
       <section className="relative isolate flex min-h-[820px] flex-col overflow-hidden">
         <div className="absolute inset-0 -z-10">
-          <CityDots paper="#FBF9F5" focusY={0} cell={2} lift={0.16} contrast={1.15} reveal={1.8} palette={["#6e4226", "#b98259", "#e8d6c0"]} />
+          <CityDots focusY={0} cell={2} lift={0.16} contrast={1.15} reveal={1.8} />
           <div className="absolute inset-x-0 top-0 h-[88%] bg-gradient-to-b from-background from-45% via-background/85 to-transparent md:h-[74%] md:from-35%" />
           <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background to-transparent" />
         </div>
         <header className="mx-auto flex w-full max-w-6xl items-center gap-8 px-6 py-5">
-          <img src={assets.logo} alt="Meridiem" className="h-5 w-auto" />
+          <Logo className="h-5 w-auto" />
           <nav className="hidden gap-6 text-sm text-muted-foreground md:flex">
             {["Solutions", "Références", "Notre modèle", "Presse"].map((l) => <a key={l} href="#landing" className="transition-colors hover:text-foreground">{l}</a>)}
           </nav>
@@ -120,7 +119,7 @@ export default function Landing() {
                     <div className="font-heading text-[15px] leading-tight">{a.name}</div>
                     <div className="truncate text-xs text-muted-foreground">{a.task}</div>
                   </div>
-                  {a.running ? <span className="rounded-md bg-ink px-2 py-1 text-[11px] font-medium text-ivory">En cours</span> : <Button size="xs" variant="outline" onClick={() => toast.success(a.name + " assigné")}>Assigner</Button>}
+                  {a.running ? <span className="rounded-md bg-ink px-2 py-1 text-[11px] font-medium text-ivory dark:bg-foreground dark:text-background">En cours</span> : <Button size="xs" variant="outline" onClick={() => toast.success(a.name + " assigné")}>Assigner</Button>}
                 </div>
               ))}
             </div>
@@ -142,7 +141,7 @@ export default function Landing() {
           <Cell title="Branchés sur vos outils" text="Outlook, Teams, votre ERP ou votre CRM : les agents travaillent là où vous travaillez.">
             <div className="flex items-center gap-3">
               {TOOLS.slice(0, 2).map((t) => <div key={t} className="flex size-14 items-center justify-center rounded-full border bg-card text-xs text-muted-foreground shadow-soft transition-transform hover:-translate-y-1">{t}</div>)}
-              <div className="flex size-20 items-center justify-center rounded-full border bg-card shadow-lift"><img src={assets.mark} alt="Meridiem" className="w-10" /></div>
+              <div className="flex size-20 items-center justify-center rounded-full border bg-card shadow-lift"><Mark className="w-10" /></div>
               {TOOLS.slice(2).map((t) => <div key={t} className="flex size-14 items-center justify-center rounded-full border bg-card text-xs text-muted-foreground shadow-soft transition-transform hover:-translate-y-1">{t}</div>)}
             </div>
           </Cell>
@@ -162,7 +161,7 @@ export default function Landing() {
 
       {/* Bloc final (validé par Maxime le 04/10) */}
       <section className="mx-auto max-w-6xl px-6 pb-20">
-        <div className="relative overflow-hidden rounded-2xl bg-ink px-6 py-16 text-center text-ivory md:px-12 md:py-20">
+        <div className="relative overflow-hidden rounded-2xl bg-[var(--cta,var(--ink))] px-6 py-16 text-center text-ivory md:px-12 md:py-20 dark:ring-1 dark:ring-border dark:ring-inset">
           <DotField />
           <div className="relative z-10 mx-auto flex max-w-2xl flex-col items-center gap-5">
             <h2 className="font-heading text-4xl leading-tight text-balance md:text-5xl">30 minutes pour savoir ce que l'IA peut faire chez vous.</h2>
@@ -174,7 +173,7 @@ export default function Landing() {
 
       <footer className="border-t">
         <div className="mx-auto grid max-w-6xl gap-8 px-6 py-12 text-sm text-muted-foreground sm:grid-cols-2 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
-          <div className="flex flex-col gap-3"><img src={assets.logo} alt="Meridiem" className="h-5 w-fit" /><p className="max-w-[30ch]">Agence IA belge. Logiciels, automatisations et agents IA, hébergés en Europe.</p></div>
+          <div className="flex flex-col gap-3"><Logo className="h-5 w-fit" /><p className="max-w-[30ch]">Agence IA belge. Logiciels, automatisations et agents IA, hébergés en Europe.</p></div>
           {([["Solutions", ["Agents IA", "Automatisations", "Logiciels sur mesure"]], ["Speyy", ["Le produit", "Sécurité des données"]], ["Société", ["Notre modèle", "Références", "Presse"]]] as const).map(([h, ls]) => (
             <div key={h} className="flex flex-col gap-2"><span className="eyebrow">{h}</span>{ls.map((l) => <a key={l} href="#landing" className="hover:text-foreground">{l}</a>)}</div>
           ))}

@@ -24,7 +24,7 @@ export default function Dashboard({ rows, go }: { rows: Request[]; go: (p: Page)
           </div>
         </div>
         <div className="absolute inset-0 opacity-20 md:left-auto md:w-[46%] md:opacity-100">
-          <CityDots paper="#FFFFFF" focusY={0.5} cell={2} lift={0.12} palette={["#6e4226", "#b98259", "#e8d6c0"]} />
+          <CityDots paper="var(--card, #FFFFFF)" focusY={0.5} cell={2} lift={0.12} />
           <div className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-card to-transparent" />
         </div>
       </section>
