@@ -2,9 +2,9 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "data-table",
   "title": "Table de données générique",
-  "description": "TanStack Table + shadcn : vos colonnes et vos données, recherche, tri, pagination, ligne cliquable, état vide, libellés traduisibles, colonnes masquées sur téléphone.",
+  "description": "TanStack Table v8 + shadcn : vos colonnes et vos données, recherche, tri, pagination, ligne cliquable, état vide, libellés traduisibles, colonnes masquées sur téléphone.",
   "dependencies": [
-    "@tanstack/react-table"
+    "@tanstack/react-table@^8.21.3"
   ],
   "registryDependencies": [
     "table",

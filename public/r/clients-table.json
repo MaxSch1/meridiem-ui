@@ -2,9 +2,9 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "clients-table",
   "title": "Table de données",
-  "description": "TanStack Table : recherche, tri, sélection avec actions groupées, actions par ligne, pagination.",
+  "description": "TanStack Table v8 : recherche, tri, sélection avec actions groupées, actions par ligne, pagination.",
   "dependencies": [
-    "@tanstack/react-table",
+    "@tanstack/react-table@^8.21.3",
     "sonner"
   ],
   "registryDependencies": [

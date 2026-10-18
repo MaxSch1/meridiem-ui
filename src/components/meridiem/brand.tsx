@@ -68,7 +68,9 @@ export function DotChart({ values, color = "#1C1B1A", accent = "#AA4F13", dim = 
 /* ======================= Cartes animées ======================= */
 const C30 = Math.cos(Math.PI / 6)
 type Pt = [number, number]
-const P = (x: number, y: number, z: number, s: number): Pt => [(x - y) * C30 * s, (x + y) * 0.5 * s - z * s]
+/* Arrondi à 0,01 : sans lui, le dernier chiffre de cos/sin diffère entre Node et le navigateur et l'hydratation signale un écart d'attribut. */
+const r2 = (v: number) => Math.round(v * 100) / 100
+const P = (x: number, y: number, z: number, s: number): Pt => [r2((x - y) * C30 * s), r2((x + y) * 0.5 * s - z * s)]
 const pts = (a: Pt[]) => a.map((p) => p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ")
 const clamp = (v: number) => Math.max(0, Math.min(1, v))
 const ease = (t: number) => 1 - Math.pow(1 - clamp(t), 3)
@@ -86,7 +88,7 @@ function Box({ x0, y0, x1, y1, z = 0, h, s, accentTop }: { x0: number; y0: numbe
   )
 }
 const arc = (R: number, z: number, a0: number, a1: number, n: number, s: number) => Array.from({ length: n + 1 }, (_, i) => { const t = a0 + ((a1 - a0) * i) / n; return P(R * Math.cos(t), R * Math.sin(t), z, s) })
-const polar = (cx: number, cy: number, r: number, a: number): Pt => [cx + r * Math.cos(a), cy + r * Math.sin(a)]
+const polar = (cx: number, cy: number, r: number, a: number): Pt => [r2(cx + r * Math.cos(a)), r2(cy + r * Math.sin(a))]
 function arcPath(cx: number, cy: number, r: number, a0: number, a1: number) {
   const [x0, y0] = polar(cx, cy, r, a0), [x1, y1] = polar(cx, cy, r, a1)
   return `M${x0.toFixed(2)} ${y0.toFixed(2)} A${r} ${r} 0 ${a1 - a0 > Math.PI ? 1 : 0} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`

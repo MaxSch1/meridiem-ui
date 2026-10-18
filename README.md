@@ -37,8 +37,10 @@ Puis ajouter `@import "./styles/olympe.css";` dans le CSS principal, et envelopp
 | `brand` | `Icon`, `CityDots` (ville en points), `DotField`, `DotChart`, `IsoArt` (9 animations), `StatusBadge` |
 | `kpi-card` | carte indicateur avec illustration animée au survol |
 | `charts` | aire à deux séries, colonnes tramées, barres empilées, courbe, jauge radiale |
-| `clients-table` | table de données : recherche, tri, sélection, actions, pagination |
-| `platform` | sidebar, menu du compte, ⌘K, notifications, tableau de bord, demandes, clients, réglages |
+| `clients-table` | table de données : recherche, tri, sélection, actions, pagination (TanStack Table v8) |
+| `data-table` | table générique : vos colonnes et vos données, recherche, tri, pagination, état vide (TanStack Table v8) |
+| `spinner` | spinner shadcn adapté à Hugeicons (celui d'origine ne compile pas avec cette bibliothèque d'icônes) |
+| `platform` | sidebar, menu du compte, ⌘K, notifications, tableau de bord, demandes, clients, réglages ; remplace le `use-mobile` de la sidebar shadcn par une version qui passe le lint de Next 16 |
 | `landing` | héros sur la ville en points, grille de filets, bloc final, prise de rendez-vous |
 
 ## Pour les agents IA

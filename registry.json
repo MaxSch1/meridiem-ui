@@ -195,12 +195,28 @@
       ]
     },
     {
+      "name": "spinner",
+      "type": "registry:ui",
+      "title": "Indicateur de chargement",
+      "description": "Spinner shadcn adapté à Hugeicons (le spinner d'origine étale les props SVG sur l'icône et ne compile pas). Décoratif, à poser à côté d'un libellé qui change.",
+      "dependencies": [
+        "@hugeicons/react",
+        "@hugeicons/core-free-icons"
+      ],
+      "files": [
+        {
+          "path": "src/components/ui/spinner.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "clients-table",
       "type": "registry:block",
       "title": "Table de données",
-      "description": "TanStack Table : recherche, tri, sélection avec actions groupées, actions par ligne, pagination.",
+      "description": "TanStack Table v8 : recherche, tri, sélection avec actions groupées, actions par ligne, pagination.",
       "dependencies": [
-        "@tanstack/react-table",
+        "@tanstack/react-table@^8.21.3",
         "sonner"
       ],
       "registryDependencies": [
@@ -227,9 +243,9 @@
       "name": "data-table",
       "type": "registry:component",
       "title": "Table de données générique",
-      "description": "TanStack Table + shadcn : vos colonnes et vos données, recherche, tri, pagination, ligne cliquable, état vide, libellés traduisibles, colonnes masquées sur téléphone.",
+      "description": "TanStack Table v8 + shadcn : vos colonnes et vos données, recherche, tri, pagination, ligne cliquable, état vide, libellés traduisibles, colonnes masquées sur téléphone.",
       "dependencies": [
-        "@tanstack/react-table"
+        "@tanstack/react-table@^8.21.3"
       ],
       "registryDependencies": [
         "table",
@@ -276,7 +292,7 @@
         "table",
         "input-group",
         "alert-dialog",
-        "spinner",
+        "https://raw.githubusercontent.com/Meridiem-ai/meridiem-ui/main/public/r/spinner.json",
         "switch",
         "item",
         "card",
@@ -305,6 +321,10 @@
         {
           "path": "src/components/meridiem/platform/Settings.tsx",
           "type": "registry:component"
+        },
+        {
+          "path": "src/hooks/use-mobile.ts",
+          "type": "registry:hook"
         }
       ]
     },

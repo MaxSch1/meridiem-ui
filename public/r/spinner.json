@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "spinner",
+  "title": "Indicateur de chargement",
+  "description": "Spinner shadcn adapté à Hugeicons (le spinner d'origine étale les props SVG sur l'icône et ne compile pas). Décoratif, à poser à côté d'un libellé qui change.",
+  "dependencies": [
+    "@hugeicons/react",
+    "@hugeicons/core-free-icons"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/spinner.tsx",
+      "content": "import { HugeiconsIcon } from \"@hugeicons/react\"\nimport { Loading03Icon } from \"@hugeicons/core-free-icons\"\nimport { cn } from \"@/lib/utils\"\n\n/* Spinner shadcn adapté à Hugeicons : la version d'origine étale les props SVG sur l'icône et ne\n   compile pas avec HugeiconsIcon. Masqué aux lecteurs d'écran : il accompagne toujours un libellé\n   qui change (« Envoi… »), c'est ce libellé qui annonce l'état, dans la langue de la page. */\nfunction Spinner({ className }: { className?: string }) {\n  return (\n    <HugeiconsIcon icon={Loading03Icon} strokeWidth={2} data-slot=\"spinner\" aria-hidden className={cn(\"size-4 animate-spin\", className)} />\n  )\n}\n\nexport { Spinner }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}
