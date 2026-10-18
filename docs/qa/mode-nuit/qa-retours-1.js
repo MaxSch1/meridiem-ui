@@ -1,5 +1,5 @@
 // QA de la librairie : jour identique (avant/après), nuit, sous-menu Apparence (souris, clavier, téléphone).
-const { chromium } = require('/Users/maximeschifflers/.npm/_npx/e41f203b7505f1fb/node_modules/playwright');
+const { chromium } = require(process.env.PLAYWRIGHT || 'playwright');
 const fs = require('fs'), path = require('path');
 const OUT = process.argv[2]; fs.mkdirSync(OUT, { recursive: true });
 const AV = 'http://127.0.0.1:8791/ui-avant/vanilla/demo.html', AP = 'http://127.0.0.1:8792/vanilla/demo.html';

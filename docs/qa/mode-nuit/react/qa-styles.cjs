@@ -1,6 +1,6 @@
 // Jour inchangé, preuve par les styles calculés : chaque élément visible des écrans #platform, #landing, #kit,
-// build d'avant (8793) contre build d'après (8794), plus deux captures successives du build d'avant (bruit des animations).
-const { chromium } = require('/Users/maximeschifflers/.npm/_npx/e41f203b7505f1fb/node_modules/playwright');
+// build d'avant (8793) contre build d'après (8794). Usage : PLAYWRIGHT=<chemin du module playwright> node qa-styles.cjs
+const { chromium } = require(process.env.PLAYWRIGHT || 'playwright');
 const PROPS = ['color', 'background-color', 'background-image', 'border-top-color', 'border-right-color', 'border-bottom-color', 'border-left-color', 'box-shadow', 'outline-color', 'fill', 'stroke', 'stop-color', 'opacity', 'filter', 'display', 'visibility', 'font-family', 'font-size', 'font-weight', 'width', 'height'];
 async function grab(b, url, hash, vw) {
   const ctx = await b.newContext({ viewport: { width: vw, height: 900 }, deviceScaleFactor: 1, reducedMotion: 'reduce' });

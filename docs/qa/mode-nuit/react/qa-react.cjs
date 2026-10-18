@@ -1,6 +1,6 @@
 // QA du kit React, mode nuit : jour identique (avant/après), nuit, sous-menu Apparence, redessin des canvas, console.
-// Usage : node qa-react.cjs <dossier de sortie>  (build d'avant servi sur 8793, build d'après sur 8794)
-const { chromium } = require('/Users/maximeschifflers/.npm/_npx/e41f203b7505f1fb/node_modules/playwright');
+// Usage : PLAYWRIGHT=<chemin du module playwright> node qa-react.cjs <dossier de sortie>  (build d'avant servi sur 8793, build d'après sur 8794)
+const { chromium } = require(process.env.PLAYWRIGHT || 'playwright');
 const fs = require('fs'), path = require('path');
 const OUT = process.argv[2]; fs.mkdirSync(OUT, { recursive: true });
 const AV = 'http://127.0.0.1:8793/index.html', AP = 'http://127.0.0.1:8794/index.html';
