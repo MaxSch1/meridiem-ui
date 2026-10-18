@@ -6,8 +6,8 @@ Relevés sur la démo de nuit et confirmés sur le Command Center de nuit (premi
 - **Ville en points de nuit** : la teinte sable claire (`#C9AD8A`) faisait de la droite du bandeau la zone la plus lumineuse de la page. `--m-city-1/2/3` passent à `#3F2D1E`, `#7E5537`, `#A08A70` (variante la plus calme des trois essayées sur le bandeau réel qui garde la ville lisible).
 - Preuves : `docs/qa/mode-nuit/demo-aire-nuit-avant.png` / `-apres.png`, `demo-ville-nuit-avant.png` / `-apres.png`, `demo-jour-avant-18-10-1440.png` / `demo-jour-apres-18-10-1440.png`, `demo-nuit-1440-18-10.png`.
 
-## 2026-10-18 · Icônes épingle et favori retiré
-- Trois icônes Hugeicons ajoutées au kit et à `vanilla/icons.js` (120 icônes) : `Pin` (épingler), `PinOff` (détacher), `StarOff` (retirer des favoris). Besoin : épingles et favoris des conversations dans Meridiem AI Center (`DEV/meridiem-vigie`).
+## 2026-10-18 · Icônes épingle, favori retiré et suivi retiré
+- Quatre icônes Hugeicons ajoutées au kit et à `vanilla/icons.js` (121 icônes) : `Pin` (épingler), `PinOff` (détacher), `StarOff` (retirer des favoris), `FlagOff` (retirer du suivi). Besoin : épingles et favoris des conversations dans Meridiem AI Center (`DEV/meridiem-vigie`).
 
 ## 2026-10-18 · Retours d'une app Next.js 16 (Assiette)
 Quatre défauts du registre trouvés en montant `DEV/meridiem-assiette` (Next.js 16.4) et corrigés là-bas sur place la nuit du 18/10 ; reportés à la source pour que les projets suivants n'aient pas à les refaire.
