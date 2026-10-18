@@ -76,3 +76,10 @@ tableau de bord et de la landing (`paper="#FFFFFF"` ou `#FBF9F5` et palette de j
 du kit, et les nuanciers du kit (`kit/foundations.tsx`, qui documentent le jour). De nuit, la ville
 du tableau de bord React garde donc un ciel blanc (`plateforme-nuit-1440.png`). Correctif simple
 maintenant qu'`art.js` lit les variables : passer `paper="var(--card)"` et une palette en variables.
+
+## Améliorations du 18/10 (après le premier essai réel, Command Center)
+| Défaut | Correction | Preuve |
+|---|---|---|
+| Aires de nuit en bloc brun | facteur `--m-area-fill` / `--chart-area-fill` : 1 le jour, 0,3 la nuit | `demo-aire-nuit-avant.png`, `demo-aire-nuit-apres.png` |
+| Ville de nuit trop lumineuse à droite | `--m-city-1/2/3` : `#3F2D1E`, `#7E5537`, `#A08A70` | `demo-ville-nuit-avant.png`, `demo-ville-nuit-apres.png` |
+| Jour | démo 1440 et 390 px : 0 pixel différent | `demo-jour-avant-18-10-1440.png`, `demo-jour-apres-18-10-1440.png` |

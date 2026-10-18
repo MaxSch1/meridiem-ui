@@ -49,8 +49,8 @@ export function RequestsAreaChart({ className }: { className?: string }) {
         <ChartContainer config={areaConfig} className="aspect-auto h-[240px] w-full">
           <AreaChart data={data} margin={{ left: 0, right: 8 }}>
             <defs>
-              <linearGradient id="fillRecues" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="var(--color-recues)" stopOpacity={0.22} /><stop offset="95%" stopColor="var(--color-recues)" stopOpacity={0.02} /></linearGradient>
-              <linearGradient id="fillTraitees" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="var(--color-traitees)" stopOpacity={0.28} /><stop offset="95%" stopColor="var(--color-traitees)" stopOpacity={0.03} /></linearGradient>
+              <linearGradient id="fillRecues" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="var(--color-recues)" style={{ stopOpacity: "calc(0.22 * var(--chart-area-fill, 1))" }} /><stop offset="95%" stopColor="var(--color-recues)" style={{ stopOpacity: "calc(0.02 * var(--chart-area-fill, 1))" }} /></linearGradient>
+              <linearGradient id="fillTraitees" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="var(--color-traitees)" style={{ stopOpacity: "calc(0.28 * var(--chart-area-fill, 1))" }} /><stop offset="95%" stopColor="var(--color-traitees)" style={{ stopOpacity: "calc(0.03 * var(--chart-area-fill, 1))" }} /></linearGradient>
             </defs>
             <CartesianGrid vertical={false} strokeDasharray="3 3" />
             <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} minTickGap={28} tickFormatter={fmtDay} />

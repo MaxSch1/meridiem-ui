@@ -66,6 +66,8 @@
   --m-dots: #AA4F13;
   --m-dots-accent: #E3CDB3;
   --m-dotchart-dim: #C9BFB0;
+  /* Remplissage des aires (MUI.area) : facteur appliqué à l'opacité du dégradé, 1 = jour */
+  --m-area-fill: 1;
 }
 
 .m-body { margin: 0; background: var(--m-bg); color: var(--m-fg); font: 14px/1.5 var(--m-font-sans); -webkit-font-smoothing: antialiased; }
@@ -434,6 +436,7 @@ html.m-dialog-lock { overflow: hidden; }
   --m-chart-3: #C3841A;
   --m-chart-4: #2AA88C;
   --m-chart-5: #BE72CC;
+  --m-area-fill: .3;
   /* Ombres : du noir, plus dense, sinon elles disparaissent */
   --m-shadow: 0 1px 2px rgb(0 0 0 / .35), 0 4px 16px rgb(0 0 0 / .25);
   --m-shadow-lift: 0 2px 6px rgb(0 0 0 / .4), 0 16px 40px rgb(0 0 0 / .5);
@@ -443,12 +446,12 @@ html.m-dialog-lock { overflow: hidden; }
   --m-cta-bg: #0E0C0A;
   --m-cta-fg: var(--m-ivory);
   --m-cta-ring: inset 0 0 0 1px var(--m-border);
-  /* Visuels : sable et terracotta sur encre */
+  /* Visuels : sable et terracotta sur encre ; la ville reste sourde (18/10 : plus claire, elle volait la page) */
   --m-bar-top: #E58B57;
   --m-bar-bottom: #A8521F;
-  --m-city-1: #4A3424;
-  --m-city-2: #9C6440;
-  --m-city-3: #C9AD8A;
+  --m-city-1: #3F2D1E;
+  --m-city-2: #7E5537;
+  --m-city-3: #A08A70;
   --m-dots: #B85A22;
   --m-dots-accent: #E3CDB3;
   --m-dotchart-dim: #5A5249;
@@ -488,6 +491,7 @@ html.m-dialog-lock { overflow: hidden; }
     --m-chart-3: #C3841A;
     --m-chart-4: #2AA88C;
     --m-chart-5: #BE72CC;
+    --m-area-fill: .3;
     /* Ombres : du noir, plus dense, sinon elles disparaissent */
     --m-shadow: 0 1px 2px rgb(0 0 0 / .35), 0 4px 16px rgb(0 0 0 / .25);
     --m-shadow-lift: 0 2px 6px rgb(0 0 0 / .4), 0 16px 40px rgb(0 0 0 / .5);
@@ -497,12 +501,12 @@ html.m-dialog-lock { overflow: hidden; }
     --m-cta-bg: #0E0C0A;
     --m-cta-fg: var(--m-ivory);
     --m-cta-ring: inset 0 0 0 1px var(--m-border);
-    /* Visuels : sable et terracotta sur encre */
+    /* Visuels : sable et terracotta sur encre ; la ville reste sourde (18/10 : plus claire, elle volait la page) */
     --m-bar-top: #E58B57;
     --m-bar-bottom: #A8521F;
-    --m-city-1: #4A3424;
-    --m-city-2: #9C6440;
-    --m-city-3: #C9AD8A;
+    --m-city-1: #3F2D1E;
+    --m-city-2: #7E5537;
+    --m-city-3: #A08A70;
     --m-dots: #B85A22;
     --m-dots-accent: #E3CDB3;
     --m-dotchart-dim: #5A5249;

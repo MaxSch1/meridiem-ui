@@ -84,6 +84,7 @@ Olympe de nuit, pas un thème sombre générique : la même page, éclairée à 
   à l'horizon) ; bloc à points plus profond que la page (`#0E0C0A`), cerné d'un filet ; cartes
   animées en traits clairs, leur touche terracotta suit `primary`.
 - Ombres en noir et plus denses (sans quoi elles disparaissent) ; voile des fenêtres plus opaque.
+- Aires de graphique allégées : le dégradé garde 30 % de son opacité de jour (`--m-area-fill`, `--chart-area-fill`) ; la ville reste sourde (sable `#A08A70` au plus clair), jamais la zone la plus lumineuse de la page.
 
 **Activer**
 | Valeur | Effet |
@@ -110,6 +111,7 @@ Olympe de nuit, pas un thème sombre générique : la même page, éclairée à 
   }
   ```
 - `art.js` accepte une couleur `var(--x)` ou `var(--x, repli)` : elle est lue sur le canvas au rendu.
+- Un projet qui essaie la nuit sur une partie seulement de ses écrans pose `data-theme="dark"` sur ces vues et `"light"` sur toutes les autres, jamais un écran à moitié sombre (exemple : Command Center, `docs/DASHBOARD-UI.md` de `meridiem-operateur`).
 
 **Jetons nuit** (sans framework `--m-*`, React sans préfixe ; jetons DTCG : groupe `color-dark`)
 | Rôle | Jour | Nuit |

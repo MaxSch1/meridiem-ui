@@ -176,6 +176,8 @@
   --chart-3: #C3841A;
   --chart-4: #2AA88C;
   --chart-5: #BE72CC;
+  /* Remplissage des aires : moins dense la nuit (la teinte pèse plus sur l'encre) */
+  --chart-area-fill: .3;
 
   --sidebar: #12100E;
   --sidebar-foreground: #D6CEC2;
@@ -224,6 +226,8 @@
     --chart-3: #C3841A;
     --chart-4: #2AA88C;
     --chart-5: #BE72CC;
+    /* Remplissage des aires : moins dense la nuit (la teinte pèse plus sur l'encre) */
+    --chart-area-fill: .3;
 
     --sidebar: #12100E;
     --sidebar-foreground: #D6CEC2;

@@ -252,7 +252,7 @@
     var paths = "";
     o.series.forEach(function (s, si) {
       var c = s.color || CHART[si], gid = nid("ag");
-      defs += '<linearGradient id="' + gid + '" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stop-color="' + c + '" stop-opacity=".26"/><stop offset="95%" stop-color="' + c + '" stop-opacity=".02"/></linearGradient>';
+      defs += '<linearGradient id="' + gid + '" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stop-color="' + c + '" style="stop-opacity:calc(.26 * var(--m-area-fill, 1))"/><stop offset="95%" stop-color="' + c + '" style="stop-opacity:calc(.02 * var(--m-area-fill, 1))"/></linearGradient>';
       var d = s.values.map(function (v, i) { return (i ? "L" : "M") + X(i).toFixed(1) + " " + Y(v).toFixed(1); }).join(" ");
       paths += '<path d="' + d + " L" + X(n - 1) + " " + Y(0) + " L" + X(0) + " " + Y(0) + ' Z" fill="url(#' + gid + ')"/><path d="' + d + '" fill="none" stroke="' + c + '" stroke-width="2" stroke-linejoin="round" class="m-draw"/>';
     });

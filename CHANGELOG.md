@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-18 · Mode nuit : aires plus légères, ville plus sourde
+Relevés sur la démo de nuit et confirmés sur le Command Center de nuit (premier projet réel à passer la nuit, tableau de bord et menu). Rendu de jour inchangé : démo sans framework 1440 et 390 px, 0 pixel différent ; opacités de jour relues identiques (sans framework 0,26 et 0,02, React 0,22, 0,02, 0,28, 0,03).
+- **Graphique en aires** (`MUI.area`, `RequestsAreaChart`) : de nuit, le dégradé à 26 % formait un bloc brun qui écrasait la lecture, surtout où deux séries se superposent. L'opacité passe par un facteur : `--m-area-fill` (sans framework) et `--chart-area-fill` (React, thème du registre), 1 le jour, 0,3 la nuit. Le dégradé de nuit va donc de 7,8 % à 0,6 % ; les courbes portent la lecture. Essai à 0,45 jugé trop timide.
+- **Ville en points de nuit** : la teinte sable claire (`#C9AD8A`) faisait de la droite du bandeau la zone la plus lumineuse de la page. `--m-city-1/2/3` passent à `#3F2D1E`, `#7E5537`, `#A08A70` (variante la plus calme des trois essayées sur le bandeau réel qui garde la ville lisible).
+- Preuves : `docs/qa/mode-nuit/demo-aire-nuit-avant.png` / `-apres.png`, `demo-ville-nuit-avant.png` / `-apres.png`, `demo-jour-avant-18-10-1440.png` / `demo-jour-apres-18-10-1440.png`, `demo-nuit-1440-18-10.png`.
+
 ## 2026-10-18 · Icônes épingle et favori retiré
 - Trois icônes Hugeicons ajoutées au kit et à `vanilla/icons.js` (120 icônes) : `Pin` (épingler), `PinOff` (détacher), `StarOff` (retirer des favoris). Besoin : épingles et favoris des conversations dans Meridiem AI Center (`DEV/meridiem-vigie`).
 
