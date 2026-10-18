@@ -1,0 +1,112 @@
+{
+ "platform-1440": {
+  "elements": [
+   638,
+   638
+  ],
+  "differents": 0,
+  "exemples": []
+ },
+ "platform-390": {
+  "elements": [
+   526,
+   526
+  ],
+  "differents": 0,
+  "exemples": []
+ },
+ "landing-1440": {
+  "elements": [
+   174,
+   174
+  ],
+  "differents": 0,
+  "exemples": []
+ },
+ "landing-390": {
+  "elements": [
+   172,
+   172
+  ],
+  "differents": 0,
+  "exemples": []
+ },
+ "kit-1440": {
+  "elements": [
+   3022,
+   3022
+  ],
+  "differents": 4,
+  "exemples": [
+   {
+    "i": 1481,
+    "avant": "div[skeleton]",
+    "apres": "div[skeleton]",
+    "detail": [
+     "opacity: 0.831535 -> 0.831539"
+    ]
+   },
+   {
+    "i": 1482,
+    "avant": "div[skeleton]",
+    "apres": "div[skeleton]",
+    "detail": [
+     "opacity: 0.831535 -> 0.831539"
+    ]
+   },
+   {
+    "i": 1483,
+    "avant": "div[skeleton]",
+    "apres": "div[skeleton]",
+    "detail": [
+     "opacity: 0.831535 -> 0.831539"
+    ]
+   },
+   {
+    "i": 1561,
+    "avant": "button[sidebar-menu-button]",
+    "apres": "button[dropdown-menu-trigger]",
+    "detail": []
+   }
+  ]
+ },
+ "kit-390": {
+  "elements": [
+   2989,
+   2989
+  ],
+  "differents": 4,
+  "exemples": [
+   {
+    "i": 1478,
+    "avant": "div[skeleton]",
+    "apres": "div[skeleton]",
+    "detail": [
+     "opacity: 0.956752 -> 0.543251"
+    ]
+   },
+   {
+    "i": 1479,
+    "avant": "div[skeleton]",
+    "apres": "div[skeleton]",
+    "detail": [
+     "opacity: 0.956752 -> 0.543251"
+    ]
+   },
+   {
+    "i": 1480,
+    "avant": "div[skeleton]",
+    "apres": "div[skeleton]",
+    "detail": [
+     "opacity: 0.956752 -> 0.543251"
+    ]
+   },
+   {
+    "i": 1558,
+    "avant": "button[sidebar-menu-button]",
+    "apres": "button[dropdown-menu-trigger]",
+    "detail": []
+   }
+  ]
+ }
+}

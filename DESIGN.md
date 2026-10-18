@@ -29,6 +29,9 @@ colors-dark:
   primary-foreground: "#1A1410"
   status: { ok: "#6CC08A", warn: "#E3A55A", wait: "#AFA2EE", crit: "#F2867A", info: "#80B2E8" }
   chart: ["#D9773F", "#7489E2", "#C3841A", "#2AA88C", "#BE72CC"]
+  city: { mode: nocturne, mass: ["#433A31", "#5C4F42"], lights: ["#A8693A", "#DE9A4E", "#F2D49C"] }
+  dots: { ink: "#5C5045", accent: "#D9934A" }
+  cta: "#0E0C0A"
 typography:
   heading: "EB Garamond"
   sans: "Geist"
@@ -46,6 +49,8 @@ Calme, lisible, sérieux, avec une touche classique : ivoire et encre, titres en
 - Logotypes officiels (fournis par Maxime le 06/10/2026) : `public/assets/meridiem-logo-noir.png` sur fond
   clair, `public/assets/meridiem-logo-blanc.png` sur fond sombre (`assets.logo`, `assets.logoLight`). Ne pas
   redessiner le logo, ne pas l'écrire en texte à côté : le fichier contient déjà le mot « Meridiem ».
+  React : `<Logo className="h-5 w-auto" />` (brique `brand`) pose le noir le jour et le blanc la nuit, sans flash ;
+  `<Mark className="w-10" />` pose l'icône seule, jamais écrasée, blanche la nuit.
 - Signature en pied de page : « meridiem.be · Your AI partner ». Ne jamais mettre l'adresse ni la ville
   (Waremme) en avant dans une interface (demande de Maxime du 06/10/2026). Seul un document commercial ou
   légal (devis, facture, CGV) porte l'adresse du siège.
@@ -91,6 +96,7 @@ Olympe de nuit, pas un thème sombre générique : la même page, éclairée à 
   sombre) en pierre et ambre (`--m-dots` `#5C5045`, `--m-dots-accent` `#D9934A`), jamais de terracotta
   saturé sur l'encre. Bloc à points plus profond que la page (`#0E0C0A`), cerné d'un filet ; cartes
   animées en traits clairs, leur touche terracotta suit `primary`.
+  React : mêmes jetons sans préfixe (`--city-mode`, `--city-*`, `--dots`, `--dots-accent`, `--cta`).
 - Ombres en noir et plus denses (sans quoi elles disparaissent) ; voile des fenêtres plus opaque.
 - Aires de graphique allégées : le dégradé garde 30 % de son opacité de jour (`--m-area-fill`, `--chart-area-fill`) ; la ville reste sourde : seules quelques lumières sont vives, jamais une zone entière lumineuse.
 
@@ -109,9 +115,34 @@ Olympe de nuit, pas un thème sombre générique : la même page, éclairée à 
   (utilisables en SVG et en CSS) ; `MUI.CHART_HEX` garde les hexadécimaux de jour.
 - Icône officielle noire dans une page qui passe la nuit : classe `m-mark-ink` (elle devient blanche,
   sans autre fichier). Logo complet : `meridiem-logo-blanc.png` sur fond sombre.
-- React : le thème du registre porte un jeu `dark` (posé par la CLI shadcn sous `.dark`), et
-  `styles/olympe.css` porte les mêmes valeurs sous `data-theme`. Pour que les utilitaires `dark:` de
-  shadcn suivent aussi `data-theme`, remplacer `@custom-variant dark (&:is(.dark *));` par :
+- React, mode d'emploi (élément `theme` du registre) :
+  ```bash
+  npx shadcn@latest add $R/olympe-theme.json $R/olympe-styles.json $R/theme.json
+  ```
+  1. Envelopper l'application : `<ThemeProvider>` (Jour par défaut, choix gardé dans le navigateur sous `olympe-theme`,
+     même clé et mêmes valeurs `light`, `dark`, `auto` que `MUI.setTheme`, et dans un cookie du même nom). Il pose
+     `data-theme` sur `<html>` et la classe `.dark` quand la page est de nuit : les utilitaires `dark:` de shadcn suivent
+     sans autre réglage. `useTheme()` rend `theme`, `resolvedTheme` (`light` ou `dark`) et `setTheme`.
+  2. Aucun flash au chargement : le thème doit être posé avant le premier affichage.
+     Vite : copier le `<script>` de `index.html` de ce dépôt dans `<head>` (c'est `themeScript()`).
+     Next.js (App Router) : `<html lang="fr" suppressHydrationWarning><head><ThemeScript /></head>…`, ou lire le cookie
+     côté serveur : `const t = (await cookies()).get("olympe-theme")?.value` puis `<html data-theme={t ?? "light"}
+     className={t === "dark" ? "dark" : undefined}>` et `<ThemeProvider initialTheme={t}>` (en `auto`, seul le script
+     connaît le réglage du système : garder `ThemeScript` ou le bloc `@custom-variant` ci-dessous).
+  3. Le choix dans le menu du compte : `<ThemeSubmenu />` dans le `DropdownMenuContent` (entrée « Apparence », valeur
+     courante, chevron, sous-menu Jour, Nuit, Système à cocher ; en place sous l'entrée sur téléphone). `onChange` pour
+     un toast. Exemple complet : `platform/Platform.tsx`.
+  4. Toasts : le `Toaster` de shadcn lit `next-themes` ; sans lui, passer `theme={resolvedTheme}` (voir `src/App.tsx`).
+- React, briques : `CityDots` lit le jeton `--city-mode` (ville de nuit éclairée, quel que soit `mode`) et les jetons
+  `--city-1..3`, `--city-light-1..3` ; `DotField` lit `--dots`, `--dots-accent` ; `DotChart` lit `--foreground`,
+  `--primary`, `--dotchart-dim` ; les colonnes tramées `--chart-bar-top/bottom` ; le bloc à points `--cta`
+  (`bg-[var(--cta,var(--ink))]`, filet `dark:ring-1 dark:ring-border dark:ring-inset`) ; les ombres `shadow-soft` et
+  `shadow-lift` passent par `--elevation-soft/lift`. Les canvas se redessinent seuls au changement de thème (sans
+  rejouer l'apparition). Donner `paper="var(--card)"` à une ville posée sur une carte (par défaut : `--background`).
+  Ne plus passer de `palette` en hexadécimal : elle figerait la trame de jour (elle ne vaut que pour le jour).
+- Le thème du registre porte les jeux `light` et `dark` (posés par la CLI sous `:root` et `.dark`) ;
+  `styles/olympe.css` porte les mêmes valeurs de nuit sous `data-theme`. Pour une page qui pose `data-theme` sans
+  le fournisseur, faire suivre les utilitaires `dark:` en remplaçant `@custom-variant dark (&:is(.dark *));` par :
   ```css
   @custom-variant dark {
     &:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *) { @slot; }
@@ -136,8 +167,12 @@ Olympe de nuit, pas un thème sombre générique : la même page, éclairée à 
 | Danger `destructive` / son texte | `#B3261E` / `#FFFFFF` | `#EE7D70` / `#1A1410` |
 | Statuts ok, warn, wait, crit, info | `#2F7A4A` `#9A5D0C` `#55499F` `#B3261E` `#2B6099` | `#6CC08A` `#E3A55A` `#AFA2EE` `#F2867A` `#80B2E8` |
 | Graphiques chart-1 à chart-5 | `#AA4F13` `#3F6FB0` `#C2861A` `#0E8C7C` `#8E4F8A` | `#D9773F` `#7489E2` `#C3841A` `#2AA88C` `#BE72CC` |
-| Ville `city-mode`, masse `city-1` / `city-2`, lumières `city-light-1..3` | (non posé : trame de jour) `#6E4226` `#B98259` | `nocturne` `#433A31` `#5C4F42`, `#A8693A` `#DE9A4E` `#F2D49C` |
-| Champ de points `dots` / `dots-accent` | `#AA4F13` / `#E3CDB3` | `#5C5045` / `#D9934A` |
+| Ville `city-mode`, masse `city-1` / `city-2` / `city-3`, lumières `city-light-1..3` | (non posé : trame de jour) `#6E4226` `#B98259` `#E8D6C0` | `nocturne` `#433A31` `#5C4F42` `#A08A70`, `#A8693A` `#DE9A4E` `#F2D49C` |
+| Champ de points `dots` / `dots-accent` ; points éteints du graphique en points `dotchart-dim` | `#AA4F13` / `#E3CDB3` ; `#C9BFB0` | `#5C5045` / `#D9934A` ; `#5A5249` |
+| Bloc à points `cta-bg` / `cta` | `#1C1B1A` | `#0E0C0A`, cerné d'un filet |
+| Colonnes tramées `bar-top` / `bar-bottom` (React `chart-bar-*`) | `#C4672A` / `#8A3F0F` | `#E58B57` / `#A8521F` |
+| Aires `area-fill` (React `chart-area-fill`) | 1 | 0,3 |
+| Ombres `shadow` / `shadow-lift` (React `elevation-soft/lift`) | brun très léger | noir, plus dense |
 
 **Règles**
 - Toute couleur passe par une variable : une couleur écrite en dur dans un composant ne suit pas la nuit.
@@ -146,6 +181,8 @@ Olympe de nuit, pas un thème sombre générique : la même page, éclairée à 
   principal ≥ 4,5:1. Palette des graphiques validée au script dataviz sur la carte nuit (bande de
   luminosité, chroma, daltonisme ΔE 9,2, vision normale, contraste ≥ 5:1).
 - Le jour ne bouge pas : une évolution du mode nuit se vérifie par une capture de jour identique.
+- Toute interface Olympe livre le choix Jour, Nuit, Système dans le menu du compte (sous-menu, Jour par défaut), et se
+  prouve par des captures de jour ET de nuit.
 
 ## Typographie
 - EB Garamond : titres d'écran (32 px), de section (24 à 30 px), de carte (18 px), chiffres clés (32 px).
@@ -164,14 +201,16 @@ Olympe de nuit, pas un thème sombre générique : la même page, éclairée à 
   dans un panneau de `MUI.menu` ; `MUI.menuValue(bloc, valeur)` coche et recopie la valeur. Il s'ouvre au
   survol et au clic, à droite de l'entrée, à gauche si la place manque, en place sous l'entrée sur
   téléphone ; flèche droite ouvre, flèche gauche referme, Échap et clic dehors ferment tout. Fermé, il
-  est en `display: none` (aucun calque de plus, le jour reste identique au pixel). React : `DropdownMenuSub`,
-  `DropdownMenuSubTrigger`, `DropdownMenuSubContent` et `DropdownMenuRadioGroup` de shadcn.
+  est en `display: none` (aucun calque de plus, le jour reste identique au pixel). React : `ThemeSubmenu` (élément
+  `theme`) pour l'apparence ; pour une autre préférence (langue), le même assemblage : `DropdownMenuSub`,
+  `DropdownMenuSubTrigger` (icône, libellé en `flex-1`, valeur en `text-muted-foreground`, le chevron est déjà posé),
+  `DropdownMenuSubContent` et `DropdownMenuRadioGroup` de shadcn.
 - En-tête de page : titre serif, une phrase, actions à droite. L'information essentielle tient au premier écran ; les bandeaux restent compacts.
 - Liste et détail côte à côte ; le détail porte l'action principale et rappelle que rien ne part sans validation.
 - Landing : héros sur la ville en points, grille de filets à repères en croix, bloc final sombre avec champ de points.
 
 ## Composants
-shadcn/ui (Radix) pour tout ce qui existe : boutons, champs, sélecteurs, onglets, tables, fenêtres, panneaux, menus, toasts (sonner), palette (cmdk). Ne pas recoder ce que shadcn fournit. Briques propres à Meridiem : `KpiCard` (illustration animée), graphiques, `CityDots`, `DotField`, `DotChart`, `StatusBadge`, `Icon`.
+shadcn/ui (Radix) pour tout ce qui existe : boutons, champs, sélecteurs, onglets, tables, fenêtres, panneaux, menus, toasts (sonner), palette (cmdk). Ne pas recoder ce que shadcn fournit. Briques propres à Meridiem : `KpiCard` (illustration animée), graphiques, `CityDots`, `DotField`, `DotChart`, `StatusBadge`, `Icon`, `Logo`, `Mark`, et l'apparence (`ThemeProvider`, `ThemeSubmenu`).
 
 ## Mouvement
 - Transitions de page courtes (fondu, glissé de quelques pixels, léger flou), cascade d'entrée (`.stagger`), pastille de navigation qui glisse (Motion `layoutId`).

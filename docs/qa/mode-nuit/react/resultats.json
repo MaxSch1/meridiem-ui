@@ -1,0 +1,123 @@
+{
+ "errs": {
+  "platform-1440-jour-avant": [],
+  "platform-1440-jour-apres": [],
+  "platform-390-jour-avant": [],
+  "platform-390-jour-apres": [],
+  "landing-1440-jour-avant": [],
+  "landing-1440-jour-apres": [],
+  "landing-390-jour-avant": [],
+  "landing-390-jour-apres": [],
+  "kit-1440-jour-avant": [],
+  "kit-1440-jour-apres": [],
+  "kit-390-jour-avant": [],
+  "kit-390-jour-apres": [],
+  "platform-1440-dark-apres": [],
+  "platform-390-dark-apres": [],
+  "landing-1440-dark-apres": [],
+  "landing-390-dark-apres": [],
+  "kit-1440-dark-apres": [],
+  "kit-390-dark-apres": [],
+  "platform-1440-auto-apres": [],
+  "platform-1440-jour-apres-parcours": [
+   "warning: Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: https://html.spec.whatwg.org/multipage/canvas.html#concept-canvas-will-read-frequently"
+  ]
+ },
+ "theme-platform-1440": {
+  "attr": "dark",
+  "dark": true,
+  "bg": "rgb(24, 21, 19)"
+ },
+ "theme-platform-390": {
+  "attr": "dark",
+  "dark": true,
+  "bg": "rgb(24, 21, 19)"
+ },
+ "theme-landing-1440": {
+  "attr": "dark",
+  "dark": true,
+  "bg": "rgb(24, 21, 19)"
+ },
+ "theme-landing-390": {
+  "attr": "dark",
+  "dark": true,
+  "bg": "rgb(24, 21, 19)"
+ },
+ "theme-kit-1440": {
+  "attr": "dark",
+  "dark": true,
+  "bg": "rgb(24, 21, 19)"
+ },
+ "theme-kit-390": {
+  "attr": "dark",
+  "dark": true,
+  "bg": "rgb(24, 21, 19)"
+ },
+ "systeme-sombre": {
+  "attr": "auto",
+  "dark": true,
+  "bg": "rgb(24, 21, 19)"
+ },
+ "sous-menu-items": [
+  "Jour",
+  "Nuit",
+  "Système"
+ ],
+ "sous-menu-coche-jour": "Jour",
+ "apres-clic-nuit": {
+  "attr": "dark",
+  "dark": true,
+  "stored": "dark",
+  "cookie": "olympe-theme=dark",
+  "toast": [
+   "Mode nuit\nThème actif : nuit"
+  ]
+ },
+ "canvas-redessines": [
+  true
+ ],
+ "valeur-affichee-nuit": "Apparence\nNuit",
+ "clavier-droite-ouvre": {
+  "options": 3,
+  "focus": "Jour"
+ },
+ "clavier-gauche-ferme": {
+  "options": 0,
+  "focus": "Apparence\nNuit"
+ },
+ "echap-ferme": true,
+ "rechargement-garde-nuit": "dark",
+ "retour-jour": "light",
+ "telephone-options-en-place": [
+  "Jour 32-260",
+  "Nuit 32-260",
+  "Système 32-260"
+ ],
+ "telephone-choix-systeme": "auto",
+ "logo-nuit": [
+  "data:image/png;base64,iVBORw0KGgoAAAANSU… 1482x246 rendu 96x16"
+ ],
+ "landing-logos-nuit": [
+  {
+   "w": 120,
+   "h": 20,
+   "nat": "6.02",
+   "rendu": "6.00",
+   "filter": "none"
+  },
+  {
+   "w": 40,
+   "h": 22,
+   "nat": "1.82",
+   "rendu": "1.82",
+   "filter": "invert(1)"
+  },
+  {
+   "w": 120,
+   "h": 20,
+   "nat": "6.02",
+   "rendu": "6.00",
+   "filter": "none"
+  }
+ ]
+}

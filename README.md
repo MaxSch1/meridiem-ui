@@ -8,7 +8,7 @@ Le design system de [Meridiem](https://www.meridiem.be) : un socle commun pour l
 | Dossier | Contenu | Pour |
 |---|---|---|
 | `registry.json`, `public/r/` | registre shadcn : thème, styles, briques de marque, carte animée, graphiques, table, plateforme type, landing | projets React (Vite, Next) |
-| `vanilla/` | `olympe.css` (classes `.m-*`), `meridiem.js` (les blocs : cartes animées, graphiques, bandeau ville, points animés, menu, pastille, toasts, états vides), `icons.js` (117 icônes), `art.js` (moteur de visuels), `demo.html` | pages sans framework |
+| `vanilla/` | `olympe.css` (classes `.m-*`), `meridiem.js` (les blocs : cartes animées, graphiques, bandeau ville, points animés, menu et sous-menu, thème, pastille, toasts, états vides), `icons.js` (121 icônes), `art.js` (moteur de visuels), `demo.html` | pages sans framework |
 | `tokens/` | jetons au format DTCG | tout outil (Figma, Style Dictionary, documents) |
 | `src/` | la démo : plateforme interactive, landing, kit de référence | consulter, copier |
 | `DESIGN.md` | les règles, à lire avant toute interface | humains et agents |
@@ -34,19 +34,40 @@ Puis ajouter `@import "./styles/olympe.css";` dans le CSS principal, et envelopp
 |---|---|
 | `olympe-theme` | les variables de couleur, polices, rayons, ombres, couleurs de statut |
 | `olympe-styles` | polices locales et utilitaires : `.eyebrow`, `.hairline-grid`, `.stagger`, `.num` |
-| `brand` | `Icon`, `CityDots` (ville en points), `DotField`, `DotChart`, `IsoArt` (9 animations), `StatusBadge` |
+| `brand` | `Icon`, `Logo` et `Mark` (noir le jour, blanc la nuit), `CityDots` (ville en points, ville éclairée la nuit), `DotField`, `DotChart`, `IsoArt` (9 animations), `StatusBadge` |
+| `theme` | apparence Jour, Nuit, Système : `ThemeProvider`, `ThemeScript` (pas de flash au chargement), `ThemeSubmenu` (entrée « Apparence » du menu du compte) |
 | `kpi-card` | carte indicateur avec illustration animée au survol |
 | `charts` | aire à deux séries, colonnes tramées, barres empilées, courbe, jauge radiale |
 | `clients-table` | table de données : recherche, tri, sélection, actions, pagination (TanStack Table v8) |
 | `data-table` | table générique : vos colonnes et vos données, recherche, tri, pagination, état vide (TanStack Table v8) |
 | `spinner` | spinner shadcn adapté à Hugeicons (celui d'origine ne compile pas avec cette bibliothèque d'icônes) |
-| `platform` | sidebar, menu du compte, ⌘K, notifications, tableau de bord, demandes, clients, réglages ; remplace le `use-mobile` de la sidebar shadcn par une version qui passe le lint de Next 16 |
+| `platform` | sidebar, menu du compte (avec Apparence), ⌘K, notifications, tableau de bord, demandes, clients, réglages ; remplace le `use-mobile` de la sidebar shadcn par une version qui passe le lint de Next 16 |
 | `landing` | héros sur la ville en points, grille de filets, bloc final, prise de rendez-vous |
+
+## Mode nuit en deux minutes
+Olympe a un mode nuit complet (encre chaude, texte ivoire, ville de nuit éclairée). Jour par défaut ; toute interface
+propose Jour, Nuit, Système dans le menu du compte. Règles et jetons : `DESIGN.md` § Mode nuit.
+
+**React**
+```bash
+npx shadcn@latest add $R/olympe-theme.json $R/olympe-styles.json $R/theme.json
+```
+```tsx
+import { ThemeProvider, ThemeSubmenu } from "@/components/meridiem/theme"
+<ThemeProvider><App /></ThemeProvider>                 // pose data-theme et .dark sur <html>, mémorise le choix
+<DropdownMenuContent>… <ThemeSubmenu /> …</DropdownMenuContent>   // dans le menu du compte
+```
+Sans flash : le `<script>` de `index.html` (Vite) ou `<ThemeScript />` dans `<head>` (Next.js, avec
+`<html suppressHydrationWarning>`), ou le cookie `olympe-theme` lu côté serveur. Ville, points, colonnes, ombres et
+logo (`<Logo />`) suivent seuls ; une couleur écrite en dur ne suit pas.
+
+**Sans framework** : `MUI.setTheme("dark" | "light" | "auto")` ; le sous-menu « Apparence » se monte avec
+`.m-menu-sub` dans un panneau de `MUI.menu` et `MUI.menuValue(bloc, valeur)` (exemple : `vanilla/demo.html`).
 
 ## Pour les agents IA
 - Lire `DESIGN.md`, puis ouvrir le kit (`npm run build`, `dist/index.html#kit`) : copier ce qu'on y voit.
 - Réutiliser les blocs ; un équivalent maison est un défaut. Habiller un écran existant, c'est le restructurer avec les blocs, pas seulement changer ses couleurs.
-- Prouver : captures à 1440 et 390 px, liste des blocs utilisés, console propre.
+- Prouver : captures à 1440 et 390 px, de jour ET de nuit, liste des blocs utilisés, console propre.
 
 ## Utiliser sans framework
 ```html
@@ -67,6 +88,7 @@ Les blocs du design system existent aussi sans framework (`vanilla/meridiem.js`,
 | Graphiques | `MUI.area(el, …)`, `MUI.columns(el, …)`, `MUI.donut(el, …)`, `MUI.radial(el, …)` ; `area` accepte `format` (infobulle), `axisFormat` (graduations Y) et `padLeft` (place des unités) |
 | Bandeau ville en points, bloc à points animés | `MUI.banner({ … })`, `MUI.ctaBand({ … })` |
 | Menu du compte, pastille de navigation | `MUI.menu(bouton, panneau, { side: "top" })`, `MUI.navPill(nav)` |
+| Sous-menu de préférence (Apparence, langue), thème | bloc `.m-menu-sub` dans le panneau de `MUI.menu`, `MUI.menuValue(bloc, valeur)` ; `MUI.setTheme("dark" \| "light" \| "auto")`, `MUI.theme()`, `MUI.retheme()` |
 | Palette de commandes ⌘K, recherche dans le contenu | `MUI.palette({ items, sources, hotkey: true })` (détail ci-dessous) |
 | Barre d'actions (décision à gauche, suivi à droite, « ⋯ ») | `MUI.actionBar({ size, prompt, decision, follow, more, status, panel })` (détail ci-dessous) ; `MUI.busy(bouton, fn)` pour l'état de chargement |
 | Fenêtre centrée (réglages, confirmation) | `MUI.dialog({ title, description, content, footer })` puis `.open()` ; interrupteur `<input type="checkbox" class="m-switch">`, lignes `.m-section` et `.m-setting` |

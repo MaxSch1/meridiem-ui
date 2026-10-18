@@ -94,3 +94,17 @@ maintenant qu'`art.js` lit les variables : passer `paper="var(--card)"` et une p
 
 Parcours (`qa-retours-1.js`) : survol ouvre ; clic sur « Nuit » pose `data-theme="dark"`, ferme le menu, toast ; la valeur affichée passe à « Nuit », coche sur Nuit ; clic dehors ferme tout ; flèche droite ouvre et met le focus sur l'option cochée, flèche bas passe à la suivante, flèche gauche referme et rend le focus à l'entrée ; Échap ferme tout ; Entrée ouvre puis choisit. Console : aucune erreur ni avertissement.
 Piège mesuré : un sous-menu fermé en `opacity: 0` (calque composité) décalait de ±1 l'anticrénelage de 20 pixels du menu de gauche ; en `display: none`, 0 pixel.
+
+## Kit React à parité (18/10, sortie du mode nuit) : `react/`
+Builds d'avant (HEAD `b245a4f`) et d'après servis en local, Playwright, échelle 1, animations réduites. Scripts : `react/qa-react.cjs` (captures et parcours), `react/qa-styles.cjs` (styles calculés de chaque élément visible).
+
+| Contrôle | Résultat |
+|---|---|
+| Styles calculés, jour, avant / après | `#platform` 638 et 526 éléments : 0 écart ; `#landing` 174 et 172 : 0 ; `#kit` 3 022 et 2 989 : 4 (3 squelettes animés, 1 bouton devenu déclencheur de menu, aucun écart de style) |
+| Pixels, jour | plateforme 1440 et 390 : 0 ; landing et kit : seules les zones animées (champ de points, squelettes), qui diffèrent aussi entre deux captures du build d'avant |
+| Nuit | `data-theme="dark"`, `.dark`, page `#181513` sur les trois écrans ; « Système » avec un système sombre : nuit |
+| Sous-menu | options Jour, Nuit, Système ; clic sur Nuit : thème posé, gardé (stockage et cookie), toast « Mode nuit · Thème actif : nuit », ville redessinée, valeur « Nuit » dans l'entrée ; flèche droite ouvre et va sur Jour, flèche gauche referme et rend le focus à l'entrée, Échap ferme ; rechargement : nuit gardée ; téléphone : options en place sous l'entrée |
+| Logo et icône de nuit | logotype blanc ; icône 1,82 rendue 1,82 (jamais écrasée), inversée en blanc |
+| Console | aucune erreur ni avertissement de la page ; seul avertissement : « willReadFrequently », dû aux lectures de pixels du script de test |
+
+Captures : `platform-jour-avant/apres-1440|390.png`, `landing-jour-*`, `kit-jour-avant/apres-1440.png`, `*-nuit-1440|390.png`, `platform-systeme-sombre-1440.png`, `sous-menu-apparence-jour.png`, `sous-menu-apparence-nuit.png`, `sous-menu-apparence-nuit-390.png`, `clic-nuit-toast.png`, `kit-sous-menu-apparence-nuit.png`, `kit-visuels-nuit.png`, `kit-sections-nuit.png`. Le constat « Ce qui reste hors de ce lot (React) » ci-dessus est soldé.

@@ -1,5 +1,26 @@
 # Changelog
 
+## 2026-10-18 · Sortie du mode nuit d'Olympe (sans framework et React)
+Le mode nuit validé par Maxime le 18/10 (essai réel sur le Command Center : « très beau » pour la ville éclairée, « le sous-menu est parfait ») est complet dans les deux versions de la librairie. Ce qui part avec cette sortie, depuis `56949ba` :
+
+| Sujet | Sans framework | React (registre) |
+|---|---|---|
+| Activation | `data-theme="dark"`, `"auto"` (système), rien = jour ; `MUI.setTheme`, `MUI.theme`, `MUI.retheme` | `.dark` ou `data-theme` ; nouvel élément **`theme`** : `ThemeProvider`, `useTheme`, `ThemeScript` / `themeScript()` (aucun flash), cookie `olympe-theme` pour Next.js |
+| Choix d'apparence | entrée « Apparence » du menu du compte qui ouvre un sous-menu Jour, Nuit, Système (`.m-menu-sub`, `MUI.menuValue`) | `ThemeSubmenu` (sous-menu shadcn, en place sous l'entrée sur téléphone), posé dans le menu du compte du gabarit `platform` et du kit |
+| Jetons nuit | encre chaude, cartes `#211D19`, texte ivoire, terracotta `#D9773F` à texte encre, statuts et graphiques éclaircis | mêmes valeurs sous `.dark` et `data-theme`, plus les jetons des visuels : `--city-mode`, `--city-1..3`, `--city-light-1..3`, `--dots`, `--dots-accent`, `--dotchart-dim`, `--chart-bar-top/bottom`, `--cta`, `--elevation-soft/lift` (valeurs de jour égales aux anciennes couleurs en dur) |
+| Ville | ville de nuit éclairée (mode `nocturne` d'`art.js`) | `CityDots` lit `--city-mode` et les jetons, se redessine au changement de thème sans rejouer l'apparition |
+| Points | champ de points pierre et ambre ; toiles recalées sur leur bloc (points ronds, `b245a4f`) | `DotField`, `DotChart` lisent les jetons et se redessinent |
+| Aires | dégradé allégé (`--m-area-fill` 0,3) | `--chart-area-fill` 0,3 |
+| Logo | `m-mark-ink`, logotype blanc | `Logo` (noir le jour, blanc la nuit, sans script), `Mark` (icône jamais écrasée, blanche la nuit) |
+| Divers | voiles, ombres noires, bloc à points `#0E0C0A` cerné d'un filet | idem (ombres `shadow-soft`/`shadow-lift` par `--elevation-*`, bloc `--cta`), avatar et pastille « En cours » de nuit, toasts au thème de la page |
+
+- React, ce lot : `brand.tsx` (hook `useThemeSignature`, `CityDots` avec `nightPalette` et `mode="nocturne"`, `Logo`, `Mark`), `theme.tsx` (nouveau), `charts.tsx` (colonnes), gabarits `Dashboard`, `Platform`, `landing`, kit (`Kit.tsx`, `layouts.tsx`), `App.tsx` (fournisseur, toasts), `index.html` (script anti-flash), `src/index.css`, `registry/olympe.css`, `registry.json` (thème et élément `theme`, dont `platform` dépend), jetons DTCG (`color-dark` complet : ville, points, bloc, colonnes, aires).
+- Changement d'API à connaître : `CityDots` sans `palette` prend la trame des jetons `--city-1..3` (avant : `OLYMPE_INK`), et `palette` ne vaut plus que pour le jour. Les gabarits passaient tous une palette, leur rendu de jour ne change pas.
+- Le jour ne bouge pas : 0 style calculé différent sur `#platform` et `#landing` (1440 et 390 px), 4 sur `#kit` (3 squelettes animés, et le bouton du compte devenu déclencheur de menu, sans écart de style) ; pixels identiques sur la plateforme ; les seules zones de pixels qui bougent (champ de points, squelettes) bougent aussi entre deux captures du build d'avant. Preuves : `docs/qa/mode-nuit/react/`.
+- Défaut trouvé et corrigé pendant la vérification : à 390 px le sous-menu sortait de l'écran (coche coupée) ; il s'ouvre maintenant en place sous l'entrée, comme `MUI.menu`.
+- Vérifié par la CLI shadcn dans un projet vide : `add olympe-theme` pose tous les jetons ; les auto-références qu'elle ajoute dans `@theme inline` (`--city-mode`, `--elevation-*`) restent dans `@layer theme` et sont écrasées par `:root` et `.dark` ; `add theme` installe `theme.tsx`, `brand`, `dropdown-menu`.
+- Reste ouvert : la landing affiche « FR · EN » en texte simple dans l'en-tête d'un site (pas de menu du compte) ; un vrai choix de langue suivra la règle du sous-menu.
+
 ## 2026-10-18 · Points ronds dans les blocs qui grandissent
 - Une toile animée (champ de points, graphique en points) prenait sa taille au premier rendu : si son bloc grandissait ensuite, les points s'étiraient en ovales (bloc final du Command Center, de jour comme de nuit). `art.js` : la boucle d'animation recale la toile sur la taille de son bloc à chaque image (et par `ResizeObserver` quand les animations sont réduites).
 
