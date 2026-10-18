@@ -131,7 +131,10 @@ Olympe de nuit, pas un thème sombre générique : la même page, éclairée à 
      connaît le réglage du système : garder `ThemeScript` ou le bloc `@custom-variant` ci-dessous).
   3. Le choix dans le menu du compte : `<ThemeSubmenu />` dans le `DropdownMenuContent` (entrée « Apparence », valeur
      courante, chevron, sous-menu Jour, Nuit, Système à cocher ; en place sous l'entrée sur téléphone). `onChange` pour
-     un toast. Exemple complet : `platform/Platform.tsx`.
+     un toast, `label` et `labels` pour une interface bilingue (`labels={{ light: "Day", dark: "Night", auto: "System" }}`). Exemple
+     complet : `platform/Platform.tsx`. Piège Next.js : dans le layout (composant serveur), écrire la clé du cookie en
+     clair ; importée de `theme.tsx` (module `"use client"`), elle n'est côté serveur qu'une référence et le cookie
+     n'est jamais lu (payé sur l'espace clients le 18/10).
   4. Toasts : le `Toaster` de shadcn lit `next-themes` ; sans lui, passer `theme={resolvedTheme}` (voir `src/App.tsx`).
 - React, briques : `CityDots` lit le jeton `--city-mode` (ville de nuit éclairée, quel que soit `mode`) et les jetons
   `--city-1..3`, `--city-light-1..3` ; `DotField` lit `--dots`, `--dots-accent` ; `DotChart` lit `--foreground`,

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-18 · `ThemeSubmenu` traduisible
+- `labels` (Jour, Nuit, Système) à côté de `label` : le sous-menu d'apparence suit la langue d'une interface bilingue. Repris de la première application Next.js passée au mode nuit, qui l'a ajouté pour son anglais.
+- `DESIGN.md` : le piège de la clé du cookie importée d'un module client dans un layout serveur (le cookie n'est alors jamais lu).
+
 ## 2026-10-18 · Sortie du mode nuit d'Olympe (sans framework et React)
 Le mode nuit validé par Maxime le 18/10 (essai réel sur le Command Center : « très beau » pour la ville éclairée, « le sous-menu est parfait ») est complet dans les deux versions de la librairie. Ce qui part avec cette sortie, depuis `56949ba` :
 

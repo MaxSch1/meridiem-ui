@@ -100,7 +100,8 @@ const useNarrow = () => useSyncExternalStore(subscribeNarrow, () => !!window.mat
 
 /** Entrée « Apparence » d'un menu du compte (dans un DropdownMenuContent) : icône, libellé, valeur courante, chevron ;
     elle ouvre un sous-menu Jour, Nuit, Système à cocher (en place sous l'entrée sur téléphone). `onChange` : effet visible en plus (toast). */
-export function ThemeSubmenu({ label = "Apparence", note, onChange }: { label?: string; note?: React.ReactNode; onChange?: (theme: Theme, resolved: "light" | "dark") => void }) {
+/* `label` et `labels` traduisent l'entrée et les trois valeurs (interface bilingue). */
+export function ThemeSubmenu({ label = "Apparence", labels = THEME_LABELS, note, onChange }: { label?: string; labels?: Record<Theme, string>; note?: React.ReactNode; onChange?: (theme: Theme, resolved: "light" | "dark") => void }) {
   const { theme, setTheme } = useTheme()
   const narrow = useNarrow()
   const [unfolded, setUnfolded] = useState(false)
@@ -111,9 +112,9 @@ export function ThemeSubmenu({ label = "Apparence", note, onChange }: { label?: 
   }
   const options = (
     <DropdownMenuRadioGroup value={theme} onValueChange={choose}>
-      <DropdownMenuRadioItem value="light"><Icon icon={Sun03Icon} />Jour</DropdownMenuRadioItem>
-      <DropdownMenuRadioItem value="dark"><Icon icon={Moon02Icon} />Nuit</DropdownMenuRadioItem>
-      <DropdownMenuRadioItem value="auto"><Icon icon={Layers01Icon} />Système</DropdownMenuRadioItem>
+      <DropdownMenuRadioItem value="light"><Icon icon={Sun03Icon} />{labels.light}</DropdownMenuRadioItem>
+      <DropdownMenuRadioItem value="dark"><Icon icon={Moon02Icon} />{labels.dark}</DropdownMenuRadioItem>
+      <DropdownMenuRadioItem value="auto"><Icon icon={Layers01Icon} />{labels.auto}</DropdownMenuRadioItem>
     </DropdownMenuRadioGroup>
   )
   const noteEl = note ? <p className="px-1.5 pt-1.5 pb-1 text-xs text-muted-foreground">{note}</p> : null
@@ -121,7 +122,7 @@ export function ThemeSubmenu({ label = "Apparence", note, onChange }: { label?: 
     <>
       <Icon icon={Moon02Icon} />
       <span className="flex-1">{label}</span>
-      <span className="text-xs text-muted-foreground">{THEME_LABELS[theme]}</span>
+      <span className="text-xs text-muted-foreground">{labels[theme]}</span>
     </>
   )
   if (narrow) return (
