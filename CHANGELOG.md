@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-10-18 · Points ronds dans les blocs qui grandissent
+- Une toile animée (champ de points, graphique en points) prenait sa taille au premier rendu : si son bloc grandissait ensuite, les points s'étiraient en ovales (bloc final du Command Center, de jour comme de nuit). `art.js` : la boucle d'animation recale la toile sur la taille de son bloc à chaque image (et par `ResizeObserver` quand les animations sont réduites).
+
 ## 2026-10-18 · Mode nuit : ville de nuit éclairée, points apaisés, sous-menu de préférence
 Retours de Maxime sur le premier essai réel (Command Center) : « l'affichage avec les petits points est très laid sur la version nuit », et le choix d'apparence doit passer par un bouton du menu du compte qui ouvre un sous-menu. Rendu de jour inchangé : démo 1440 et 390 px, 0 pixel différent (`demo-jour-avant/apres-retours-*.png`).
 - **Ville de nuit** (`art.js`, source `src/lib/meridiem/art.js`) : nouveau mode `nocturne` de `ditherImage`. Les zones lisses de la photo (ciel, brume, eau, mesurées par l'écart-type local) restent la carte ; la ville est une masse de points sourds qui suit la photo en positif ; un point plus clair que son voisinage devient une lumière chaude (3 tons), qui s'allume en fin d'apparition. `MUI.city` lit le jeton `--m-city-mode` (posé à `nocturne` la nuit seulement) ; nouveaux jetons nuit `--m-city-light-1..3`, masse `--m-city-1/2` = `#433A31`, `#5C4F42`. Le chemin de jour n'a pas changé d'une ligne. Trois partis essayés dans le bandeau réel du Command Center (gravure claire, ville éclairée, riso deux encres) : `docs/qa/mode-nuit/ville-nuit-essais.png`. Retenu : la ville éclairée (seule à rester calme sur l'encre, la gravure faisait un bloc beige, le riso un champ terracotta).

@@ -148,10 +148,17 @@
   /* Boucle d'animation ; une seule image si l'utilisateur a demandé moins d'animations. */
   function loop(canvas, draw) {
     if (canvas._stop) canvas._stop();
-    let raf = 0, alive = true; const t0 = performance.now();
-    const tick = now => { if (!alive) return; draw(Math.max(0, (now - t0) / 1000)); if (!reduced) raf = requestAnimationFrame(tick); };
+    let raf = 0, alive = true, ro = null; const t0 = performance.now();
+    // La toile suit la taille de son bloc : un bloc qui grandit après le premier rendu étirait les points en ovales.
+    const fit = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2), w = Math.round((canvas.clientWidth || 0) * dpr), h = Math.round((canvas.clientHeight || 0) * dpr);
+      if (!w || !h || (w === canvas.width && h === canvas.height)) return false;
+      canvas.width = w; canvas.height = h; return true;
+    };
+    const tick = now => { if (!alive) return; fit(); draw(Math.max(0, (now - t0) / 1000)); if (!reduced) raf = requestAnimationFrame(tick); };
     raf = requestAnimationFrame(tick);
-    canvas._stop = () => { alive = false; cancelAnimationFrame(raf); };
+    if (reduced && window.ResizeObserver) { ro = new ResizeObserver(() => { if (alive && fit()) draw(Math.max(0, (performance.now() - t0) / 1000)); }); ro.observe(canvas); }
+    canvas._stop = () => { alive = false; cancelAnimationFrame(raf); if (ro) ro.disconnect(); };
   }
 
   /* Champ de points : la taille de chaque point suit un bruit qui dérive lentement, avec une onde autour d'un foyer « soleil ». */
