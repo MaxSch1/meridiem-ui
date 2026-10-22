@@ -254,36 +254,104 @@
   }
   function niceMax(v) { if (v <= 0) return 4; var p = Math.pow(10, Math.floor(Math.log10(v))), n = v / p; return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10) * p; }
 
-  // Aire à plusieurs séries : MUI.area(el, { labels, series: [{ name, values, color }], height, format, axisFormat, padLeft })
+  function niceStep(v) { var p = Math.pow(10, Math.floor(Math.log10(v))), x = v / p; return (x >= 5 ? 5 : x >= 2.5 ? 2.5 : x >= 2 ? 2 : 1) * p; }
+  // Échelle « ronde » d'au moins k intervalles : [bas, haut, nombre d'intervalles]
+  function niceScale(lo, hi, k) { var st = niceStep((hi - lo) / k), a = Math.floor(lo / st) * st, b = Math.ceil(hi / st) * st; if (b <= a) b = a + st; return [a, b, Math.round((b - a) / st)]; }
+
+  /* Aire à plusieurs séries : MUI.area(el, { labels, series: [{ name, values, color }], height, format, axisFormat, padLeft, tipLabels })
+     Options facultatives (sans elles, le rendu est celui d'avant) :
+     - values peut contenir null : le trait et l'aire se coupent, l'infobulle saute la série ce jour-là, l'échelle l'ignore ;
+     - par série : dash: true (trait pointillé, aire allégée), fill: false (pas d'aire), tipNote (mot après le nom dans
+       l'infobulle, ex. « réel », « projeté »). Deux séries du même nom (le réel, puis le projeté) n'ont qu'une entrée de
+       légende, et l'infobulle ne garde que la première présente à un point ;
+     - ticks: [{ i, label, minor }] graduations X imposées, avec un trait vertical discret ; s'il manque de place, les
+       « minor » perdent d'abord leur libellé, puis un libellé sur deux, et ainsi de suite ;
+     - marker: { i, label } ligne verticale et son mot (« Aujourd'hui ») ;
+     - tipTitle(i), tipExtra(i) : en-tête et lignes en plus dans l'infobulle (HTML déjà échappé par l'appelant) ;
+     - legendNote : texte après la légende (« trait plein : réel · pointillé : projeté ») ;
+     - yTicks : nombre minimal d'intervalles de la grille, pas « ronds » (1, 2, 2,5 ou 5 × 10^n) ; 4 par défaut ;
+     - negative: true : l'échelle descend sous zéro quand une valeur l'exige.
+     Le graphique suit la largeur de son conteneur : il est redessiné sans rejouer l'animation. Au toucher (téléphone),
+     l'infobulle s'ouvre comme au survol ; un toucher ailleurs la ferme. Couleurs par variables : le mode nuit suit. */
+  var areaRO = window.ResizeObserver ? new ResizeObserver(function (entries) {
+    entries.forEach(function (en) {
+      var el = en.target, a = el._muiArea;
+      if (!a || !el.clientWidth || Math.max(280, el.clientWidth) === a.w) return;
+      drawArea(el, a.o, true);
+    });
+  }) : null;
   function area(el, o) {
+    drawArea(el, o, false);
+    if (areaRO && !el._muiAreaObs) { el._muiAreaObs = 1; areaRO.observe(el); }
+  }
+  function drawArea(el, o, still) {
     var H = o.height || 240, W = Math.max(280, el.clientWidth || 600), padL = o.padLeft || 30, padR = 10, padT = 12, padB = 26;
-    var n = o.labels.length, max = niceMax(Math.max.apply(null, o.series.map(function (s) { return Math.max.apply(null, s.values); })) || 1);
-    var X = function (i) { return padL + (W - padL - padR) * (n === 1 ? 0.5 : i / (n - 1)); }, Y = function (v) { return padT + (H - padT - padB) * (1 - v / max); };
+    var n = o.labels.length, hi = -Infinity, lo = Infinity, min = 0, max, nT = 4;
+    o.series.forEach(function (s) { s.values.forEach(function (v) { if (v != null) { if (v > hi) hi = v; if (v < lo) lo = v; } }); });
+    if (o.yTicks || (o.negative && lo < 0)) { var sc = niceScale(o.negative && lo < 0 ? lo : 0, hi > 0 ? hi : 1, o.yTicks || 4); min = sc[0]; max = sc[1]; nT = sc[2]; }
+    else max = niceMax(hi || 1);
+    var X = function (i) { return padL + (W - padL - padR) * (n === 1 ? 0.5 : i / (n - 1)); }, Y = function (v) { return padT + (H - padT - padB) * (1 - (v - min) / (max - min)); };
     var fmt = o.format || nf, axisFmt = o.axisFormat || Math.round, g = "", defs = "";
-    for (var t = 0; t <= 4; t++) { var v = max * t / 4, y = Y(v); g += '<line x1="' + padL + '" x2="' + (W - padR) + '" y1="' + y + '" y2="' + y + '" class="m-grid"/><text x="' + (padL - 6) + '" y="' + (y + 3) + '" class="m-axis" text-anchor="end">' + esc(axisFmt(v)) + "</text>"; }
-    var every = Math.max(Math.ceil(n / 7), Math.ceil(n / Math.max(2, Math.floor((W - padL - padR) / 58))));   // au plus une date tous les 58 px (téléphone)
-    o.labels.forEach(function (l, i) { if ((n - 1 - i) % every === 0) g += '<text x="' + X(i) + '" y="' + (H - 6) + '" class="m-axis" text-anchor="middle">' + esc(l) + "</text>"; });
+    for (var t = 0; t <= nT; t++) { var v = min + (max - min) * t / nT, y = Y(v); g += '<line x1="' + padL + '" x2="' + (W - padR) + '" y1="' + y + '" y2="' + y + '" class="m-grid"/><text x="' + (padL - 6) + '" y="' + (y + 3) + '" class="m-axis" text-anchor="end">' + esc(axisFmt(v)) + "</text>"; }
+    if (o.ticks) {
+      var tk = o.ticks.filter(function (k) { return k.i >= 0 && k.i < n; }), room = W - padL - padR, gap = o.tickGap || 46;
+      tk.forEach(function (k) { g += '<line x1="' + X(k.i).toFixed(1) + '" x2="' + X(k.i).toFixed(1) + '" y1="' + padT + '" y2="' + (H - padB) + '" class="m-grid m-grid-x"/>'; });
+      var lab = tk.length > 1 && room / tk.length < gap ? tk.filter(function (k) { return !k.minor; }) : tk, step = lab.length > 1 ? Math.max(1, Math.ceil(lab.length * gap / room)) : 1;
+      lab.forEach(function (k, j) { if (j % step === 0) g += '<text x="' + X(k.i).toFixed(1) + '" y="' + (H - 6) + '" class="m-axis" text-anchor="middle">' + esc(k.label) + "</text>"; });
+    } else {
+      var every = Math.max(Math.ceil(n / 7), Math.ceil(n / Math.max(2, Math.floor((W - padL - padR) / 58))));   // au plus une date tous les 58 px (téléphone)
+      o.labels.forEach(function (l, i) { if ((n - 1 - i) % every === 0) g += '<text x="' + X(i) + '" y="' + (H - 6) + '" class="m-axis" text-anchor="middle">' + esc(l) + "</text>"; });
+    }
+    if (o.marker && o.marker.i >= 0 && o.marker.i < n) {
+      var mx = X(o.marker.i), right = mx > padL + (W - padL - padR) * 0.78;
+      g += '<line x1="' + mx.toFixed(1) + '" x2="' + mx.toFixed(1) + '" y1="' + padT + '" y2="' + (H - padB) + '" class="m-marker"/>' +
+        (o.marker.label ? '<text x="' + (mx + (right ? -5 : 5)).toFixed(1) + '" y="' + (padT + 11) + '" class="m-marker-t" text-anchor="' + (right ? "end" : "start") + '">' + esc(o.marker.label) + "</text>" : "");
+    }
+    // pathLength="3000" : l'animation .m-draw (trait de 3000) couvre toute la courbe, même longue (365 jours en dents de scie)
     var paths = "";
     o.series.forEach(function (s, si) {
-      var c = s.color || CHART[si], gid = nid("ag");
-      defs += '<linearGradient id="' + gid + '" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stop-color="' + c + '" style="stop-opacity:calc(.26 * var(--m-area-fill, 1))"/><stop offset="95%" stop-color="' + c + '" style="stop-opacity:calc(.02 * var(--m-area-fill, 1))"/></linearGradient>';
-      var d = s.values.map(function (v, i) { return (i ? "L" : "M") + X(i).toFixed(1) + " " + Y(v).toFixed(1); }).join(" ");
-      paths += '<path d="' + d + " L" + X(n - 1) + " " + Y(0) + " L" + X(0) + " " + Y(0) + ' Z" fill="url(#' + gid + ')"/><path d="' + d + '" fill="none" stroke="' + c + '" stroke-width="2" stroke-linejoin="round" class="m-draw"/>';
+      var c = s.color || CHART[si], gid = nid("ag"), runs = [], cur = null, a0 = s.dash ? ".12" : ".26";
+      s.values.forEach(function (v, i) { if (v == null) { cur = null; return; } if (!cur) { cur = []; runs.push(cur); } cur.push(i); });
+      if (!runs.length) return;
+      if (s.fill !== false) defs += '<linearGradient id="' + gid + '" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stop-color="' + c + '" style="stop-opacity:calc(' + a0 + ' * var(--m-area-fill, 1))"/><stop offset="95%" stop-color="' + c + '" style="stop-opacity:calc(.02 * var(--m-area-fill, 1))"/></linearGradient>';
+      var ds = runs.map(function (r) { return r.map(function (i, k) { return (k ? "L" : "M") + X(i).toFixed(1) + " " + Y(s.values[i]).toFixed(1); }).join(" "); });
+      if (s.fill !== false) paths += '<path d="' + ds.map(function (d, k) { var r = runs[k]; return d + " L" + X(r[r.length - 1]) + " " + Y(0) + " L" + X(r[0]) + " " + Y(0) + " Z"; }).join(" ") + '" fill="url(#' + gid + ')"/>';
+      paths += '<path d="' + ds.join(" ") + '" fill="none" stroke="' + c + '" stroke-width="2" stroke-linejoin="round"' + (s.dash ? ' style="stroke-dasharray:6 4"' : still ? "" : ' class="m-draw" pathLength="3000"') + "/>";
     });
+    // une entrée de légende par nom (le réel et le projeté d'une même grandeur partagent la leur)
+    var names = [], lg = [];
+    o.series.forEach(function (s, si) { if (names.indexOf(s.name) < 0) { names.push(s.name); lg.push('<span><i style="background:' + (s.color || CHART[si]) + '"></i>' + esc(s.name) + "</span>"); } });
     el.classList.add("m-chart");
     el.innerHTML = '<svg width="100%" height="' + H + '" viewBox="0 0 ' + W + " " + H + '" preserveAspectRatio="none"><defs>' + defs + "</defs>" + g + paths +
       '<line class="m-cross" x1="0" x2="0" y1="' + padT + '" y2="' + (H - padB) + '" style="display:none"/><g class="m-hdots"></g><rect x="' + padL + '" y="0" width="' + (W - padL - padR) + '" height="' + H + '" fill="transparent" class="m-hit"/></svg>' +
-      (o.series.length > 1 ? '<div class="m-legend">' + o.series.map(function (s, si) { return '<span><i style="background:' + (s.color || CHART[si]) + '"></i>' + esc(s.name) + "</span>"; }).join("") + "</div>" : "");
+      (names.length > 1 || o.legendNote ? '<div class="m-legend' + (o.legendNote ? " is-wrap" : "") + '">' + lg.join("") + (o.legendNote ? '<span class="m-legend-note">' + esc(o.legendNote) + "</span>" : "") + "</div>" : "");
+    el._muiArea = { o: o, w: W };
     var sv = el.querySelector("svg"), hit = el.querySelector(".m-hit"), cross = el.querySelector(".m-cross"), hd = el.querySelector(".m-hdots"), tip = tipEl(el);
-    hit.addEventListener("mousemove", function (e) {
-      var r = sv.getBoundingClientRect(), px = (e.clientX - r.left) * W / r.width, i = Math.max(0, Math.min(n - 1, Math.round((px - padL) / ((W - padL - padR) / Math.max(1, n - 1)))));
+    if (o.tipTitle || o.tipExtra) tip.classList.add("is-rich"); else tip.classList.remove("is-rich");
+    function show(clientX) {
+      var r = sv.getBoundingClientRect(), px = (clientX - r.left) * W / r.width, i = Math.max(0, Math.min(n - 1, Math.round((px - padL) / ((W - padL - padR) / Math.max(1, n - 1)))));
+      var seen = [], vis = [];
+      o.series.forEach(function (s, si) { if (s.values[i] != null && seen.indexOf(s.name) < 0) { seen.push(s.name); vis.push([s, si]); } });
       cross.setAttribute("x1", X(i)); cross.setAttribute("x2", X(i)); cross.style.display = "";
-      hd.innerHTML = o.series.map(function (s, si) { return '<circle cx="' + X(i) + '" cy="' + Y(s.values[i]) + '" r="4" fill="var(--m-card)" stroke="' + (s.color || CHART[si]) + '" stroke-width="2"/>'; }).join("");
-      tip.innerHTML = '<div class="m-tip-h">' + esc(o.tipLabels ? o.tipLabels[i] : o.labels[i]) + "</div>" + o.series.map(function (s, si) { return '<div class="m-tip-r"><i style="background:' + (s.color || CHART[si]) + '"></i>' + esc(s.name) + "<b>" + fmt(s.values[i]) + "</b></div>"; }).join("");
-      tip.style.opacity = 1; placeTip(el, tip, X(i) * r.width / W, Y(Math.max.apply(null, o.series.map(function (s) { return s.values[i]; }))) * r.height / H);
-    });
-    hit.addEventListener("mouseleave", function () { cross.style.display = "none"; hd.innerHTML = ""; tip.style.opacity = 0; });
+      hd.innerHTML = vis.map(function (p) { return '<circle cx="' + X(i) + '" cy="' + Y(p[0].values[i]) + '" r="4" fill="var(--m-card)" stroke="' + (p[0].color || CHART[p[1]]) + '" stroke-width="2"/>'; }).join("");
+      tip.innerHTML = '<div class="m-tip-h">' + (o.tipTitle ? o.tipTitle(i) : esc(o.tipLabels ? o.tipLabels[i] : o.labels[i])) + "</div>" +
+        vis.map(function (p) { var s = p[0]; return '<div class="m-tip-r"><i style="background:' + (s.color || CHART[p[1]]) + '"></i>' + esc(s.name) + (s.tipNote ? '<em class="m-tip-n">' + esc(s.tipNote) + "</em>" : "") + "<b>" + fmt(s.values[i]) + "</b></div>"; }).join("") +
+        (o.tipExtra ? o.tipExtra(i) || "" : "");
+      var top = vis.length ? Math.max.apply(null, vis.map(function (p) { return p[0].values[i]; })) : max;
+      tip.style.opacity = 1; placeTip(el, tip, X(i) * r.width / W, Y(top) * r.height / H);
+    }
+    function hide() { cross.style.display = "none"; hd.innerHTML = ""; tip.style.opacity = 0; }
+    hit.addEventListener("mousemove", function (e) { show(e.clientX); });
+    hit.addEventListener("mouseleave", hide);
+    var touch = function (e) { var t = e.touches && e.touches[0]; if (t) show(t.clientX); };
+    hit.addEventListener("touchstart", touch, { passive: true });
+    hit.addEventListener("touchmove", touch, { passive: true });
+    el._muiHide = hide;
   }
+  // Un toucher hors d'un graphique ferme son infobulle (téléphone : pas de « mouseleave »)
+  document.addEventListener("touchstart", function (e) {
+    document.querySelectorAll(".m-chart").forEach(function (c) { if (c._muiHide && !c.contains(e.target)) c._muiHide(); });
+  }, { passive: true });
 
   // Colonnes tramées, une série : MUI.columns(el, { data: [{ label, value }], height, total, format, onClick })
   function columns(el, o) {
@@ -577,6 +645,7 @@
   }
 
   /* Fenêtre centrée (même esprit que le Dialog de shadcn) : MUI.dialog({ title, description, content, footer, size, onOpen, onClose })
+     size : "sm" (400 px), "lg" (680 px), "xl" (980 px, une longue liste en tableau) ; sans size, 520 px.
      content : chaîne HTML ou élément (déplacé dans la fenêtre, il garde ses écouteurs et ses ids).
      Voile, titre en serif, bouton de fermeture, Échap et clic sur le voile ferment, ouverture animée,
      focus rendu à l'élément d'origine. Renvoie { open, close, isOpen, el, body }. */

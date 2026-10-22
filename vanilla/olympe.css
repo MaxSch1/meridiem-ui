@@ -232,6 +232,16 @@
 .m-tip-h { font-weight: 500; margin-bottom: 4px; }
 .m-tip-r { display: flex; align-items: center; gap: 6px; color: var(--m-muted-fg); }
 .m-tip-r b { margin-left: auto; padding-left: 12px; color: var(--m-fg); font-weight: 500; font-variant-numeric: tabular-nums; }
+/* MUI.area enrichi : graduations imposées, repère « Aujourd'hui », note de légende, infobulle détaillée */
+.m-grid-x { stroke-dasharray: none; opacity: .5; }
+.m-marker { stroke: var(--m-muted-fg); stroke-width: 1; stroke-dasharray: 4 3; }
+.m-marker-t { font: 500 11px var(--m-font-sans); fill: var(--m-fg); }
+.m-legend.is-wrap { flex-wrap: wrap; row-gap: 4px; }
+.m-legend-note { color: var(--m-muted-fg); }
+.m-tip.is-rich { min-width: 210px; max-width: min(340px, calc(100% - 8px)); }
+.m-tip-n { font-style: normal; font-size: 11px; color: var(--m-muted-fg); margin-left: 2px; }
+.m-tip-x { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--m-border); display: flex; flex-direction: column; gap: 2px; }
+.m-tip-x .m-tip-r span { min-width: 0; overflow-wrap: anywhere; }
 .m-donut { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; justify-content: center; }
 .m-donut-ring, .m-radial { position: relative; flex: none; }
 .m-donut-c { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
@@ -348,6 +358,7 @@
 .m-dialog-back.is-open { display: flex; animation: m-fade-in .16s ease; }
 .m-dialog { position: relative; width: 100%; max-width: 520px; max-height: calc(100vh - 32px); display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--m-border); border-radius: var(--m-radius-lg); background: var(--m-card); box-shadow: var(--m-shadow-lift); color: var(--m-fg); font: 14px/1.5 var(--m-font-sans); outline: none; }
 .m-dialog.is-lg { max-width: 680px; } .m-dialog.is-sm { max-width: 400px; }
+.m-dialog.is-xl { max-width: 980px; }
 .m-dialog-back.is-open .m-dialog { animation: m-dialog-in .22s cubic-bezier(.2, .8, .2, 1); }
 .m-dialog-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 20px 20px 12px; }
 .m-dialog-title { margin: 0; font: 400 24px/1.15 var(--m-font-heading); letter-spacing: -.01em; }

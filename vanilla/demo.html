@@ -78,6 +78,7 @@
     '<div class="m-card"><div class="m-card-head"><div><h3 class="m-card-title">Qualité</h3><p class="m-card-desc">correctifs acceptés</p></div></div><div class="m-card-body" style="display:flex;justify-content:center"><div id="radial"></div></div></div></div>' +
     '<div class="row2b"><div class="m-card"><div class="m-card-head"><div><h3 class="m-card-title">Tâches par statut</h3><p class="m-card-desc">sur 30 jours</p></div></div><div class="m-card-body"><div id="cols"></div></div></div>' +
     '<div class="m-card"><div class="m-card-head"><div><h3 class="m-card-title">Répartition du pipeline</h3><p class="m-card-desc">montants one-shot</p></div></div><div class="m-card-body"><div id="donut"></div></div></div></div>' +
+    '<div class="m-card"><div class="m-card-head"><div><h3 class="m-card-title">Trésorerie et cumuls, réel puis projeté</h3><p class="m-card-desc">chiffres inventés · graduations imposées, repère, trous et pointillés</p></div></div><div class="m-card-body"><div id="area2"></div></div></div>' +
     '<div class="m-card" style="padding:18px 20px"><h3 class="m-card-title">Relances devis de septembre</h3><p class="m-card-desc">4 brouillons prêts, rien ne part sans toi.</p>' +
       MUI.actionBar({ prompt: "L'agent attend ta décision", decision: [{ label: "Confirmer", icon: "Tick02", kind: "primary", onclick: "MUI.toast('Confirmé, l\\'agent reprend', { tone: 'ok' })" }, { label: "Donner un retour", icon: "PencilEdit02" }],
         follow: [{ label: "Marquer lu", icon: "MailOpen01" }], more: [{ label: "Discuter avec l'agent", icon: "Message01" }, { label: "C'est réglé", icon: "CheckmarkCircle02" }] }) + "</div>" +
@@ -89,6 +90,26 @@
   for (var i = 13; i >= 0; i--) { var d = new Date(Date.now() - i * 864e5); labels.push(d.toLocaleDateString("fr-BE", { day: "numeric", month: "short" })); cr.push(Math.round(8 + 8 * Math.abs(Math.sin(i / 2)))); cl.push(Math.round(6 + 7 * Math.abs(Math.sin(i / 2 + 0.6)))); }
   MUI.area(document.getElementById("area"), { labels: labels, series: [{ name: "Créées", values: cr, color: MUI.CHART[1] }, { name: "Clôturées", values: cl, color: MUI.CHART[0] }] });
   MUI.radial(document.getElementById("radial"), { value: 67, sub: "objectif : 70 %" });
+  // MUI.area enrichi (données inventées) : 122 jours, réel jusqu'au 80e puis projeté en pointillé, repère « Aujourd'hui »,
+  // graduations le 1er et le 15 du mois, mouvements du jour dans l'infobulle.
+  var d0 = new Date(2025, 8, 1), J = [], solde = [], soldeP = [], ventes = [], ventesP = [], ev = {};
+  for (var k = 0, s1 = 12000, v1 = 0; k < 122; k++) {
+    var dk = new Date(d0.getTime() + k * 864e5); J.push(dk);
+    var mvt = k % 15 === 4 ? 4800 : k % 30 === 9 ? -2600 : k % 7 === 2 ? -180 : 0;
+    if (mvt) ev[k] = [{ t: mvt > 0 ? "Client Exemple" : mvt < -1000 ? "Loyer de démonstration" : "Abonnement", m: mvt }];
+    s1 += mvt; if (mvt > 0) v1 += mvt / 1.21;
+    solde.push(k <= 80 ? s1 : null); soldeP.push(k >= 80 ? s1 : null); ventes.push(k <= 80 ? Math.round(v1) : null); ventesP.push(k >= 80 ? Math.round(v1) : null);
+  }
+  var eur = function (v) { return v.toLocaleString("fr-BE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " €"; };
+  MUI.area(document.getElementById("area2"), {
+    labels: J.map(function (x) { return x.toLocaleDateString("fr-BE", { day: "numeric", month: "short" }); }), height: 300, padLeft: 48, yTicks: 5,
+    series: [{ name: "Trésorerie", values: solde, color: MUI.CHART[0], tipNote: "réel" }, { name: "Trésorerie", values: soldeP, color: MUI.CHART[0], dash: true, tipNote: "projeté" },
+      { name: "Ventes cumulées HT", values: ventes, color: MUI.CHART[1], tipNote: "réel" }, { name: "Ventes cumulées HT", values: ventesP, color: MUI.CHART[1], dash: true, tipNote: "projeté" }],
+    ticks: J.map(function (x, i) { return x.getDate() === 1 || x.getDate() === 15 ? { i: i, label: x.toLocaleDateString("fr-BE", { day: "numeric", month: "short" }), minor: x.getDate() === 15 } : null; }).filter(Boolean),
+    marker: { i: 80, label: "Aujourd'hui" }, legendNote: "trait plein : réel · pointillé : projeté", format: eur,
+    axisFormat: function (v) { return Math.round(v / 1000) + " k€"; },
+    tipTitle: function (i) { return J[i].toLocaleDateString("fr-BE", { weekday: "long", day: "numeric", month: "long", year: "numeric" }); },
+    tipExtra: function (i) { return ev[i] ? '<div class="m-tip-x">' + ev[i].map(function (e) { return '<div class="m-tip-r"><span>' + e.t + "</span><b>" + (e.m > 0 ? "+" : "") + eur(e.m) + "</b></div>"; }).join("") + "</div>" : ""; } });
   MUI.columns(document.getElementById("cols"), { name: "Tâches", data: [{ label: "À faire", value: 12 }, { label: "En cours", value: 4 }, { label: "Besoin de moi", value: 15 }, { label: "Terminées", value: 41 }] });
   MUI.donut(document.getElementById("donut"), { total: "184 k€", sub: "pipeline actif", format: function (v) { return Math.round(v / 1000) + " k€"; }, segments: [{ label: "Découverte", value: 52000 }, { label: "Offre et négociation", value: 88000 }, { label: "Gagné", value: 44000 }] });
   MUI.bind(document);

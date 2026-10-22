@@ -1,5 +1,25 @@
 # Changelog
 
+## 2026-10-22 · `MUI.area` enrichi (trous, pointillés, graduations, repère, infobulle détaillée), fenêtre `xl`
+Demandé par la section Finance du Command Center : un graphique jour par jour sur un an, réel puis projeté, lisible.
+- Sans framework, options toutes facultatives : `values` accepte `null` (trait et aire coupés, série sautée dans
+  l'infobulle, échelle qui l'ignore) ; par série `dash: true` (pointillé, aire allégée), `fill: false`, `tipNote`
+  (« réel », « projeté ») ; deux séries du même nom partagent une entrée de légende et une ligne d'infobulle ;
+  `ticks: [{ i, label, minor }]` (graduations imposées, trait vertical discret, libellés « minor » retirés d'abord
+  quand la place manque) ; `marker: { i, label }` ; `tipTitle(i)`, `tipExtra(i)` ; `legendNote` ; `yTicks` (pas
+  ronds 1, 2, 2,5, 5) ; `negative: true`. Toucher sur téléphone = survol, un toucher ailleurs ferme l'infobulle.
+  Le graphique suit la largeur de son conteneur (`ResizeObserver`) et se redessine sans rejouer l'animation.
+- `olympe.css` : `.m-grid-x`, `.m-marker`, `.m-marker-t`, `.m-legend.is-wrap`, `.m-legend-note`, `.m-tip.is-rich`,
+  `.m-tip-n`, `.m-tip-x` ; `MUI.dialog({ size: "xl" })` (980 px, longue liste en tableau).
+- Correctif : le trait animé (`.m-draw`, longueur 3000) porte `pathLength="3000"`. Sans lui, une courbe plus longue
+  que 3000 unités (365 jours en dents de scie) s'arrêtait à mi-parcours. Invisible sur une courbe courte.
+- Rétrocompatible : sans les nouvelles options, le HTML rendu est identique au caractère près, hors l'attribut
+  `pathLength` du trait animé (24 cas comparés,
+  ancienne contre nouvelle version : options du Command Center et de la démo, à 340, 600 et 1180 px ; script
+  `meridiem-operateur/docs/qa/finance/tour-10/scripts/area-retro.js`).
+- Démo : carte « Trésorerie et cumuls, réel puis projeté » dans `vanilla/demo.html` (chiffres inventés).
+- Pas encore d'équivalent React.
+
 ## 2026-10-19 · Barre de niveau `MUI.meter`, icônes Vidéo et Pause
 Demandé par la vue Content Factory du Command Center (solde de crédits de voix avec son seuil d'arrêt) ; le
 Command Center en portait déjà une version locale (limites des licences).
