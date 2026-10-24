@@ -84,6 +84,13 @@
         follow: [{ label: "Marquer lu", icon: "MailOpen01" }], more: [{ label: "Discuter avec l'agent", icon: "Message01" }, { label: "C'est réglé", icon: "CheckmarkCircle02" }] }) + "</div>" +
     '<div class="m-card" style="padding:18px 20px"><h3 class="m-card-title">Crédits de voix</h3><p class="m-card-desc">74 % restants, arrêt automatique sous le repère.</p><div style="margin-top:14px">' +
       MUI.meter({ value: 74, max: 100, tone: "ok", mark: 22, markLabel: "Seuil d'arrêt", label: "Crédits restants" }) + "</div></div>" +
+    '<div class="m-card"><div class="m-card-head"><div><h3 class="m-card-title">Parcours, conversation, tailles au doigt</h3><p class="m-card-desc">MUI.steps, .m-chat, .m-btn-block, .m-input-lg, .m-link (exemple inventé)</p></div></div><div class="m-card-body" style="display:flex;flex-direction:column;gap:16px">' +
+      MUI.steps({ items: ["Votre site", "Sept questions", "Votre résultat"], current: 2, label: "Étapes de la démo" }) +
+      '<div class="m-chat"><div class="m-msg"><div class="m-msg-note">' + MUI.badge("info", "Vu sur votre site") + '</div>Quand un client vous demande un prix, comment le devis est-il fait ?</div>' +
+      '<div class="m-msg is-me"><div class="m-msg-note">Réponse écrite</div>On le rédige le soir, à la main.</div><div class="m-msg"><span class="m-typing"><i></i><i></i><i></i></span></div></div>' +
+      '<div style="display:flex;flex-direction:column;gap:8px;max-width:420px"><button class="m-btn m-btn-block">On le calcule et on le rédige à la main</button><button class="m-btn m-btn-block">Notre logiciel le monte depuis un catalogue, on complète</button></div>' +
+      '<div style="display:flex;gap:8px;max-width:420px"><input class="m-input m-input-lg" placeholder="Ou écrivez votre réponse"><button class="m-btn m-btn-primary m-btn-lg">Envoyer</button></div>' +
+      '<p class="m-help" style="margin:0">Un lien dans un texte : <a class="m-link" href="#">Confidentialité</a></p></div></div>' +
     '<div class="m-card">' + MUI.empty({ icon: "CheckList", title: "Rien d'autre en attente", text: "Les tâches terminées apparaissent ici.", action: '<button class="m-btn m-btn-sm">Voir l\'historique</button>' }) + "</div>" +
     MUI.ctaBand({ title: "Tout tourne.", text: "12 contrôles au vert, contrôlé à 09:30.", action: '<button class="m-btn m-btn-primary m-btn-sm">Voir la santé</button>' });
   var labels = [], cr = [], cl = [];

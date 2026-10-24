@@ -427,10 +427,43 @@ html.m-dialog-lock { overflow: hidden; }
 .m-btn.is-busy::after { content: ""; position: absolute; inset: 0; margin: auto; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--m-border); border-top-color: var(--m-fg); animation: m-spin .7s linear infinite; }
 .m-btn-primary.is-busy::after { border-color: color-mix(in srgb, var(--m-primary-fg) 40%, transparent); border-top-color: var(--m-primary-fg); }
 
+/* Tailles au doigt (44 px, règle téléphone) : bouton et champ plus hauts ; bouton en bloc pour une liste de choix
+   (réponses rapides) : pleine largeur, texte aligné à gauche, qui passe à la ligne au lieu d'être coupé. */
+.m-btn-lg { height: 44px; padding: 0 18px; font-size: 14.5px; border-radius: 10px; }
+.m-btn-block { display: flex; width: 100%; height: auto; min-height: 44px; padding: 10px 14px; justify-content: flex-start; text-align: left; white-space: normal; line-height: 1.35; font-size: 14px; border-radius: 10px; }
+.m-input-lg { height: 44px; padding: 0 12px; font-size: 16px; border-radius: 10px; }
+/* Lien dans un texte : couleur du texte, souligné discret, terracotta au survol (jamais le bleu du navigateur) */
+.m-link { color: inherit; text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); text-underline-offset: 3px; }
+.m-link:hover { color: var(--m-primary); text-decoration-color: currentColor; }
+
+/* Étapes d'un parcours (MUI.steps) : numéro et mot toujours visibles, l'étape en cours en encre, les faites cochées */
+.m-steps { display: flex; align-items: center; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.m-step { display: flex; align-items: center; gap: 8px; flex: 1 1 0; min-width: 0; font-size: 13px; line-height: 1.25; color: var(--m-muted-fg); }
+.m-step:last-child { flex: 0 1 auto; }
+.m-step:not(:last-child)::after { content: ""; flex: 1 1 auto; min-width: 8px; height: 1px; background: var(--m-border); }
+.m-step-n { display: grid; place-items: center; flex: none; width: 22px; height: 22px; box-sizing: border-box; border-radius: 50%; border: 1px solid var(--m-input); background: var(--m-card); font: 500 11.5px/1 var(--m-font-mono); }
+.m-step-n svg { width: 13px; height: 13px; }
+.m-step-l { min-width: 0; }
+.m-step.is-current { color: var(--m-fg); font-weight: 500; }
+.m-step.is-current .m-step-n { background: var(--m-fg); border-color: var(--m-fg); color: var(--m-bg); }
+.m-step.is-done .m-step-n { color: var(--m-ok); border-color: color-mix(in srgb, var(--m-ok) 40%, transparent); }
+@media (max-width: 480px) { .m-steps { gap: 5px; } .m-step { gap: 5px; font-size: 12px; } .m-step-l { white-space: nowrap; } .m-step:not(:last-child)::after { min-width: 4px; } }
+
+/* Conversation : fil .m-chat, messages .m-msg (l'interlocuteur, à gauche) et .m-msg.is-me (l'utilisateur, à droite),
+   étiquette .m-msg-note au-dessus du texte, « en train d'écrire » .m-typing (trois points). Jetons seulement. */
+.m-chat { display: flex; flex-direction: column; gap: 10px; }
+.m-msg { align-self: flex-start; box-sizing: border-box; max-width: min(560px, 88%); padding: 10px 14px; border-radius: 14px 14px 14px 4px; background: var(--m-muted); color: var(--m-fg); font-size: 14.5px; line-height: 1.5; overflow-wrap: anywhere; }
+.m-msg.is-me { align-self: flex-end; border-radius: 14px 14px 4px 14px; background: var(--m-card); border: 1px solid var(--m-border); }
+.m-msg-note { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 6px; font-size: 12px; color: var(--m-muted-fg); }
+.m-typing { display: inline-flex; align-items: center; gap: 4px; height: 18px; }
+.m-typing i { width: 6px; height: 6px; border-radius: 50%; background: var(--m-muted-fg); animation: m-typing 1.2s ease-in-out infinite; }
+.m-typing i:nth-child(2) { animation-delay: .15s; } .m-typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes m-typing { 0%, 60%, 100% { opacity: .35; transform: none; } 30% { opacity: 1; transform: translateY(-3px); } }
+
 /* Changement de vue */
 @keyframes m-view-in { from { opacity: 0; transform: translateY(10px); filter: blur(3px); } to { opacity: 1; transform: none; filter: none; } }
 .m-view-in { animation: m-view-in .28s cubic-bezier(.2, .8, .2, 1); }
-@media (prefers-reduced-motion: reduce) { .m-grow, .m-draw, .m-radial-arc, .m-toast, .m-view-in, .m-pill, .m-pal, .m-dialog, .m-dialog-back, .m-switch, .m-switch::after, .m-spin { animation: none !important; transition: none !important; } .m-radial-arc { stroke-dashoffset: var(--to); } }
+@media (prefers-reduced-motion: reduce) { .m-grow, .m-draw, .m-radial-arc, .m-toast, .m-view-in, .m-pill, .m-pal, .m-dialog, .m-dialog-back, .m-switch, .m-switch::after, .m-spin, .m-typing i { animation: none !important; transition: none !important; } .m-radial-arc { stroke-dashoffset: var(--to); } }
 
 /* ===================== Mode nuit =====================
    Activation : <html data-theme="dark"> (nuit), data-theme="auto" (suit le réglage du système),

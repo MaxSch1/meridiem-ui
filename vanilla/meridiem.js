@@ -239,6 +239,19 @@
       '<i style="width:' + pc(o.value || 0) + '%"></i>' + (o.mark != null ? '<b class="m-meter-mark" style="left:' + pc(o.mark) + '%"' + (o.markLabel ? ' title="' + esc(o.markLabel) + '"' : "") + "></b>" : "") + "</div>";
   }
 
+  /* Étapes d'un parcours : MUI.steps({ items: ["Votre site", "Sept questions", "Votre résultat"], current: 2, label })
+     current compte à partir de 1 (0 : aucune en cours, page d'information) ; les étapes avant elle sont cochées.
+     Le numéro et le mot restent visibles ; l'étape en cours porte aria-current="step". */
+  function steps(o) {
+    o = o || {};
+    var cur = o.current || 0;
+    return '<ol class="m-steps" aria-label="' + esc(o.label || "Étapes") + '">' + (o.items || []).map(function (t, i) {
+      var n = i + 1, st = n < cur ? "is-done" : n === cur ? "is-current" : "";
+      return '<li class="m-step' + (st ? " " + st : "") + '"' + (n === cur ? ' aria-current="step"' : "") + '><span class="m-step-n">' +
+        (n < cur && window.meridiemIcon ? window.meridiemIcon("Tick02", 13) : n) + '</span><span class="m-step-l">' + esc(t) + "</span></li>";
+    }).join("") + "</ol>";
+  }
+
   /* ======================= Graphiques ======================= */
   // Couleurs des séries : variables CSS (suivent le mode nuit), valeurs de jour en repli. CHART_HEX : les valeurs de jour en hexadécimal.
   var CHART_HEX = ["#AA4F13", "#3F6FB0", "#C2861A", "#0E8C7C", "#8E4F8A"];
@@ -735,7 +748,7 @@
     return Promise.resolve().then(fn).finally(function () { el.classList.remove("is-busy"); el.style.minWidth = ""; el.removeAttribute("aria-busy"); });
   }
 
-  window.MUI = { kpi: kpi, kpis: kpis, iso: iso, bind: bind, area: area, columns: columns, donut: donut, radial: radial, banner: banner, ctaBand: ctaBand, empty: empty, badge: badge, meter: meter,
+  window.MUI = { kpi: kpi, kpis: kpis, iso: iso, bind: bind, area: area, columns: columns, donut: donut, radial: radial, banner: banner, ctaBand: ctaBand, empty: empty, badge: badge, meter: meter, steps: steps,
     toast: toast, menu: menu, menuValue: menuValue, navPill: navPill, palette: palette, dialog: dialog, actionBar: actionBar, busy: busy, dotChart: dotChart, dotField: dotField, city: city, CHART: CHART, CHART_HEX: CHART_HEX, citySrc: null,
     setTheme: setTheme, theme: theme, retheme: retheme };
 })();

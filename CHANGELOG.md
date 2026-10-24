@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026-10-24 · Étapes `MUI.steps`, conversation `.m-chat`, tailles au doigt, lien `.m-link`
+Demandé par les maquettes v2 du diagnostic IA (`meridiem-diagnostic-ia`), rejetées en v1 pour un univers maison :
+ces besoins manquaient au design system, ils y sont ajoutés au lieu d'être recodés dans le projet.
+- `MUI.steps({ items, current, label })` et `.m-steps`, `.m-step`, `.m-step-n`, `.m-step-l` (`.is-current`, `.is-done`,
+  `aria-current="step"`) : étapes d'un parcours, filets entre les étapes ; sur une ligne à 390 px (mots sans retour).
+- `.m-chat`, `.m-msg`, `.m-msg.is-me`, `.m-msg-note`, `.m-typing` (trois points, coupés si moins d'animations) : fil de
+  conversation en jetons (`--m-muted` pour l'interlocuteur, `--m-card` cerné pour l'utilisateur), suit la nuit.
+- `.m-btn-lg` (44 px), `.m-btn-block` (pleine largeur, texte à gauche qui passe à la ligne, 44 px minimum),
+  `.m-input-lg` (44 px, 16 px de texte) : zones à toucher de la règle téléphone.
+- `.m-link` : lien dans un texte, couleur du texte et soulignement discret, terracotta au survol.
+- Démo : carte « Parcours, conversation, tailles au doigt » dans `vanilla/demo.html` (exemple inventé). `DESIGN.md` § Composants.
+- Rétrocompatible : classes et fonction nouvelles seulement, aucun style existant modifié (hors la liste des animations
+  coupées par `prefers-reduced-motion`, qui gagne `.m-typing i`). Le Command Center n'est pas resynchronisé (`sync.py`
+  non relancé) : il n'utilise aucun de ces blocs.
+- Pas encore d'équivalent React : à ajouter au registre quand l'application du diagnostic (Next.js) en aura besoin.
+
 ## 2026-10-22 · `MUI.area` enrichi (trous, pointillés, graduations, repère, infobulle détaillée), fenêtre `xl`
 Demandé par la section Finance du Command Center : un graphique jour par jour sur un an, réel puis projeté, lisible.
 - Sans framework, options toutes facultatives : `values` accepte `null` (trait et aire coupés, série sautée dans

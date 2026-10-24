@@ -221,6 +221,10 @@ Olympe de nuit, pas un thème sombre générique : la même page, éclairée à 
 
 ## Composants
 shadcn/ui (Radix) pour tout ce qui existe : boutons, champs, sélecteurs, onglets, tables, fenêtres, panneaux, menus, toasts (sonner), palette (cmdk). Ne pas recoder ce que shadcn fournit. Briques propres à Meridiem : `KpiCard` (illustration animée), graphiques, `CityDots`, `DotField`, `DotChart`, `StatusBadge`, `Icon`, `Logo`, `Mark`, et l'apparence (`ThemeProvider`, `ThemeSubmenu`).
+Sans framework seulement, pour l'instant (24/10/2026, diagnostic IA) : étapes d'un parcours `MUI.steps` (`.m-steps`, numéro et
+mot visibles, étape en cours en encre), fil de conversation `.m-chat` / `.m-msg` / `.m-msg.is-me` / `.m-typing`, tailles au doigt
+`.m-btn-lg`, `.m-btn-block` (liste de choix pleine largeur), `.m-input-lg` (44 px, 16 px de texte contre le zoom d'iOS), lien dans
+un texte `.m-link`. Une page publique sur téléphone les utilise plutôt que d'agrandir les boutons à la main.
 
 ## Mouvement
 - Transitions de page courtes (fondu, glissé de quelques pixels, léger flou), cascade d'entrée (`.stagger`), pastille de navigation qui glisse (Motion `layoutId`).
